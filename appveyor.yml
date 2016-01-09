@@ -1,0 +1,59 @@
+os: Visual Studio 2015
+
+branches:
+  only:
+  - master
+
+environment:
+  global:
+    # SDK v7.0 MSVC Express 2008's SetEnv.cmd script will fail if the
+    # /E:ON and /V:ON options are not enabled in the batch script intepreter
+    # See: http://stackoverflow.com/a/13751649/163740
+    CMD_IN_ENV: "cmd /E:ON /V:ON /C .\\devtools\\appveyor\\run_with_env.cmd"
+    BINSTAR_TOKEN:
+      secure: 8ZUGhuOs5ffofdj5EqrwBaN+k9da2CbYVuve7QFl5SYvI0DwcfCcLw23GbkYKXoK
+
+  matrix:
+    - PYTHON: "C:\\Miniconda"
+      CONDA_PY: "27"
+      PYTHON_VERSION: "2.7.x"
+      PYTHON_ARCH: "32"
+    - PYTHON: "C:\\Miniconda-x64"
+      CONDA_PY: "27"
+      PYTHON_VERSION: "2.7.x"
+      PYTHON_ARCH: "64"
+
+    - PYTHON: "C:\\Miniconda3"
+      CONDA_PY: "34"
+      PYTHON_VERSION: "3.4.x"
+      PYTHON_ARCH: "32"
+    - PYTHON: "C:\\Miniconda3-x64"
+      CONDA_PY: "34"
+      PYTHON_VERSION: "3.4.x"
+      PYTHON_ARCH: "64"
+
+    - PYTHON: "C:\\Miniconda3"
+      CONDA_PY: "35"
+      PYTHON_VERSION: "3.5.x"
+      PYTHON_ARCH: "32"
+
+    - PYTHON: "C:\\Miniconda3-x64"
+      CONDA_PY: "35"
+      PYTHON_VERSION: "3.5.x"
+      PYTHON_ARCH: "64"
+
+install:
+  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  - set PATH=C:\MinGW\msys\1.0\bin;%PATH%
+  - conda config --add channels omnia
+  - conda config --add channels salilab
+  - conda update -yq --all
+  - conda install -yq conda-build jinja2 anaconda-client
+  - powershell .\\devtools\\appveyor\\missing-headers.ps1
+
+build: false
+
+test_script:
+  - ps: if (($env:APPVEYOR_PULL_REQUEST_NUMBER -eq $null) -and ($env:APPVEYOR_REPO_BRANCH -eq "master")) { $env:UPLOAD = "--upload omnia" } else { $env:UPLOAD = " " }
+  - "%CMD_IN_ENV% python conda-build-all --check-against omnia %UPLOAD% --python %CONDA_PY% *"
+
