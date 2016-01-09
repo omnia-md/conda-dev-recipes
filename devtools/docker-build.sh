@@ -10,6 +10,10 @@ PATH=/opt/rh/devtoolset-2/root/usr/bin:/opt/rh/autotools-latest/root/usr/bin:/an
 conda config --add channels omnia
 conda install -yq conda-build jinja2 anaconda-client
 
+# Install sphinx (hack for building OpenMM documentation).
+# TODO: Convert these into conda recipes
+pip install sphinx sphinxcontrib-bibtex sphinxcontrib-lunrsearch sphinxcontrib-autodoc_doxygen lxml
+
 if [[ "${TRAVIS_PULL_REQUEST}" == "false" ]]; then
     /io/conda-build-all --check-against omnia $UPLOAD /io/* || true
 else
