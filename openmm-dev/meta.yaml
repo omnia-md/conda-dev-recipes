@@ -24,11 +24,11 @@ requirements:
     # on osx, need to install doxygen manually
     - doxygen   [not osx]
     # for building docs
-    - sphinx
-    - sphinxcontrib-bibtex
-    - sphinxcontrib-lunrsearch
-    - sphinxcontrib-autodoc_doxygen
-    - lxml
+    #- sphinx
+    #- sphinxcontrib-bibtex
+    #- sphinxcontrib-lunrsearch
+    #- sphinxcontrib-autodoc_doxygen
+    #- lxml
 
   run:
     - python

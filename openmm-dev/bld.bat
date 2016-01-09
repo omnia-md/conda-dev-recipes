@@ -14,7 +14,7 @@ set CMAKE_FLAGS=%CMAKE_FLAGS% -DOPENCL_LIBRARY="C:/Program Files (x86)/AMD APP S
 
 cmake -G "NMake Makefiles" %CMAKE_FLAGS% ..
 
-jom all DoxygenApiDocs :: sphinxpdf
+:: jom all DoxygenApiDocs :: sphinxpdf
 jom install
 if errorlevel 1 exit 1
 
@@ -30,9 +30,9 @@ mkdir %PREFIX%\share\openmm
 move %PREFIX%\examples %PREFIX%\share\openmm
 
 :: Put docs into a subdirectory.
-cd %PREFIX%\docs
-mkdir openmm
-move *.html openmm 
+:: cd %PREFIX%\docs
+:: mkdir openmm
+:: move *.html openmm
 :: move *.pdf openmm
 :: move api-* openmm
 
