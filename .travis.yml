@@ -19,8 +19,7 @@ install:
       docker pull rmcgibbo/centos5-build-box;
     fi
   # Retrieve conda-build-all
-  # TODO: Change path from `jchodera` to `omnia` once merged
-  - wget -O conda-build-all --quiet https://raw.githubusercontent.com/jchodera/conda-recipes/force-upload/conda-build-all
+  - wget -O conda-build-all --quiet https://raw.githubusercontent.com/omnia-md/conda-recipes/master/conda-build-all
   - chmod u+x conda-build-all
 
 script:
