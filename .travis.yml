@@ -18,10 +18,14 @@ install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       docker pull rmcgibbo/centos5-build-box;
     fi
+  # Retrieve conda-build-all
+  # TODO: Change path from `jchodera` to `omnia` once merged
+  - wget -O conda-build-all --quiet https://raw.githubusercontent.com/jchodera/conda-recipes/force-upload/conda-build-all
+  - chmod u+x conda-build-all
 
 script:
   - if [[ "${TRAVIS_PULL_REQUEST}" == "false" && "${TRAVIS_BRANCH}" == "master" ]]; then
-        export UPLOAD="--upload omnia";
+        export UPLOAD="--upload omnia --force";
     else
         export UPLOAD=" ";
     fi
@@ -41,7 +45,7 @@ script:
         conda install -yq conda-build jinja2 anaconda-client;
 
 
-        if ! ./conda-build-all --check-against omnia --dry-run openmm-dev; then
+        if ! ./conda-build-all --dry-run openmm-dev; then
             brew install -y doxygen;
             curl -O -s http://developer.download.nvidia.com/compute/cuda/7_0/Prod/network_installers/mac/cuda_mac_installer_tk.tar.gz ;
             curl -O -s http://developer.download.nvidia.com/compute/cuda/7_0/Prod/network_installers/mac/cuda_mac_installer_drv.tar.gz ;
@@ -50,8 +54,8 @@ script:
         fi;
 
         if [[ "${TRAVIS_PULL_REQUEST}" == "false" ]]; then
-          ./conda-build-all --check-against omnia $UPLOAD * || true;
+          ./conda-build-all $UPLOAD * || true;
         else
-          ./conda-build-all --check-against omnia $UPLOAD *;
+          ./conda-build-all $UPLOAD *;
         fi;
     fi
