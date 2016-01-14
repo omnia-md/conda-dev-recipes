@@ -29,9 +29,11 @@ script:
         export UPLOAD=" ";
     fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+        echo "Building linux...";
         docker run -e UPLOAD -e BINSTAR_TOKEN -e TRAVIS_PULL_REQUEST
             -t -i --rm -v `pwd`:/io rmcgibbo/centos5-build-box:latest
             bash /io/devtools/docker-build.sh;
     elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+        echo "Building osx...";
         bash devtools/docker-build-osx.sh;
     fi
