@@ -9,7 +9,7 @@ build:
   number: 0
   skip:
     # don't build on Appveyor (no OpenCL / CUDA)
-    - [ {{ os.environ.get('APPVEYOR', 'False') == 'True' }} ]
+    #- [ {{ os.environ.get('APPVEYOR', 'False') == 'True' }} ]
 
 requirements:
   build:
