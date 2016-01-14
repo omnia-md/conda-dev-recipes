@@ -15,7 +15,7 @@ sudo tar -zxf cuda_mac_installer_drv.tar.gz -C /;
 #fi
 
 if [[ "${TRAVIS_PULL_REQUEST}" == "false" ]]; then
-  ./conda-build-all $UPLOAD * || true;
+  ./conda-build-all $CONDA_BUILD_ALL_FLAGS * || true;
 else
-  ./conda-build-all $UPLOAD *;
+  ./conda-build-all $CONDA_BUILD_ALL_FLAGS *;
 fi;
