@@ -3,13 +3,14 @@ package:
   version: 7.0.0.dev0
 
 source:
-  git_url: https://github.com/pandegroup/openmm.git
+  url: https://github.com/pandegroup/openmm/archive/master.zip
+  fn: master.zip
 
 build:
   number: 0
   skip:
     # don't build on Appveyor (no OpenCL / CUDA)
-    - [ {{ os.environ.get('APPVEYOR', 'False') == 'True' }} ]
+    #- [ {{ os.environ.get('APPVEYOR', 'False') == 'True' }} ]
 
 requirements:
   build:
@@ -20,15 +21,16 @@ requirements:
     - fftw3f
     - sphinx
     - sphinxcontrib-bibtex
-    - swig
+    # swig is pinned to use omnia swig 3.0.7
+    - swig ==3.0.7
     # on osx, need to install doxygen manually
     - doxygen   [not osx]
     # for building docs
-    #- sphinx
-    #- sphinxcontrib-bibtex
-    #- sphinxcontrib-lunrsearch
-    #- sphinxcontrib-autodoc_doxygen
-    #- lxml
+    - sphinx
+    - sphinxcontrib-bibtex
+    - sphinxcontrib-lunrsearch
+    - sphinxcontrib-autodoc_doxygen
+    - lxml
 
   run:
     - python

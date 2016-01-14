@@ -18,6 +18,9 @@ install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       docker pull rmcgibbo/centos5-build-box;
     fi
+  # Retrieve conda-build-all
+  - wget -O conda-build-all --quiet https://raw.githubusercontent.com/omnia-md/conda-recipes/master/conda-build-all
+  - chmod u+x conda-build-all
 
 script:
   - if [[ "${TRAVIS_PULL_REQUEST}" == "false" && "${TRAVIS_BRANCH}" == "master" ]]; then
@@ -25,33 +28,12 @@ script:
     else
         export UPLOAD=" ";
     fi
-
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-
+        echo "Building linux...";
         docker run -e UPLOAD -e BINSTAR_TOKEN -e TRAVIS_PULL_REQUEST
             -t -i --rm -v `pwd`:/io rmcgibbo/centos5-build-box:latest
             bash /io/devtools/docker-build.sh;
-
     elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-
-        curl -s -O https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh;
-        bash Miniconda3-latest-MacOSX-x86_64.sh -b -p $HOME/anaconda;
-        export PATH=$HOME/anaconda/bin:$PATH;
-        conda config --add channels omnia;
-        conda install -yq conda-build jinja2 anaconda-client;
-
-
-        if ! ./conda-build-all --check-against omnia --dry-run openmm-dev; then
-            brew install -y doxygen;
-            curl -O -s http://developer.download.nvidia.com/compute/cuda/7_0/Prod/network_installers/mac/cuda_mac_installer_tk.tar.gz ;
-            curl -O -s http://developer.download.nvidia.com/compute/cuda/7_0/Prod/network_installers/mac/cuda_mac_installer_drv.tar.gz ;
-            sudo tar -zxf cuda_mac_installer_tk.tar.gz -C /;
-            sudo tar -zxf cuda_mac_installer_drv.tar.gz -C /;
-        fi;
-
-        if [[ "${TRAVIS_PULL_REQUEST}" == "false" ]]; then
-          ./conda-build-all --check-against omnia $UPLOAD * || true;
-        else
-          ./conda-build-all --check-against omnia $UPLOAD *;
-        fi;
+        echo "Building osx...";
+        bash devtools/docker-build-osx.sh;
     fi
