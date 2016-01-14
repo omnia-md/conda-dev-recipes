@@ -20,7 +20,8 @@ requirements:
     - fftw3f
     - sphinx
     - sphinxcontrib-bibtex
-    - swig ==2.0.10
+    # swig is pinned to use omnia swig 3.0.7
+    - swig ==3.0.7
     # on osx, need to install doxygen manually
     - doxygen   [not osx]
     # for building docs
