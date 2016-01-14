@@ -22,7 +22,8 @@ requirements:
     - sphinxcontrib-bibtex
     - swig
     # on osx, need to install doxygen manually
-    - doxygen   [not osx]
+    #- doxygen   [not osx]
+    - doxygen
     # for building docs
     #- sphinx
     #- sphinxcontrib-bibtex
