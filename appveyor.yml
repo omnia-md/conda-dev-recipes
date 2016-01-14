@@ -51,7 +51,7 @@ install:
   - conda install -yq conda-build jinja2 anaconda-client
   - powershell .\\devtools\\appveyor\\missing-headers.ps1
   # Retrieve conda-build-all
-  - wget https://raw.githubusercontent.com/omnia-md/conda-recipes/master/conda-build-all -OutFile conda-build-all --no-check-certificate
+  - ps: wget https://raw.githubusercontent.com/omnia-md/conda-recipes/master/conda-build-all -OutFile conda-build-all --no-check-certificate
 
 build: false
 
