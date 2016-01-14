@@ -20,7 +20,7 @@ requirements:
     - fftw3f
     - sphinx
     - sphinxcontrib-bibtex
-    - swig
+    - swig ==2.0.10
     # on osx, need to install doxygen manually
     - doxygen   [not osx]
     # for building docs
