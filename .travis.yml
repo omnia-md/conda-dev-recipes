@@ -13,7 +13,7 @@ env:
     secure: "FJIkUm66d96GPtgISVFewtJpSr809sjZU1AdJx15csBkxDXvzG0oi6ksTvlbOD1gqUHWeSW8K3QMklsbrtn4T+UOc0hFgq5vNKCDhXouWuSW1hzqb15o7rZ0szg4noG9JLKsZfRHsCJ37C9OHmS40kuDAadql5g/Y+Q2+6uufDX3GT+v88oIOdYHGzOEbP6juz8C/CipbEFgz5sYepB/sdovaJQkzdSV4B/A7UGbnTXmNyf7diCpQNyweaeNaxOGtVaUsK7xJfI5sjzN00a11gqLVsi6TCYc+3md7At76yvhbphCedJlDWcf/Fm9n+3xkzkZv+7btjMJGdxkHMD7iuoclw+pRURTDlCI0WJikIkP+q5fyVyzHBnRq4yz7sTqCWnS9PQRXqfRzAlM/uHxEOYciPl2MaxEhZC5i3ti7Hn8LQGTEldDj34Hq3J0oEuGj6qrihVhv703ODLdHx910Y+5QRIXWTmtR/Ze3E+xDh648V0P1B2Rmgs8KmNc3pxW+Q/QsYnXQEGfI1k2Iv/RjemMjgEHMgsjZqJyo+2K/JuKhOi/EaEU4AtV3XNrZAO+ksxBcG4TR5iK6bmqxgZ4hPoKR8vtMeY6finZOECp52PhI3NX3Ug2a5h34CnaHF0ikDHu0snbBzNueZy9bDGZhxy47kBZqxOfo8thBwl8+Pc="
 
 # The Dockerfile that defines the image that for the build environment is
-# available in this repo at devtools/centos5-build-box/Dockerfile
+# available at https://github.com/omnia-md/conda-recipes/tree/master/devtools/centos5-build-box
 install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       docker pull rmcgibbo/centos5-build-box;
@@ -24,16 +24,16 @@ install:
 
 script:
   - if [[ "${TRAVIS_PULL_REQUEST}" == "false" && "${TRAVIS_BRANCH}" == "master" ]]; then
-        export UPLOAD="--upload omnia";
+        export CONDA_BUILD_ALL_FLAGS="--force --upload omnia";
     else
-        export UPLOAD=" ";
+        export CONDA_BUILD_ALL_FLAGS=" ";
     fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
         echo "Building linux...";
-        docker run -e UPLOAD -e BINSTAR_TOKEN -e TRAVIS_PULL_REQUEST
+        docker run -e CONDA_BUILD_ALL_FLAGS -e BINSTAR_TOKEN -e TRAVIS_PULL_REQUEST
             -t -i --rm -v `pwd`:/io rmcgibbo/centos5-build-box:latest
             bash /io/devtools/docker-build.sh;
     elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
         echo "Building osx...";
-        bash devtools/docker-build-osx.sh;
+        bash devtools/osx-build.sh;
     fi
