@@ -1,0 +1,27 @@
+package:
+  name: parmed-dev
+  version: !!str 0.0.0
+
+source:
+  git_url: https://github.com/parmed/parmed.git
+  git_tag: ommparams
+
+build:
+  number: 0
+
+requirements:
+  build:
+    - python
+    - numpy
+    - setuptools
+
+  run:
+    - python
+    - numpy
+    - pandas
+    - openmm
+
+about:
+  home: http://parmed.github.io/ParmEd
+  license: GNU Lesser General Public License v2 or later (LGPLv2+)
+  summary: A package for parsing, interconverting, manipulating, and simulating biomolecular simulations with many packages
