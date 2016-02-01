@@ -43,6 +43,7 @@ environment:
       PYTHON_ARCH: "64"
 
 install:
+  - 'C:\cygwin\setup-x86.exe -P libsasl2 -P ca-certificates'
   - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
   - set PATH=C:\MinGW\msys\1.0\bin;%PATH%
   - conda config --add channels omnia
