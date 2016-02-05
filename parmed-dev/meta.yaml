@@ -4,7 +4,7 @@ package:
 
 source:
   git_url: https://github.com/parmed/parmed.git
-  git_tag: ommparams
+  git_tag: master
 
 build:
   number: 0
