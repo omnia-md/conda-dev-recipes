@@ -54,6 +54,9 @@ make -j$CPU_COUNT C++ApiDocs PythonApiDocs
 mkdir -p $PREFIX/docs/openmm
 mv api-python $PREFIX/docs/openmm
 mv api-c++ $PREFIX/docs/openmm
+# Remove errant .html files
+rm -f $PREFIX/docs/"Python API Reference.html"
+rm -f $PREFIX/docs/"C++ API Reference.html"
 
 # Put examples into an appropriate subdirectory.
 mkdir $PREFIX/share/openmm/
