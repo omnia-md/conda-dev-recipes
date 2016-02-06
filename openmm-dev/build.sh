@@ -51,9 +51,9 @@ mkdir -p $PREFIX/docs/openmm
 mv sphinx-docs/userguide/html/* $PREFIX/docs/openmm
 # Build API docs
 make -j$CPU_COUNT C++ApiDocs PythonApiDocs
-mkdir -p $PREFIX/docs/openmm/api-docs
-mv docs/api-python/* $PREFIX/docs/openmm/api-docs
-mv api-c++/* $PREFIX/docs/openmm/api-docs
+mkdir -p $PREFIX/docs/openmm
+mv api-python $PREFIX/docs/openmm
+mv api-c++ $PREFIX/docs/openmm
 
 # Put examples into an appropriate subdirectory.
 mkdir $PREFIX/share/openmm/
