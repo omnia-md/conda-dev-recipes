@@ -16,7 +16,7 @@ env:
 # available at https://github.com/omnia-md/conda-recipes/tree/master/devtools/centos5-build-box
 install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-      docker pull rmcgibbo/centos5-build-box;
+      docker pull jchodera/omnia-build-box;
     fi
   # Retrieve conda-build-all
   - wget -O conda-build-all --quiet https://raw.githubusercontent.com/omnia-md/conda-recipes/master/conda-build-all
