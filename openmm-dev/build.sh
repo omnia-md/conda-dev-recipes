@@ -46,14 +46,14 @@ make -j$CPU_COUNT all $OTHER_TARGETS
 make -j$CPU_COUNT install PythonInstall
 
 # Build manuals
-#make -j$CPU_COUNT sphinxhtml
-#mkdir -p $PREFIX/docs/openmm
-#mv sphinx-docs/userguide/html/* $PREFIX/docs/openmm
+make -j$CPU_COUNT sphinxhtml
+mkdir -p $PREFIX/docs/openmm
+mv sphinx-docs/userguide/html/* $PREFIX/docs/openmm
 # Build API docs
-#make -j$CPU_COUNT C++ApiDocs PythonApiDocs
-#mkdir -p $PREFIX/docs/openmm/api-docs
-#mv docs/api-python/* $PREFIX/docs/openmm/api-docs
-#mv api-c++/* $PREFIX/docs/openmm/api-docs
+make -j$CPU_COUNT C++ApiDocs PythonApiDocs
+mkdir -p $PREFIX/docs/openmm/api-docs
+mv docs/api-python/* $PREFIX/docs/openmm/api-docs
+mv api-c++/* $PREFIX/docs/openmm/api-docs
 
 # Put examples into an appropriate subdirectory.
 mkdir $PREFIX/share/openmm/
