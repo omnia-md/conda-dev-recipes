@@ -41,7 +41,6 @@ fi
 # Build in subdirectory.
 mkdir build
 cd build
-CWD = `pwd`
 cmake .. $CMAKE_FLAGS
 make -j$CPU_COUNT all
 make -j$CPU_COUNT install PythonInstall
