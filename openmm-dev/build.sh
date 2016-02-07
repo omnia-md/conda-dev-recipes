@@ -43,8 +43,6 @@ mkdir build
 cd build
 cmake .. $CMAKE_FLAGS
 make -j$CPU_COUNT all
-make -j$CPU_COUNT sphinxpdf
-make -j$CPU_COUNT C++ApiDocs PythonApiDocs
 make -j$CPU_COUNT install PythonInstall
 
 # Clean up paths
@@ -53,17 +51,17 @@ mv $PREFIX/docs/* openmm-docs
 mv openmm-docs $PREFIX/docs/
 
 # Build manuals
-#make -j$CPU_COUNT sphinxpdf
-#mkdir -p $PREFIX/docs/openmm/userguide
-#mv sphinx-docs/userguide/latex/*.pdf $PREFIX/docs/openmm/
+make -j$CPU_COUNT sphinxpdf
+mkdir -p $PREFIX/docs/openmm/userguide
+mv sphinx-docs/userguide/latex/*.pdf $PREFIX/docs/openmm/
 # Build API docs
-#make -j$CPU_COUNT C++ApiDocs PythonApiDocs
-#mkdir -p $PREFIX/docs/openmm
-#mv api-python $PREFIX/docs/openmm
-#mv api-c++ $PREFIX/docs/openmm
+make -j$CPU_COUNT C++ApiDocs PythonApiDocs
+mkdir -p $PREFIX/docs/openmm
+mv api-python $PREFIX/docs/openmm
+mv api-c++ $PREFIX/docs/openmm
 # Move errant .html files
-#mv $PREFIX/docs/"Python API Reference.html" $PREFIX/docs/openmm
-#mv $PREFIX/docs/"C++ API Reference.html" $PREFIX/docs/openmm
+mv $PREFIX/docs/"Python API Reference.html" $PREFIX/docs/openmm
+mv $PREFIX/docs/"C++ API Reference.html" $PREFIX/docs/openmm
 
 # Put examples into an appropriate subdirectory.
 mkdir $PREFIX/share/openmm/
