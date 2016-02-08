@@ -17,8 +17,7 @@ sudo tar -zxf cuda_mac_installer_tk.tar.gz -C /;
 sudo tar -zxf cuda_mac_installer_drv.tar.gz -C /;
 
 # Install latex.
-brew install -y ruby
-brew install -y caskroom/cask/brew-cask
+brew tap -y Caskroom/cask
 brew cask install -y mactex
 
 # Build packages
