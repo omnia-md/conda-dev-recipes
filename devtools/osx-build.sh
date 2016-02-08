@@ -15,11 +15,13 @@ curl -O -s http://developer.download.nvidia.com/compute/cuda/7.5/Prod/network_in
 curl -O -s http://developer.download.nvidia.com/compute/cuda/7.5/Prod/network_installers/mac/x86_64/cuda_mac_installer_drv.tar.gz
 sudo tar -zxf cuda_mac_installer_tk.tar.gz -C /;
 sudo tar -zxf cuda_mac_installer_drv.tar.gz -C /;
+rm -f cuda_mac_installer_tk.tar.gz cuda_mac_installer_drv.tar.gz
 
 # Install latex.
 brew update -y --quiet
-brew tap -y --quiet Caskroom/cask
-brew cask install -y --quiet mactex >& mactex-install.log || tail -n 50 mactex-install.log
+brew tap -y --quiet Caskroom/cask;
+sudo brew cask install -y --quiet mactex >& mactex-install.log || tail -n 50 mactex-install.log
+rm -f mactex-install.log
 
 # Build packages
 ./conda-build-all $CONDA_BUILD_ALL_FLAGS *;
