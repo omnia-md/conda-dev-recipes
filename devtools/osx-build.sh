@@ -19,7 +19,7 @@ sudo tar -zxf cuda_mac_installer_drv.tar.gz -C /;
 # Install latex.
 brew update -y --quiet
 brew tap -y --quiet Caskroom/cask
-brew cask install -y --quiet mactex
+brew cask install -y --quiet mactex >& mactex-install.log || tail -n 50 mactex-install.log
 
 # Build packages
 ./conda-build-all $CONDA_BUILD_ALL_FLAGS *;
