@@ -7,17 +7,9 @@ brew update -y --quiet
 # Install latex.
 brew tap -y --quiet Caskroom/cask;
 sudo brew cask install -y --quiet basictex
-ls -ltr /opt/homebrew-cask/
-ls -ltr /opt/homebrew-cask/Caskroom/
-ls -ltr /opt/homebrew-cask/Caskroom/basictex/
-ls -ltr /opt/homebrew-cask/Caskroom/basictex/latest
-brew info basictex
-#ls -ltr /opt/homebrew-cask/Caskroom/basictex/latest
-#brew info basictex
-echo $PATH
-export PATH="/usr/local/bin:${PATH}:/usr/bin"
+ls -ltr /usr
+export PATH="/usr/texbin:${PATH}:/usr/bin"
 which pdflatex
-#rm -f mactex-install.log
 
 # Install Miniconda
 curl -s -O https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh;
