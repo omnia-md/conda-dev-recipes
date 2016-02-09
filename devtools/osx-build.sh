@@ -24,8 +24,8 @@ rm -f cuda_mac_installer_tk.tar.gz cuda_mac_installer_drv.tar.gz
 brew tap -y --quiet Caskroom/cask;
 sudo brew cask install -y --quiet basictex
 export PATH="/usr/texbin:${PATH}:/usr/bin"
-sudo tlmgr install titlesec
-sudo tlmgr install framed
+sudo tlmgr update --self
+sudo tlmgr install titlesec framed threeparttable wrapfig multirow collection-fontsrecommended
 
 # Build packages
 ./conda-build-all $CONDA_BUILD_ALL_FLAGS *;
