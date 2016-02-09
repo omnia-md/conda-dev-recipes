@@ -4,12 +4,6 @@ set -e -x
 # Update homebrew
 brew update -y --quiet
 
-# Install latex.
-brew install -y --quiet pv
-brew tap -y --quiet Caskroom/cask;
-sudo brew cask install -y --quiet mactex
-export PATH="/usr/texbin:${PATH}:/usr/bin"
-
 # Install Miniconda
 curl -s -O https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh;
 bash Miniconda3-latest-MacOSX-x86_64.sh -b -p $HOME/anaconda;
@@ -25,6 +19,12 @@ curl -O -s http://developer.download.nvidia.com/compute/cuda/7.5/Prod/network_in
 sudo tar -zxf cuda_mac_installer_tk.tar.gz -C /;
 sudo tar -zxf cuda_mac_installer_drv.tar.gz -C /;
 rm -f cuda_mac_installer_tk.tar.gz cuda_mac_installer_drv.tar.gz
+
+# Install latex.
+brew install -y --quiet pv
+brew tap -y --quiet Caskroom/cask;
+sudo brew cask install -y mactex | pv
+export PATH="/usr/texbin:${PATH}:/usr/bin"
 
 # Build packages
 ./conda-build-all $CONDA_BUILD_ALL_FLAGS *;
