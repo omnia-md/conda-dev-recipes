@@ -21,10 +21,11 @@ sudo tar -zxf cuda_mac_installer_drv.tar.gz -C /;
 rm -f cuda_mac_installer_tk.tar.gz cuda_mac_installer_drv.tar.gz
 
 # Install latex.
-brew install -y --quiet pv
 brew tap -y --quiet Caskroom/cask;
-sudo brew cask install -y mactex | pv
+sudo brew cask install -y --quiet basictex
 export PATH="/usr/texbin:${PATH}:/usr/bin"
+sudo tlmgr install titlesec
+sudo tlmgr install framed
 
 # Build packages
 ./conda-build-all $CONDA_BUILD_ALL_FLAGS *;
