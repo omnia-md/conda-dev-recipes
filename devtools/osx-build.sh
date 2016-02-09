@@ -21,7 +21,7 @@ rm -f cuda_mac_installer_tk.tar.gz cuda_mac_installer_drv.tar.gz
 brew update -y --quiet
 brew tap -y --quiet Caskroom/cask;
 sudo brew cask install -y --quiet basictex >& mactex-install.log && tail -n 50 mactex-install.log
-which pdflatex
+ls -ltr /opt/homebrew-cask/Caskroom/basictex/latest
 brew info basictex
 echo $PATH
 rm -f mactex-install.log
