@@ -6,10 +6,9 @@ brew update -y --quiet
 
 # Install latex.
 brew tap -y --quiet Caskroom/cask;
-sudo brew cask install -y --quiet basictex
-ls -ltr /usr
+brew install -y --quiet pv
+sudo brew cask install -y --quiet mactex | pv > mactex-install.out
 export PATH="/usr/texbin:${PATH}:/usr/bin"
-which pdflatex
 
 # Install Miniconda
 curl -s -O https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh;
