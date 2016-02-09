@@ -24,6 +24,8 @@ sudo brew cask install -y --quiet basictex
 #ls -ltr /opt/homebrew-cask/Caskroom/basictex/latest
 #brew info basictex
 echo $PATH
+export PATH="/usr/local/bin:${PATH}:/usr/bin"
+which pdflatex
 #rm -f mactex-install.log
 
 # Build packages
