@@ -20,11 +20,11 @@ rm -f cuda_mac_installer_tk.tar.gz cuda_mac_installer_drv.tar.gz
 # Install latex.
 brew update -y --quiet
 brew tap -y --quiet Caskroom/cask;
-sudo brew cask install -y --quiet basictex >& mactex-install.log && tail -n 50 mactex-install.log
-ls -ltr /opt/homebrew-cask/Caskroom/basictex/latest
-brew info basictex
+sudo brew cask install -y --quiet basictex
+#ls -ltr /opt/homebrew-cask/Caskroom/basictex/latest
+#brew info basictex
 echo $PATH
-rm -f mactex-install.log
+#rm -f mactex-install.log
 
 # Build packages
 ./conda-build-all $CONDA_BUILD_ALL_FLAGS *;
