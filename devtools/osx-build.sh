@@ -14,8 +14,8 @@ conda install -yq conda-build jinja2 anaconda-client;
 # Install OpenMM dependencies that can't be installed through
 # conda package manager (doxygen + CUDA)
 brew install -y --quiet doxygen
-curl -O -s http://developer.download.nvidia.com/compute/cuda/7.5/Prod/network_installers/mac/x86_64/cuda_mac_installer_tk.tar.gz && false
-curl -O -s http://developer.download.nvidia.com/compute/cuda/7.5/Prod/network_installers/mac/x86_64/cuda_mac_installer_drv.tar.gz && false
+curl -O -s http://developer.download.nvidia.com/compute/cuda/7.5/Prod/network_installers/mac/x86_64/cuda_mac_installer_tk.tar.gz
+curl -O -s http://developer.download.nvidia.com/compute/cuda/7.5/Prod/network_installers/mac/x86_64/cuda_mac_installer_drv.tar.gz
 sudo tar -zxf cuda_mac_installer_tk.tar.gz -C /;
 sudo tar -zxf cuda_mac_installer_drv.tar.gz -C /;
 rm -f cuda_mac_installer_tk.tar.gz cuda_mac_installer_drv.tar.gz
