@@ -25,7 +25,7 @@ brew tap -y --quiet Caskroom/cask;
 sudo brew cask install -y --quiet basictex
 export PATH="/usr/texbin:${PATH}:/usr/bin"
 sudo tlmgr update --self
-sudo tlmgr install titlesec framed threeparttable wrapfig multirow collection-fontsrecommended hyphenat
+sudo tlmgr install titlesec framed threeparttable wrapfig multirow collection-fontsrecommended hyphenat xstring
 
 # Build packages
 ./conda-build-all $CONDA_BUILD_ALL_FLAGS *;
