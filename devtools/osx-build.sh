@@ -7,7 +7,7 @@ brew update -y --quiet
 # Install latex.
 brew tap -y --quiet Caskroom/cask;
 brew install -y --quiet pv
-sudo brew cask install -y --quiet mactex | pv > mactex-install.out
+sudo brew cask install -y --quiet mactex | pv
 export PATH="/usr/texbin:${PATH}:/usr/bin"
 
 # Install Miniconda
