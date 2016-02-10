@@ -42,6 +42,7 @@ fi
 mkdir build
 cd build
 cmake .. $CMAKE_FLAGS
+cat ../CMakeCache.txt # DEBUG
 make -j$CPU_COUNT all
 make -j$CPU_COUNT install PythonInstall
 
