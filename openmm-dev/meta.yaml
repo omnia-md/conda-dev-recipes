@@ -1,9 +1,10 @@
 package:
   name: openmm-dev
-  version: 7.0.0.dev0
+  version: 7.0beta1
 
 source:
   git_url: https://github.com/pandegroup/openmm.git
+  git_rev: 7.0beta1
 
 build:
   number: 0
@@ -18,8 +19,6 @@ requirements:
     - jom       [win]
     - python
     - fftw3f
-    - sphinx
-    - sphinxcontrib-bibtex
     # swig is pinned to use omnia swig 3.0.7
     - swig ==3.0.7
     # on osx, need to install doxygen manually
