@@ -38,30 +38,22 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     CMAKE_FLAGS+=" -DFFTW_THREADS_LIBRARY=$PREFIX/lib/libfftw3f_threads.dylib"
 fi
 
-# Build in subdirectory.
+# Build in subdirectory and install.
 mkdir build
 cd build
 cmake .. $CMAKE_FLAGS
 make -j$CPU_COUNT all
 make -j$CPU_COUNT install PythonInstall
 
-# Clean up paths
+# Clean up paths for API docs.
 mkdir openmm-docs
 mv $PREFIX/docs/* openmm-docs
 mv openmm-docs $PREFIX/docs/openmm
 
-# Build manuals
+# Build PDF manuals
 make -j$CPU_COUNT sphinxpdf
-#mkdir -p $PREFIX/docs/openmm/userguide
 mv sphinx-docs/userguide/latex/*.pdf $PREFIX/docs/openmm/
 mv sphinx-docs/developerguide/latex/*.pdf $PREFIX/docs/openmm/
-# Build API docs
-#make -j$CPU_COUNT C++ApiDocs PythonApiDocs
-#mv api-python $PREFIX/docs/openmm
-#mv api-c++ $PREFIX/docs/openmm
-# Move errant .html files
-#mv $PREFIX/docs/"Python API Reference.html" $PREFIX/docs/openmm
-#mv $PREFIX/docs/"C++ API Reference.html" $PREFIX/docs/openmm
 
 # Put examples into an appropriate subdirectory.
 mkdir $PREFIX/share/openmm/
