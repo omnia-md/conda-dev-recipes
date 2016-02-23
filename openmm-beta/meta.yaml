@@ -1,9 +1,10 @@
 package:
-  name: openmm-dev
-  version: 0.0.0
+  name: openmm-beta
+  version: 7.0beta1
 
 source:
   git_url: https://github.com/pandegroup/openmm.git
+  git_rev: 7.0beta1
 
 build:
   number: 0
