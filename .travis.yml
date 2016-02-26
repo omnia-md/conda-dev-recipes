@@ -31,7 +31,7 @@ script:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
         echo "Building linux...";
         docker run -e CONDA_BUILD_ALL_FLAGS -e BINSTAR_TOKEN -e TRAVIS_PULL_REQUEST
-            -t -i --rm -v `pwd`:/io rmcgibbo/centos5-build-box:latest
+            -t -i --rm -v `pwd`:/io jchodera/omnia-build-box:latest
             bash /io/devtools/docker-build.sh;
     elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
         echo "Building osx...";
