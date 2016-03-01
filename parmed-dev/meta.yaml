@@ -18,7 +18,7 @@ requirements:
     - python
     - numpy
     - pandas
-    - openmm
+    - openmm-dev
 
 about:
   home: http://parmed.github.io/ParmEd
