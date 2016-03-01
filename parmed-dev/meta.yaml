@@ -1,6 +1,6 @@
 package:
   name: parmed-dev
-  version: "2.1.dev0"
+  version: 0.0.0
 
 source:
   git_url: https://github.com/parmed/parmed.git
@@ -18,7 +18,7 @@ requirements:
     - python
     - numpy
     - pandas
-    - openmm
+    - openmm-dev
 
 about:
   home: http://parmed.github.io/ParmEd
