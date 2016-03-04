@@ -3,7 +3,7 @@ package:
   version: 0.0.0
 
 source:
-  git_url: git@github.com:choderalab/openpathsampling.git
+  git_url: https://github.com/choderalab/openpathsampling.git
 
 build:
   preserve_egg_dir: True
