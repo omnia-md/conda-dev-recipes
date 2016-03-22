@@ -28,6 +28,7 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
 
     # DEBUGGING name_tool issues
     which install_name_tool
+    ls -ltr `which install_name_tool`
     path_to_install_name_tool=/usr/bin/install_name_tool
 fi
 
