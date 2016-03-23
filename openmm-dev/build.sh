@@ -27,6 +27,7 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     CMAKE_FLAGS+=" -DCMAKE_OSX_SYSROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk"
 
     # DEBUGGING name_tool issues
+    xcode-select -p
     which install_name_tool
     ls -ltr `which install_name_tool`
     path_to_install_name_tool=/usr/bin/install_name_tool
