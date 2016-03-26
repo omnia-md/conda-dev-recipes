@@ -25,12 +25,6 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     CMAKE_FLAGS+=" -DCUDA_SDK_ROOT_DIR=/Developer/NVIDIA/CUDA-7.5"
     CMAKE_FLAGS+=" -DCUDA_TOOLKIT_ROOT_DIR=/Developer/NVIDIA/CUDA-7.5"
     CMAKE_FLAGS+=" -DCMAKE_OSX_SYSROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk"
-
-    # DEBUGGING name_tool issues
-    xcode-select -p
-    which install_name_tool
-    ls -ltr `which install_name_tool`
-    path_to_install_name_tool=/usr/bin/install_name_tool
 fi
 
 # Generate API docs
