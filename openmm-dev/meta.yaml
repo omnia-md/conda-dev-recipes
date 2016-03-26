@@ -17,7 +17,7 @@ requirements:
     - cmake     [not win]
     - jom       [win]
     - python
-    # DEBUG: Pin fftw3f to 3.3.3 to fix OSX py34 issues?
+    # Pin fftw3f to 3.3.3 to work around OSX py34 issues
     - fftw3f ==3.3.3
     # swig is pinned to use omnia swig 3.0.7
     - swig ==3.0.7
