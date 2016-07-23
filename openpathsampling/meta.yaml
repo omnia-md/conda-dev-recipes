@@ -16,7 +16,7 @@ requirements:
   build:
     - python
     - setuptools
-    - numpy
+    - pyyaml
 
   run:
     - python
@@ -29,7 +29,7 @@ requirements:
     - pymbar
     - docopt
     - pyyaml
-    - mdtraj 1.5.1
+    - mdtraj
     - svgwrite
     - networkx
     - matplotlib
