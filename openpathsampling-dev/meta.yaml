@@ -1,5 +1,5 @@
 package:
-  name: openpathsampling-dev
+  name: openpathsampling
   version: 0.0.0
 
 source:

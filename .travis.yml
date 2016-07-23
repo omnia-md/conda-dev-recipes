@@ -8,38 +8,35 @@ sudo: required
 services:
   - docker
 
-notifications:
-  email:
-    recipients:
-      - peastman@stanford.edu
-    on_success: change # default: change
-    on_failure: always # default: always
-
 env:
   global:
     secure: "BaOgRZbUyPCPm3Sgm3Rh51IlDJL+umm2E59VsmUdA54xnTgBpketQb6LjHRMMchN7INiAaXdtIfynbtIbkEmog7z2vlbNHEI1n60FXaddy3O0cxhAwzRq3LidIK8vYw1q2gczZIK4WSEDLMCNMzhRvL2LqDU7SQ5YAY4T0dFUP6/9fqb5S7b8gBfTJMdiK1dhYZOm8UmlRTR6ukQbC/kq4CG0JfXT1qwcmh7bo80YEiSBhXHfVi6y5q8XpMphg83rSDDrQFUZUTquDTiK3ID/qtS74JmnIpXWgVYcO2bEkdwf0snaU/Sq+34bUry1H5MIlrHAeCeT6WtJfdY4QyoF80A3tVZ8aiuBE1DyGgZxLMnscqiUzIDdzI8b+s9aIyjxl5q3Eufoq0kTLOX51bOIhSxHTUNGENnecBBKIRh/YYwWuCM7LXu2X86E8OkyuqOCKHfIGVs65Y4XL1qOqH3VLVWyhTmeTFpb3kqxn/mTDHHAE7/V36gqcLMgiOX9cbR+ZVRGugY1+HMxb26iA6YrMnXL8oD+eKqu3ofTQ1itKcxXoZnf3AcPwnqs8BnX5j6nN749PWAKnNXheG27IS9M1AqP2QM0Qs86nQZyDW2E511/VXwbUyj+DVrThZqL3FX5IV0WNZ3w8UXFO9EVSfKGxB24K9NDhoYBQLUo0WPNig="
 
 # The Dockerfile that defines the image that for the build environment is
-# available at https://github.com/omnia-md/conda-recipes/tree/master/devtools/centos5-build-box
+# available in this repo at devtools/centos5-build-box/Dockerfile
 install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       docker pull jchodera/omnia-build-box;
     fi
+
+script:
   # Retrieve conda-build-all
   - wget -O conda-build-all --quiet https://raw.githubusercontent.com/omnia-md/conda-recipes/master/conda-build-all
   - chmod u+x conda-build-all
-
-script:
+  # Select upload destination
   - if [[ "${TRAVIS_PULL_REQUEST}" == "false" && "${TRAVIS_BRANCH}" == "master" ]]; then
-        export CONDA_BUILD_ALL_FLAGS="--force --upload omnia";
+        export UPLOAD="--upload omnia --dev --force";
     else
-        export CONDA_BUILD_ALL_FLAGS=" ";
+        export UPLOAD=" ";
     fi
+  - echo $UPLOAD
+
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-        echo "Building linux...";
-        docker run -e CONDA_BUILD_ALL_FLAGS -e BINSTAR_TOKEN -e TRAVIS_PULL_REQUEST
+
+        docker run -e UPLOAD -e BINSTAR_TOKEN -e TRAVIS_PULL_REQUEST
             -t -i --rm -v `pwd`:/io jchodera/omnia-build-box:latest
             bash /io/devtools/docker-build.sh;
+
     elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
         echo "Building osx...";
         bash devtools/osx-build.sh;

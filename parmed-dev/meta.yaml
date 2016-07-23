@@ -1,5 +1,5 @@
 package:
-  name: parmed-dev
+  name: parmed
   version: 0.0.0
 
 source:
@@ -7,8 +7,6 @@ source:
 
 build:
   number: 0
-  skip:
-    - [win]
 
 requirements:
   build:
@@ -20,7 +18,7 @@ requirements:
     - python
     - numpy
     - pandas
-    - openmm-dev
+    - openmm
 
 about:
   home: http://parmed.github.io/ParmEd
