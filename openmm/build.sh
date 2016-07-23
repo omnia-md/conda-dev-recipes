@@ -2,8 +2,8 @@
 
 CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=$PREFIX -DBUILD_TESTING=OFF"
 
-# Ensure we build debug version
-CMAKE_FLAGS+=" -DCMAKE_BUILD_TYPE=Debug"
+# Ensure we build a release
+CMAKE_FLAGS+=" -DCMAKE_BUILD_TYPE=Release"
 
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     CUDA_PATH="/usr/local/cuda-7.5"
