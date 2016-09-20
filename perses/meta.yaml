@@ -1,0 +1,66 @@
+package:
+  name: perses
+  version: 1.0.0
+
+source:
+  git_url: https://github.com/choderalab/perses.git
+
+build:
+  preserve_egg_dir: True
+  number: 0
+
+requirements:
+  build:
+    - python
+    - setuptools
+    - numpy
+    - scipy
+    - numexpr
+    - autograd
+    - pymbar
+    - openmm >=7.0.1
+    - parmed
+    - openmoltools
+    - alchemy >=1.2.0
+    - openmmtools
+    - numba ==0.27.0
+    - netcdf4
+    - matplotlib
+    - seaborn
+    - pdbfixer
+    - mdtraj
+    - parmed # for testing/debugging
+    - pdbfixer
+
+  run:
+    - python
+    - setuptools
+    - numpy
+    - scipy
+    - numexpr
+    - autograd
+    - pymbar
+    - openmm >=7.0.1
+    - parmed
+    - openmoltools
+    - alchemy >=1.2.0
+    - openmmtools
+    - numba ==0.27.0
+    - netcdf4
+    - matplotlib
+    - seaborn
+    - pdbfixer
+    - mdtraj
+    - parmed # for testing/debugging
+    - pdbfixer
+#
+# test:
+#   requires:
+#     - nose
+#     - nose-timer
+#   imports:
+#     - perses
+
+about:
+  home: https://github.com/choderalab/perses
+  license: GNU Lesser General Public License v2 or later (LGPLv2+)
