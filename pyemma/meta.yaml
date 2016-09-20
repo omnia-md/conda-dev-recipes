@@ -2,7 +2,7 @@ package:
   name: pyemma-dev
   # version number: [base tag]+[commits-upstream]_[git_hash]
   # eg. v2.0+0_g8824162
-  version: {{ GIT_DESCRIBE_TAG[1:] + '+' +GIT_BUILD_STR}}
+  version: {{ python setup.py --version }}
 source:
   git_url: https://github.com/markovmodel/pyemma
   git_rev: devel
