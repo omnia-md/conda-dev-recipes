@@ -53,9 +53,6 @@ requirements:
     - progress_reporter
 
 test:
-  requires:
-    - nose
-    - coverage ==4
   imports:
     - pyemma
 
