@@ -1,5 +1,5 @@
 package:
-  name: pyemma-dev
+  name: pyemma
   # version number: [base tag]+[commits-upstream]_[git_hash]
   # eg. v2.0+0_g8824162
   version: {{ python setup.py --version }}
