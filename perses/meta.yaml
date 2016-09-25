@@ -21,7 +21,7 @@ requirements:
     - openmm >=7.0.1
     - parmed
     - openmoltools
-    - alchemy >=1.2.0
+    - alchemy >=1.2.1
     - openmmtools
     - numba
     - netcdf4
@@ -43,7 +43,7 @@ requirements:
     - openmm >=7.0.1
     - parmed
     - openmoltools
-    - alchemy >=1.2.0
+    - alchemy >=1.2.1
     - openmmtools
     - numba
     - netcdf4
