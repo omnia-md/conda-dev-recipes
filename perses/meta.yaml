@@ -10,7 +10,7 @@ build:
   number: 0
   skip:
     - [win32 or (win and py2k)]
-    
+
 requirements:
   build:
     - python
@@ -55,13 +55,6 @@ requirements:
     - mdtraj
     - parmed # for testing/debugging
     - pdbfixer
-#
-# test:
-#   requires:
-#     - nose
-#     - nose-timer
-#   imports:
-#     - perses
 
 about:
   home: https://github.com/choderalab/perses
