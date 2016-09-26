@@ -9,8 +9,7 @@ build:
   preserve_egg_dir: True
   number: 0
   skip:
-    - [win32] # no openmm
-    - [win and py27] # no openmm
+    - [win32 or (win and py2k)]
 
 requirements:
   build:
@@ -56,13 +55,6 @@ requirements:
     - mdtraj
     - parmed # for testing/debugging
     - pdbfixer
-#
-# test:
-#   requires:
-#     - nose
-#     - nose-timer
-#   imports:
-#     - perses
 
 about:
   home: https://github.com/choderalab/perses
