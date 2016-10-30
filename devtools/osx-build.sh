@@ -22,7 +22,7 @@ rm -f cuda_mac_installer_tk.tar.gz cuda_mac_installer_drv.tar.gz
 
 # Install latex.
 brew tap -y --quiet Caskroom/cask;
-sudo brew cask install -y --quiet basictex
+brew cask install -y --quiet basictex
 export PATH="/usr/texbin:${PATH}:/usr/bin"
 sudo tlmgr update --self
 sudo tlmgr install titlesec framed threeparttable wrapfig multirow collection-fontsrecommended hyphenat xstring
