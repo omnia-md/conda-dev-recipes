@@ -27,7 +27,7 @@ install:
 
 script:
   # Retrieve conda-build-all
-  - wget -O conda-build-all --quiet https://raw.githubusercontent.com/omnia-md/conda-recipes/master/conda-build-all
+  - wget -O conda-build-all --no-check-certificate --quiet https://raw.githubusercontent.com/omnia-md/conda-recipes/master/conda-build-all
   - chmod u+x conda-build-all
   # Select upload destination
   - if [[ "${TRAVIS_PULL_REQUEST}" == "false" && "${TRAVIS_BRANCH}" == "master" ]]; then
