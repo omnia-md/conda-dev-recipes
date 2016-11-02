@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 # Activate Holy Build Box environment.
-source /hbb_exe/activate
+#source /hbb_exe/activate # Don't activate holy build box
 
 # Disable PYTHONPATH
 unset PYTHONPATH
@@ -11,11 +11,6 @@ pushd .
 cd /opt/rh/devtoolset-2/root/usr/lib/gcc
 ln -s x86_64-CentOS-linux/ x86_64-redhat-linux
 popd
-#CFLAGS: -g -O2 -fvisibility=hidden -I/hbb_exe/include
-#LDFLAGS: -L/hbb_exe/lib -static-libstdc++
-#STATICLIB_CFLAGS: -g -O2 -fvisibility=hidden -I/hbb_exe/include
-#SHLIB_CFLAGS: -g -O2 -fvisibility=hidden -I/hbb_exe/include
-#SHLIB_LDFLAGS: -L/hbb_exe/lib -static-libstdc++
 
 set -x
 curl -s -O https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
