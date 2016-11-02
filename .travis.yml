@@ -22,12 +22,12 @@ env:
 # available in this repo at devtools/centos5-build-box/Dockerfile
 install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-      docker pull jchodera/omnia-build-box:cuda80-amd30;
+      docker pull jchodera/omnia-build-box:cuda80-amd30-clang38;
     fi
 
 script:
   # Retrieve conda-build-all
-  - wget -O conda-build-all --quiet https://raw.githubusercontent.com/omnia-md/conda-recipes/master/conda-build-all
+  - wget -O conda-build-all --no-check-certificate --quiet https://raw.githubusercontent.com/omnia-md/conda-recipes/master/conda-build-all
   - chmod u+x conda-build-all
   # Select upload destination
   - if [[ "${TRAVIS_PULL_REQUEST}" == "false" && "${TRAVIS_BRANCH}" == "master" ]]; then
@@ -40,7 +40,7 @@ script:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
 
         docker run -e UPLOAD -e BINSTAR_TOKEN -e TRAVIS_PULL_REQUEST
-            -t -i --rm -v `pwd`:/io jchodera/omnia-build-box:cuda80-amd30
+            -t -i --rm -v `pwd`:/io jchodera/omnia-build-box:cuda80-amd30-clang38
             bash /io/devtools/docker-build.sh;
 
     elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
