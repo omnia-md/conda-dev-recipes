@@ -14,15 +14,15 @@ conda install -yq conda-build jinja2 anaconda-client;
 # Install OpenMM dependencies that can't be installed through
 # conda package manager (doxygen + CUDA)
 brew install -y --quiet doxygen
-curl -O -s http://developer.download.nvidia.com/compute/cuda/8.0/Prod/network_installers/mac/x86_64/cuda_mac_installer_tk.tar.gz
-curl -O -s http://developer.download.nvidia.com/compute/cuda/8.0/Prod/network_installers/mac/x86_64/cuda_mac_installer_drv.tar.gz
+curl -O -s http://developer.download.nvidia.com/compute/cuda/$CUDA_VERSION/Prod/network_installers/mac/x86_64/cuda_mac_installer_tk.tar.gz
+curl -O -s http://developer.download.nvidia.com/compute/cuda/$CUDA_VERSION/Prod/network_installers/mac/x86_64/cuda_mac_installer_drv.tar.gz
 sudo tar -zxf cuda_mac_installer_tk.tar.gz -C /;
 sudo tar -zxf cuda_mac_installer_drv.tar.gz -C /;
 rm -f cuda_mac_installer_tk.tar.gz cuda_mac_installer_drv.tar.gz
 
 # Install latex.
 brew tap -y --quiet Caskroom/cask;
-sudo brew cask install -y --quiet basictex
+brew cask install -y --quiet basictex
 export PATH="/usr/texbin:${PATH}:/usr/bin"
 sudo tlmgr update --self
 sudo tlmgr install titlesec framed threeparttable wrapfig multirow collection-fontsrecommended hyphenat xstring
