@@ -17,9 +17,6 @@ env:
     # Select which CUDA version to use
     - CUDA_VERSION=7.5
     - CUDA_SHORT_VERSION=75
-  secure:
-    # omnia channel binstar key
-    - "U02NgOGoOGMhHB+Cc7w1aaiUsFE75VAAnIJ7ECME9FtLa1ktQWMy3VEPNK8hPUJ07D3WrY0J9fi5u4Z3N8CBo4HzWZovmGWkd7I5WzqNdWLUgbDIgts9O45/PLp0mwMpocEyq5WCBtWKQoni0H23kgSJHoMl7KyszdJ0/IyAA4qCFXIhukRKYmWu4EQK/VkEjROBzLxFH8ImztKei6VogGP/zVsRbuXHnZkVV+UgltPWDR8Wkig5jp9jmpgn9yYA2IVT8cCeh8kL7haC+1KJSFd/LfS7runNn68/AnTRQ8XpvoxE2Qp73xnSLnEHliM53dqZ4RxlqUK9Pj3nY1KyQCiaX1JtmIT2CzqQwbbPjEITLKfuZVBWN3i1h2lcJP69mo1io2f1gjZBX5qsYIJAZ5KzfksQ6z4loAp0BpHGjEO+4sYpi5pIj9hMY4qGywuFFjB2LPJleN7l9omIUIUMGdwegoigohh+lS3TtK9ISfYdGFFlp0HlmsQpW3k0eZHwNXd/NVDCk8oNnRvYeovGD16nPMB7HM8BCezd4exj9EMcVlLVlHKLxrNdH8btq2+4n97yHS//ULyYp/Vn6PA+Be9yhZlWfatW9x73mSw1o8j6bjH/5bc7hTCJxaos1uUv39D5+xXm+t2y05cyQMK7uRqIv4YtP8WQAh+d8nb8/bk="
 
 # The Dockerfile that defines the image that for the build environment is
 # available in this repo at devtools/centos5-build-box/Dockerfile
