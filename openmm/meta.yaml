@@ -3,7 +3,8 @@ package:
   version: 7.1.0
 
 source:
-  git_url: https://github.com/pandegroup/openmm.git
+  git_url: https://github.com/jchodera/openmm.git
+  git_rev: debug-openmm-7.1.0
 
 build:
   number: 0
