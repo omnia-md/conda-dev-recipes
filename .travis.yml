@@ -43,7 +43,7 @@ script:
 
         docker run -e UPLOAD -e BINSTAR_TOKEN -e TRAVIS_PULL_REQUEST -e CUDA_VERSION -e CUDA_SHORT_VERSION
             -t -i --rm -v `pwd`:/io jchodera/omnia-build-box:cuda${CUDA_SHORT_VERSION}-amd30
-            bash /io/devtools/docker-build.sh;
+            source /io/devtools/docker-build.sh;
 
     elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
         echo "Building osx...";
