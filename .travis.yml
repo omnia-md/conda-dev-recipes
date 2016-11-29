@@ -39,7 +39,6 @@ script:
         export UPLOAD="--dev --force";
     fi
   - echo $UPLOAD
-
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
 
         docker run -e UPLOAD -e BINSTAR_TOKEN -e TRAVIS_PULL_REQUEST -e CONDA_BUILD
@@ -47,6 +46,8 @@ script:
             bash /io/devtools/docker-build.sh;
 
     elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+
         echo "Building osx...";
         bash devtools/osx-build.sh;
+        
     fi
