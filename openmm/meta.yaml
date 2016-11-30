@@ -4,7 +4,7 @@ package:
 
 source:
   git_url: https://github.com/jchodera/openmm.git
-  git_rev: revert-1632
+  git_rev: openmm-7.1-debug-build
 
 build:
   number: 0
