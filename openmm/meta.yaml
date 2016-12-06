@@ -3,8 +3,7 @@ package:
   version: 7.1.0
 
 source:
-  git_url: https://github.com/peastman/openmm.git
-  git_tag: triclinicerror
+  git_url: https://github.com/pandegroup/openmm.git
 
 build:
   number: 0
