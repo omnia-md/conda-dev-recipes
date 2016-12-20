@@ -10,7 +10,7 @@ fi
 
 # holy build box paths
 export HBB_PREFIX="/hbb_shlib"
-export PATH=$HBB_PREFIX/bin:/hbb/bin:$PATH
+export PATH=$PATH:$HBB_PREFIX/bin:/hbb/bin
 export C_INCLUDE_PATH=$HBB_PREFIX/include
 export CPLUS_INCLUDE_PATH=$HBB_PREFIX/include
 export LIBRARY_PATH=$HBB_PREFIX/lib
@@ -31,7 +31,7 @@ export SHLIB_LDFLAGS="$LDPATHFLAGS -static-libstdc++"
 
 # Clang paths
 export CLANG_PREFIX="/opt/clang"
-export PATH=$CLANG_PREFIX/bin:$PATH
+export PATH=$PATH:$CLANG_PREFIX/bin
 
 # OpenMM paths
 CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=$PREFIX -DBUILD_TESTING=OFF"
