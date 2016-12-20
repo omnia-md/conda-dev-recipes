@@ -30,7 +30,7 @@ export SHLIB_CXXFLAGS="$MINIMAL_CFLAGS"
 export SHLIB_LDFLAGS="$LDPATHFLAGS -static-libstdc++"
 
 # Clang paths
-export CLANG_PREFIX="/opt/clang/bin/"
+export CLANG_PREFIX="/opt/clang"
 export PATH=$CLANG_PREFIX/bin:$PATH
 
 # OpenMM paths
