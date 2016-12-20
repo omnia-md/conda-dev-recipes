@@ -4,13 +4,13 @@
 ln -s /opt/rh/devtoolset-2/root/usr/lib/gcc/x86_64-CentOS-linux/ /opt/rh/devtoolset-2/root/usr/lib/gcc/x86_64-redhat-linux
 ln -s /opt/rh/devtoolset-2/root/usr/include/c++/4.8.2/x86_64-CentOS-linux/ /opt/rh/devtoolset-2/root/usr/include/c++/4.8.2/x86_64-redhat-linux
 
-# Save anaconda path
-export PYTHON=`which python`
-export PYTHONBIN=`dirname $PYTHON`
+# Clang paths
+export CLANG_PREFIX="/opt/clang"
+export PATH=$PATH:$CLANG_PREFIX/bin
 
 # holy build box paths
 export HBB_PREFIX="/hbb_shlib"
-export PATH=$HBB_PREFIX/bin:/hbb/bin:$PATH
+export PATH=$PATH:$HBB_PREFIX/bin:/hbb/bin
 export C_INCLUDE_PATH=$HBB_PREFIX/include
 export CPLUS_INCLUDE_PATH=$HBB_PREFIX/include
 export LIBRARY_PATH=$HBB_PREFIX/lib
@@ -28,13 +28,6 @@ export STATICLIB_CXXFLAGS="$MINIMAL_CFLAGS -fPIC"
 export SHLIB_CFLAGS="$MINIMAL_CFLAGS"
 export SHLIB_CXXFLAGS="$MINIMAL_CFLAGS"
 export SHLIB_LDFLAGS="$LDPATHFLAGS -static-libstdc++"
-
-# Clang paths
-export CLANG_PREFIX="/opt/clang"
-export PATH=$CLANG_PREFIX/bin:$PATH
-
-# Add back anaconda path at front
-export PATH=$PYTHONBIN:$PATH
 
 # OpenMM paths
 CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=$PREFIX -DBUILD_TESTING=OFF"
