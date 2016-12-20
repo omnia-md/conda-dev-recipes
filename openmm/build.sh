@@ -8,9 +8,13 @@ if [ ! -e /opt/rh/devtoolset-2/root/usr/include/c++/4.8.2/x86_64-CentOS-linux/ ]
     ln -s /opt/rh/devtoolset-2/root/usr/include/c++/4.8.2/x86_64-CentOS-linux/ /opt/rh/devtoolset-2/root/usr/include/c++/4.8.2/x86_64-redhat-linux
 fi
 
+# Save anaconda path
+export PYTHON=`which python`
+export PYTHONBIN=`dirname $PYTHON`
+
 # holy build box paths
 export HBB_PREFIX="/hbb_shlib"
-export PATH=$PATH:$HBB_PREFIX/bin:/hbb/bin
+export PATH=$HBB_PREFIX/bin:/hbb/bin:$PATH
 export C_INCLUDE_PATH=$HBB_PREFIX/include
 export CPLUS_INCLUDE_PATH=$HBB_PREFIX/include
 export LIBRARY_PATH=$HBB_PREFIX/lib
@@ -31,7 +35,10 @@ export SHLIB_LDFLAGS="$LDPATHFLAGS -static-libstdc++"
 
 # Clang paths
 export CLANG_PREFIX="/opt/clang"
-export PATH=$PATH:$CLANG_PREFIX/bin
+export PATH=$CLANG_PREFIX/bin:$PATH
+
+# Add back anaconda path at front
+export PATH=$PYTHONBIN:$PATH
 
 # OpenMM paths
 CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=$PREFIX -DBUILD_TESTING=OFF"
