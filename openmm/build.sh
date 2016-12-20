@@ -46,7 +46,7 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     CMAKE_FLAGS+=" -DCUDA_TOOLKIT_ROOT_DIR=${CUDA_PATH}/"
     CMAKE_FLAGS+=" -DCMAKE_CXX_FLAGS=-I/usr/include/nvidia/"
     # Use clang 3.8.1 inside omnia-build-box docker image
-    CMAKE_FLAGS+=" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++"
+    CMAKE_FLAGS+=" -DCMAKE_C_COMPILER=$CLANG_PREFIX/bin/clang -DCMAKE_CXX_COMPILER=$CLANG_PREFIX/bin/clang++"
     # AMD APP SDK 3.0 OpenCL
     CMAKE_FLAGS+=" -DOPENCL_INCLUDE_DIR=/opt/AMDAPPSDK-3.0/include/"
     CMAKE_FLAGS+=" -DOPENCL_LIBRARY=/opt/AMDAPPSDK-3.0/lib/x86_64/libOpenCL.so"
