@@ -56,8 +56,8 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     CMAKE_FLAGS+=" -DOPENCL_LIBRARY=/opt/AMDAPPSDK-3.0/lib/x86_64/libOpenCL.so"
     # Don't build tests or examples
     CMAKE_FLAGS+=" -DOPENMM_BUILD_CUDA_TESTS=off"
-    CMAKE_FLAGS+=" -DOPENMM_BUILD_EXAMPLES=off"
     CMAKE_FLAGS+=" -DOPENMM_BUILD_OPENCL_TESTS=off"
+    #CMAKE_FLAGS+=" -DOPENMM_BUILD_EXAMPLES=off"
     # CUDA OpenCL
     #CMAKE_FLAGS+=" -DOPENCL_INCLUDE_DUR=${CUDA_PATH}/include/"
     #CMAKE_FLAGS+=" -DOPENCL_LIBRARY=${CUDA_PATH}/lib64/libOpenCL.so"
@@ -100,5 +100,7 @@ mv sphinx-docs/userguide/latex/*.pdf $PREFIX/docs/openmm/
 mv sphinx-docs/developerguide/latex/*.pdf $PREFIX/docs/openmm/
 
 # Put examples into an appropriate subdirectory.
-mkdir $PREFIX/share/openmm/
-mv $PREFIX/examples $PREFIX/share/openmm/
+if [ -d examples ]; then
+    mkdir $PREFIX/share/openmm/
+    mv $PREFIX/examples $PREFIX/share/openmm/
+fi
