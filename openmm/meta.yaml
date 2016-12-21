@@ -34,14 +34,14 @@ requirements:
     - python
     - fftw3f
 
-test:
-  requires:
-    - python
-  imports:
-    - simtk
-    - simtk.openmm
-  commands:
-    - python -m simtk.testInstallation
+#test:
+#  requires:
+#    - python
+#  imports:
+#    - simtk
+#    - simtk.openmm
+#  commands:
+#    - python -m simtk.testInstallation
 
 about:
   home: http://openmm.org
