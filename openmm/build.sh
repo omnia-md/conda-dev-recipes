@@ -13,6 +13,10 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     # For Docker build
     #
 
+    echo $CFLAGS
+    echo $CXXFLAGS
+    echo $LDFLAGS
+
     # Fix hbb issues.
     # If statements needed because multiple Python versions are built in same docker image.
     if [ ! -e /opt/rh/devtoolset-2/root/usr/lib/gcc/x86_64-redhat-linux ]; then
