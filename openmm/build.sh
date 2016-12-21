@@ -1,34 +1,5 @@
 #!/bin/bash
 
-# Fix hbb issues
-ln -s /opt/rh/devtoolset-2/root/usr/lib/gcc/x86_64-CentOS-linux/ /opt/rh/devtoolset-2/root/usr/lib/gcc/x86_64-redhat-linux
-ln -s /opt/rh/devtoolset-2/root/usr/include/c++/4.8.2/x86_64-CentOS-linux/ /opt/rh/devtoolset-2/root/usr/include/c++/4.8.2/x86_64-redhat-linux
-
-# Clang paths
-export CLANG_PREFIX="/opt/clang"
-export PATH=$PATH:$CLANG_PREFIX/bin
-
-# holy build box paths
-export HBB_PREFIX="/hbb_shlib"
-export PATH=$PATH:$HBB_PREFIX/bin:/hbb/bin
-export C_INCLUDE_PATH=$HBB_PREFIX/include
-export CPLUS_INCLUDE_PATH=$HBB_PREFIX/include
-export LIBRARY_PATH=$HBB_PREFIX/lib
-export PKG_CONFIG_PATH=$HBB_PREFIX/lib/pkgconfig:/usr/lib/pkgconfig
-
-export CPPFLAGS="-I$HBB_PREFIX/include"
-export LDPATHFLAGS="-L$HBB_PREFIX/lib"
-export MINIMAL_CFLAGS="-g -O3 $CPPFLAGS"
-
-export CFLAGS="$MINIMAL_CFLAGS"
-export CXXFLAGS="$MINIMAL_CFLAGS"
-export LDFLAGS="$LDPATHFLAGS -static-libstdc++"
-export STATICLIB_CFLAGS="$MINIMAL_CFLAGS -fPIC"
-export STATICLIB_CXXFLAGS="$MINIMAL_CFLAGS -fPIC"
-export SHLIB_CFLAGS="$MINIMAL_CFLAGS"
-export SHLIB_CXXFLAGS="$MINIMAL_CFLAGS"
-export SHLIB_LDFLAGS="$LDPATHFLAGS -static-libstdc++"
-
 # OpenMM paths
 CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=$PREFIX -DBUILD_TESTING=OFF"
 
@@ -38,6 +9,40 @@ CMAKE_FLAGS+=" -DCMAKE_BUILD_TYPE=Release"
 CUDA_VERSION="8.0"
 
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    #
+    # For Docker build
+    #
+
+    # Fix hbb issues
+    ln -s /opt/rh/devtoolset-2/root/usr/lib/gcc/x86_64-CentOS-linux/ /opt/rh/devtoolset-2/root/usr/lib/gcc/x86_64-redhat-linux
+    ln -s /opt/rh/devtoolset-2/root/usr/include/c++/4.8.2/x86_64-CentOS-linux/ /opt/rh/devtoolset-2/root/usr/include/c++/4.8.2/x86_64-redhat-linux
+
+    # Clang paths
+    export CLANG_PREFIX="/opt/clang"
+    export PATH=$PATH:$CLANG_PREFIX/bin
+
+    # holy build box paths
+    export HBB_PREFIX="/hbb_shlib"
+    export PATH=$PATH:$HBB_PREFIX/bin:/hbb/bin
+    export C_INCLUDE_PATH=$HBB_PREFIX/include
+    export CPLUS_INCLUDE_PATH=$HBB_PREFIX/include
+    export LIBRARY_PATH=$HBB_PREFIX/lib
+    export PKG_CONFIG_PATH=$HBB_PREFIX/lib/pkgconfig:/usr/lib/pkgconfig
+
+    export CPPFLAGS="-I$HBB_PREFIX/include"
+    export LDPATHFLAGS="-L$HBB_PREFIX/lib"
+    export MINIMAL_CFLAGS="-g -O3 $CPPFLAGS"
+
+    export CFLAGS="$MINIMAL_CFLAGS"
+    export CXXFLAGS="$MINIMAL_CFLAGS"
+    export LDFLAGS="$LDPATHFLAGS -static-libstdc++"
+    export STATICLIB_CFLAGS="$MINIMAL_CFLAGS -fPIC"
+    export STATICLIB_CXXFLAGS="$MINIMAL_CFLAGS -fPIC"
+    export SHLIB_CFLAGS="$MINIMAL_CFLAGS"
+    export SHLIB_CXXFLAGS="$MINIMAL_CFLAGS"
+    export SHLIB_LDFLAGS="$LDPATHFLAGS -static-libstdc++"
+
+    # OpenMM build configuration
     CUDA_PATH="/usr/local/cuda-${CUDA_VERSION}"
     CMAKE_FLAGS+=" -DCUDA_CUDART_LIBRARY=${CUDA_PATH}/lib64/libcudart.so"
     CMAKE_FLAGS+=" -DCUDA_NVCC_EXECUTABLE=${CUDA_PATH}/bin/nvcc"
