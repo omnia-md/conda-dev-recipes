@@ -50,6 +50,9 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     export SHLIB_CXXFLAGS="$MINIMAL_CFLAGS"
     export SHLIB_LDFLAGS="$LDPATHFLAGS -static-libstdc++"
 
+    # Use clang 3.8.1 inside omnia-build-box docker image
+    CMAKE_FLAGS+=" -DCMAKE_C_COMPILER=$CLANG_PREFIX/bin/clang -DCMAKE_CXX_COMPILER=$CLANG_PREFIX/bin/clang++"
+
     # OpenMM build configuration
     CUDA_PATH="/usr/local/cuda-${CUDA_VERSION}"
     CMAKE_FLAGS+=" -DCUDA_CUDART_LIBRARY=${CUDA_PATH}/lib64/libcudart.so"
