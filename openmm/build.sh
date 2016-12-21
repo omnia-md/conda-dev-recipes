@@ -42,15 +42,15 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     export MINIMAL_CFLAGS="-g -O3 $CPPFLAGS"
 
     export CFLAGS="$MINIMAL_CFLAGS"
-    export CXXFLAGS="$MINIMAL_CFLAGS"
+    export CXXFLAGS="$MINIMAL_CFLAGS -std=gnu++11 -stdlib=libstdc++"
     #export LDFLAGS="$LDPATHFLAGS -static-libstdc++"
-    export LDFLAGS="$LDPATHFLAGS -static-libgcc -static-libstdc++"
+    export LDFLAGS="$LDPATHFLAGS -static-libgcc -static-libstdc+ -stdlib=libstdc++"
     export STATICLIB_CFLAGS="$MINIMAL_CFLAGS -fPIC"
     export STATICLIB_CXXFLAGS="$MINIMAL_CFLAGS -fPIC"
     export SHLIB_CFLAGS="$MINIMAL_CFLAGS"
     export SHLIB_CXXFLAGS="$MINIMAL_CFLAGS"
     #export SHLIB_LDFLAGS="$LDPATHFLAGS -static-libstdc++"
-    export SHLIB_LDFLAGS="$LDPATHFLAGS -static-libgcc -static-libstdc++"
+    export SHLIB_LDFLAGS="$LDPATHFLAGS -static-libgcc -static-libstdc++ -stdlib=libstdc++"
 
     # Use clang 3.8.1 inside omnia-build-box docker image
     CMAKE_FLAGS+=" -DCMAKE_C_COMPILER=$CLANG_PREFIX/bin/clang -DCMAKE_CXX_COMPILER=$CLANG_PREFIX/bin/clang++"
