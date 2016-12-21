@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# OpenMM paths
 CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=$PREFIX -DBUILD_TESTING=OFF"
 
 # Ensure we build a release
@@ -58,16 +57,10 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     CMAKE_FLAGS+=" -DCUDA_SDK_ROOT_DIR=${CUDA_PATH}/"
     CMAKE_FLAGS+=" -DCUDA_TOOLKIT_INCLUDE=${CUDA_PATH}/include"
     CMAKE_FLAGS+=" -DCUDA_TOOLKIT_ROOT_DIR=${CUDA_PATH}/"
-    CMAKE_FLAGS+=" -DCMAKE_CXX_FLAGS=-I/usr/include/nvidia/"
-    # Use clang 3.8.1 inside omnia-build-box docker image
-    CMAKE_FLAGS+=" -DCMAKE_C_COMPILER=$CLANG_PREFIX/bin/clang -DCMAKE_CXX_COMPILER=$CLANG_PREFIX/bin/clang++"
+    CMAKE_FLAGS+=" -DCMAKE_CXX_FLAGS_RELEASE=-I/usr/include/nvidia/"
     # AMD APP SDK 3.0 OpenCL
     CMAKE_FLAGS+=" -DOPENCL_INCLUDE_DIR=/opt/AMDAPPSDK-3.0/include/"
     CMAKE_FLAGS+=" -DOPENCL_LIBRARY=/opt/AMDAPPSDK-3.0/lib/x86_64/libOpenCL.so"
-    # Don't build tests or examples
-    CMAKE_FLAGS+=" -DOPENMM_BUILD_CUDA_TESTS=off"
-    CMAKE_FLAGS+=" -DOPENMM_BUILD_OPENCL_TESTS=off"
-    #CMAKE_FLAGS+=" -DOPENMM_BUILD_EXAMPLES=off"
     # CUDA OpenCL
     #CMAKE_FLAGS+=" -DOPENCL_INCLUDE_DUR=${CUDA_PATH}/include/"
     #CMAKE_FLAGS+=" -DOPENCL_LIBRARY=${CUDA_PATH}/lib64/libOpenCL.so"
@@ -110,7 +103,5 @@ mv sphinx-docs/userguide/latex/*.pdf $PREFIX/docs/openmm/
 mv sphinx-docs/developerguide/latex/*.pdf $PREFIX/docs/openmm/
 
 # Put examples into an appropriate subdirectory.
-if [ -d examples ]; then
-    mkdir $PREFIX/share/openmm/
-    mv $PREFIX/examples $PREFIX/share/openmm/
-fi
+mkdir $PREFIX/share/openmm/
+mv $PREFIX/examples $PREFIX/share/openmm/
