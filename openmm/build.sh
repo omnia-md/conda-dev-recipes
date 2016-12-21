@@ -95,6 +95,12 @@ mkdir build
 cd build
 cmake .. $CMAKE_FLAGS
 make -j$CPU_COUNT all
+
+# PythonInstall uses the gcc/g++ 4.2.1 that anaconda was built with, so we can't add extraneous unrecognized compiler arguments.
+export CXXFLAGS="$MINIMAL_CFLAGS"
+export LDFLAGS="$LDPATHFLAGS"
+export SHLIB_LDFLAGS="$LDPATHFLAGS"
+
 make -j$CPU_COUNT install PythonInstall
 
 # Clean up paths for API docs.
