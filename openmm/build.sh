@@ -12,10 +12,6 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     # For Docker build
     #
 
-    echo $CFLAGS
-    echo $CXXFLAGS
-    echo $LDFLAGS
-
     # Fix hbb issues.
     # If statements needed because multiple Python versions are built in same docker image.
     if [ ! -e /opt/rh/devtoolset-2/root/usr/lib/gcc/x86_64-redhat-linux ]; then
@@ -29,28 +25,31 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     export CLANG_PREFIX="/opt/clang"
     export PATH=$PATH:$CLANG_PREFIX/bin
 
-    # holy build box paths
-    export HBB_PREFIX="/hbb_shlib"
-    export PATH=$PATH:$HBB_PREFIX/bin:/hbb/bin
-    export C_INCLUDE_PATH=$HBB_PREFIX/include
-    export CPLUS_INCLUDE_PATH=$HBB_PREFIX/include
-    export LIBRARY_PATH=$HBB_PREFIX/lib
-    export PKG_CONFIG_PATH=$HBB_PREFIX/lib/pkgconfig:/usr/lib/pkgconfig
+    # enable devtoolset-2
+    source /opt/rh/devtoolset-2/enable
 
-    export CPPFLAGS="-I$HBB_PREFIX/include"
-    export LDPATHFLAGS="-L$HBB_PREFIX/lib"
-    export MINIMAL_CFLAGS="-g -O3 $CPPFLAGS"
-
-    export CFLAGS="$MINIMAL_CFLAGS"
-    export CXXFLAGS="$MINIMAL_CFLAGS -std=gnu++11 -stdlib=libstdc++"
-    #export LDFLAGS="$LDPATHFLAGS -static-libstdc++"
-    export LDFLAGS="$LDPATHFLAGS -stdlib=libstdc++"
-    export STATICLIB_CFLAGS="$MINIMAL_CFLAGS -fPIC"
-    export STATICLIB_CXXFLAGS="$MINIMAL_CFLAGS -fPIC"
-    export SHLIB_CFLAGS="$MINIMAL_CFLAGS"
-    export SHLIB_CXXFLAGS="$MINIMAL_CFLAGS"
-    #export SHLIB_LDFLAGS="$LDPATHFLAGS -static-libstdc++"
-    export SHLIB_LDFLAGS="$LDPATHFLAGS -stdlib=libstdc++"
+    # # holy build box paths
+    # export HBB_PREFIX="/hbb_shlib"
+    # export PATH=$PATH:$HBB_PREFIX/bin:/hbb/bin
+    # export C_INCLUDE_PATH=$HBB_PREFIX/include
+    # export CPLUS_INCLUDE_PATH=$HBB_PREFIX/include
+    # export LIBRARY_PATH=$HBB_PREFIX/lib
+    # export PKG_CONFIG_PATH=$HBB_PREFIX/lib/pkgconfig:/usr/lib/pkgconfig
+    #
+    # export CPPFLAGS="-I$HBB_PREFIX/include"
+    # export LDPATHFLAGS="-L$HBB_PREFIX/lib"
+    # export MINIMAL_CFLAGS="-g -O3 $CPPFLAGS"
+    #
+    # export CFLAGS="$MINIMAL_CFLAGS"
+    # export CXXFLAGS="$MINIMAL_CFLAGS -std=gnu++11 -stdlib=libstdc++"
+    # #export LDFLAGS="$LDPATHFLAGS -static-libstdc++"
+    # export LDFLAGS="$LDPATHFLAGS -stdlib=libstdc++"
+    # export STATICLIB_CFLAGS="$MINIMAL_CFLAGS -fPIC"
+    # export STATICLIB_CXXFLAGS="$MINIMAL_CFLAGS -fPIC"
+    # export SHLIB_CFLAGS="$MINIMAL_CFLAGS"
+    # export SHLIB_CXXFLAGS="$MINIMAL_CFLAGS"
+    # #export SHLIB_LDFLAGS="$LDPATHFLAGS -static-libstdc++"
+    # export SHLIB_LDFLAGS="$LDPATHFLAGS -stdlib=libstdc++"
 
     # Use clang 3.8.1 inside omnia-build-box docker image
     CMAKE_FLAGS+=" -DCMAKE_C_COMPILER=$CLANG_PREFIX/bin/clang -DCMAKE_CXX_COMPILER=$CLANG_PREFIX/bin/clang++"
