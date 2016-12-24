@@ -15,7 +15,7 @@ requirements:
     # on windows, need to install cmake manually
     - cmake     [not win]
     - jom       [win]
-    - python
+    #- python
     # Pin fftw3f to 3.3.3 to work around OSX py34 issues
     - fftw3f ==3.3.3 [not win]
     - fftw3f ==3.3.4 [win]
@@ -31,7 +31,7 @@ requirements:
     - lxml
 
   run:
-    - python
+    #- python
     - fftw3f
 
 test:
