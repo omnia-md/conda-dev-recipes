@@ -26,30 +26,13 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     export PATH=$PATH:$CLANG_PREFIX/bin
 
     # enable devtoolset-2
-    source /opt/rh/devtoolset-2/enable
+    # will return an error return code because of python 3.x incompatible code, but this error is inconsequential
+    source /opt/rh/devtoolset-2/enable || true
 
-    # # holy build box paths
-    # export HBB_PREFIX="/hbb_shlib"
-    # export PATH=$PATH:$HBB_PREFIX/bin:/hbb/bin
-    # export C_INCLUDE_PATH=$HBB_PREFIX/include
-    # export CPLUS_INCLUDE_PATH=$HBB_PREFIX/include
-    # export LIBRARY_PATH=$HBB_PREFIX/lib
-    # export PKG_CONFIG_PATH=$HBB_PREFIX/lib/pkgconfig:/usr/lib/pkgconfig
-    #
-    # export CPPFLAGS="-I$HBB_PREFIX/include"
-    # export LDPATHFLAGS="-L$HBB_PREFIX/lib"
-    # export MINIMAL_CFLAGS="-g -O3 $CPPFLAGS"
-    #
-    # export CFLAGS="$MINIMAL_CFLAGS"
-    # export CXXFLAGS="$MINIMAL_CFLAGS -std=gnu++11 -stdlib=libstdc++"
-    # #export LDFLAGS="$LDPATHFLAGS -static-libstdc++"
-    # export LDFLAGS="$LDPATHFLAGS -stdlib=libstdc++"
-    # export STATICLIB_CFLAGS="$MINIMAL_CFLAGS -fPIC"
-    # export STATICLIB_CXXFLAGS="$MINIMAL_CFLAGS -fPIC"
-    # export SHLIB_CFLAGS="$MINIMAL_CFLAGS"
-    # export SHLIB_CXXFLAGS="$MINIMAL_CFLAGS"
-    # #export SHLIB_LDFLAGS="$LDPATHFLAGS -static-libstdc++"
-    # export SHLIB_LDFLAGS="$LDPATHFLAGS -stdlib=libstdc++"
+    export MINIMAL_CFLAGS="-g -O3"
+    export CFLAGS="$MINIMAL_CFLAGS"
+    export CXXFLAGS="$MINIMAL_CFLAGS"
+    export LDFLAGS="$LDPATHFLAGS"
 
     # Use clang 3.8.1 inside omnia-build-box docker image
     CMAKE_FLAGS+=" -DCMAKE_C_COMPILER=$CLANG_PREFIX/bin/clang -DCMAKE_CXX_COMPILER=$CLANG_PREFIX/bin/clang++"
