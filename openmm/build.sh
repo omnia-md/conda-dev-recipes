@@ -49,9 +49,9 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     export PYTHONPATH=/opt/rh/devtoolset-2/root/usr/lib64/python$pythonvers/site-packages:/opt/rh/devtoolset-2/root/usr/lib/python$pythonvers/site-packages${PYTHONPATH:+:${PYTHONPATH}}
 
     # CFLAGS
-    #export MINIMAL_CFLAGS="-g -O3"
-    #export CFLAGS="$MINIMAL_CFLAGS"
-    #export CXXFLAGS="$MINIMAL_CFLAGS"
+    export MINIMAL_CFLAGS="-g -O3"
+    export CFLAGS="$MINIMAL_CFLAGS"
+    export CXXFLAGS="$MINIMAL_CFLAGS"
     export LDFLAGS="$LDPATHFLAGS"
 
     # Use clang 3.8.1 inside omnia-build-box docker image
