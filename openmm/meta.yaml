@@ -8,13 +8,6 @@ source:
 build:
   number: 0
   skip: True # [win]
-  # TODO: FOR NEXT RELEASE
-  # TODO: Change OpenMM release to use new function (cant change already released version)
-  # TODO: Reactivate test checking git hash since the patch's change the hash (run_test.py)
-  # Patch DUspan -> DUpatch since Sphinx 1.5.1 changed this function so renew command does not work
-  # This is purely a documentation compiler version patch and NOT a change to the functional code
-  patches:
-    - durole.patch
 
 requirements:
   build:
