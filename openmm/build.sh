@@ -48,6 +48,12 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     pythonvers=`python -c 'import sys; print(sys.version[:3])'`
     export PYTHONPATH=/opt/rh/devtoolset-2/root/usr/lib64/python$pythonvers/site-packages:/opt/rh/devtoolset-2/root/usr/lib/python$pythonvers/site-packages${PYTHONPATH:+:${PYTHONPATH}}
 
+    # CFLAGS
+    #export MINIMAL_CFLAGS="-g -O3"
+    #export CFLAGS="$MINIMAL_CFLAGS"
+    #export CXXFLAGS="$MINIMAL_CFLAGS"
+    #export LDFLAGS="$LDPATHFLAGS"
+
     # Use clang 3.8.1 inside omnia-build-box docker image
     CMAKE_FLAGS+=" -DCMAKE_C_COMPILER=$CLANG_PREFIX/bin/clang -DCMAKE_CXX_COMPILER=$CLANG_PREFIX/bin/clang++"
 
@@ -93,9 +99,9 @@ cmake .. $CMAKE_FLAGS
 make -j$CPU_COUNT all
 
 # PythonInstall uses the gcc/g++ 4.2.1 that anaconda was built with, so we can't add extraneous unrecognized compiler arguments.
-export CXXFLAGS="$MINIMAL_CFLAGS"
-export LDFLAGS="$LDPATHFLAGS"
-export SHLIB_LDFLAGS="$LDPATHFLAGS"
+#export CXXFLAGS="$MINIMAL_CFLAGS"
+#export LDFLAGS="$LDPATHFLAGS"
+#export SHLIB_LDFLAGS="$LDPATHFLAGS"
 
 make -j$CPU_COUNT install PythonInstall
 
