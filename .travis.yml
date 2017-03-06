@@ -42,11 +42,9 @@ script:
         export UPLOAD="--dev --force";
     fi
   - echo $UPLOAD
-  - export PY_BUILD_VERSION="$PY_BUILD_VERSION"
-  - echo $PY_BUILD_VERSION
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
 
-        docker run -e UPLOAD -e BINSTAR_TOKEN -e TRAVIS_PULL_REQUEST
+        docker run -e UPLOAD -e BINSTAR_TOKEN -e TRAVIS_PULL_REQUEST -e PY_BUILD_VERSION
             -t -i --rm -v `pwd`:/io jchodera/omnia-build-box:cuda${CUDA_SHORT_VERSION}-amd30-clang38
             bash /io/devtools/docker-build.sh;
 
