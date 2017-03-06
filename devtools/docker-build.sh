@@ -15,6 +15,6 @@ conda install -yq conda-build jinja2 anaconda-client
 # Install missing LaTeX docs
 tlmgr install fncychap tabulary capt-of eqparbox environ trimspaces
 
-/io/conda-build-all -vvv $UPLOAD -- /io/*
+/io/conda-build-all -vvv --python $PY_BUILD_VERSION $UPLOAD -- /io/*
 
 #mv /anaconda/conda-bld/linux-64/*tar.bz2 /io/ || true
