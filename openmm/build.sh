@@ -79,6 +79,9 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     CMAKE_FLAGS+=" -DCMAKE_OSX_SYSROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk"
 fi
 
+# Generate verbose make output
+CMAKE_FLAGS+=" -DCMAKE_VERBOSE_MAKEFILE=ON"
+
 # Generate API docs
 CMAKE_FLAGS+=" -DOPENMM_GENERATE_API_DOCS=ON"
 
