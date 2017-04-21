@@ -29,6 +29,8 @@ requirements:
     - sphinxcontrib-autodoc_doxygen
     - lxml
     - numpy
+    # Get clang from conda-forge
+    - clangdev ==3.8.1 [not win]
 
   run:
     - python
