@@ -30,7 +30,7 @@ requirements:
     - lxml
     - numpy
     # Get clang from conda-forge
-    - clangdev ==3.8.1
+    - clangdev ==3.8.1 [linux]
 
   run:
     - python
