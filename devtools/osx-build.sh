@@ -37,6 +37,6 @@ fi;
 
 # Build packages
 conda config --set channel_priority false;
-#conda config --add channels conda-forge;
+conda config --add channels conda-forge;
 conda config --show;
 ./conda-build-all -vvv --python $PY_BUILD_VERSION $UPLOAD -- *
