@@ -14,9 +14,6 @@ conda config --add channels omnia;
 conda config --show;
 conda install -yq conda-build jinja2 anaconda-client;
 
-# Install packages that must come from omnia channel.
-conda install -yq swig setuptools;
-
 #export INSTALL_CUDA=`./conda-build-all --dry-run -- openmm`
 export INSTALL_OPENMM_PREREQUISITES=true
 if [ "$INSTALL_OPENMM_PREREQUISITES" = true ] ; then
