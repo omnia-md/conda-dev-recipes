@@ -7,10 +7,6 @@ CMAKE_FLAGS+=" -DCMAKE_BUILD_TYPE=Release"
 
 CUDA_VERSION="8.0"
 
-# conda-build MACOSX_DEPLOYMENT_TARGET must be exported as an environment variable to override 10.7 default
-# cc: https://github.com/conda/conda-build/pull/1561
-export MACOSX_DEPLOYMENT_TARGET="10.7"
-
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     #
     # For Docker build
@@ -40,6 +36,9 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     #CMAKE_FLAGS+=" -DOPENCL_INCLUDE_DUR=${CUDA_PATH}/include/"
     #CMAKE_FLAGS+=" -DOPENCL_LIBRARY=${CUDA_PATH}/lib64/libOpenCL.so"
 elif [[ "$OSTYPE" == "darwin"* ]]; then
+    # conda-build MACOSX_DEPLOYMENT_TARGET must be exported as an environment variable to override 10.7 default
+    # cc: https://github.com/conda/conda-build/pull/1561
+    export MACOSX_DEPLOYMENT_TARGET="10.9"
     CMAKE_FLAGS+=" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++"
     CMAKE_FLAGS+=" -DCMAKE_OSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET}"
     CMAKE_FLAGS+=" -DCUDA_SDK_ROOT_DIR=/Developer/NVIDIA/CUDA-${CUDA_VERSION}"
