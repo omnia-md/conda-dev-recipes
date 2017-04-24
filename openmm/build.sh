@@ -18,6 +18,10 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     export CXXFLAGS="$MINIMAL_CFLAGS"
     export LDFLAGS="$LDPATHFLAGS"
 
+    # Addtions from toolchain
+    export CFLAGS="-I$PREFIX/include $CFLAGS"
+    export LDFLAGS="-L$PREFIX/lib $LDFLAGS"
+
     # Use clang 3.8.1 from the clangdev package on conda-forge
     CMAKE_FLAGS+=" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++"
 
