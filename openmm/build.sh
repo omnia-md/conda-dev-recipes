@@ -14,8 +14,8 @@ echo $CC
 echo $CXX
 readlink -f `which cc`
 readlink -f `which c++`
-export CC=gcc
-export CXX=g++
+export CC=/opt/rh/devtoolset-2/root/usr/bin/gcc
+export CXX=/opt/rh/devtoolset-2/root/usr/bin/g++
 readlink -f `which c++`
 
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
@@ -30,9 +30,9 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     export LDFLAGS="$LDPATHFLAGS"
 
     # Addtions from toolchain
-    export CFLAGS="-I$PREFIX/include --gcc-toolchain=/opt/rh/devtoolset-2/root/usr/ $CFLAGS"
-    export CXXFLAGS="-I$PREFIX/include --gcc-toolchain=/opt/rh/devtoolset-2/root/usr/ $CXXFLAGS"
-    export LDFLAGS="-L$PREFIX/lib $LDFLAGS"
+    export CFLAGS="$CFLAGS"
+    export CXXFLAGS="$CXXFLAGS"
+    export LDFLAGS="-L/opt/rh/devtoolset-2/root/usr/lib64 $LDFLAGS"
 
     # Use clang 3.8.1 from the clangdev package on conda-forge
     CMAKE_FLAGS+=" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++"
@@ -51,6 +51,8 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     # CUDA OpenCL
     #CMAKE_FLAGS+=" -DOPENCL_INCLUDE_DUR=${CUDA_PATH}/include/"
     #CMAKE_FLAGS+=" -DOPENCL_LIBRARY=${CUDA_PATH}/lib64/libOpenCL.so"
+    # gcc from devtoolset-2
+    CMAKE_FLAGS+=" -DCMAKE_CXX_LINK_FLAGS=-Wl,-rpath,/opt/rh/devtoolset-2/root/usr/lib64"
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     # conda-build MACOSX_DEPLOYMENT_TARGET must be exported as an environment variable to override 10.7 default
     # cc: https://github.com/conda/conda-build/pull/1561
