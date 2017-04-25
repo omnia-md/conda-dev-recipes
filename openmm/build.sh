@@ -16,6 +16,7 @@ readlink -f `which cc`
 readlink -f `which c++`
 export CC=gcc
 export CXX=g++
+readlink -f `which c++`
 
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     #
@@ -29,8 +30,8 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     export LDFLAGS="$LDPATHFLAGS"
 
     # Addtions from toolchain
-    export CFLAGS="-I$PREFIX/include $CFLAGS"
-    export CXXFLAGS="-I$PREFIX/include $CXXFLAGS"
+    export CFLAGS="-I$PREFIX/include --gcc-toolchain=/opt/rh/devtoolset-2/root/usr/bin $CFLAGS"
+    export CXXFLAGS="-I$PREFIX/include --gcc-toolchain=/opt/rh/devtoolset-2/root/usr/bin $CXXFLAGS"
     export LDFLAGS="-L$PREFIX/lib $LDFLAGS"
 
     # Use clang 3.8.1 from the clangdev package on conda-forge
