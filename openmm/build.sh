@@ -11,7 +11,7 @@ CUDA_VERSION="8.0"
 gcc --version
 g++ --version
 echo $CC
-echno $CXX
+echo $CXX
 readlink -f `which cc`
 readlink -f `which c++`
 

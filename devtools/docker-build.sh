@@ -9,7 +9,7 @@ conda install -yq conda-build jinja2 anaconda-client
 gcc --version
 g++ --version
 echo $CC
-echno $CXX
+echo $CXX
 readlink -f `which cc`
 readlink -f `which c++`
 
