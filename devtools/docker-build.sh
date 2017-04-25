@@ -6,9 +6,13 @@ conda config --add channels omnia
 conda install -yq conda-build jinja2 anaconda-client
 
 #DEBUG
-echo $PATH
-echo $LD_LIBRARY_PATH
-echo $PREFIX
+gcc --version
+g++ --version
+echo $CC
+echno $CXX
+readlink -f `which cc`
+readlink -f `which c++`
+
 
 /io/conda-build-all -vvv --python $PY_BUILD_VERSION $UPLOAD -- /io/*
 

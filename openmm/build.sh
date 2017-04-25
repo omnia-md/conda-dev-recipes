@@ -8,9 +8,12 @@ CMAKE_FLAGS+=" -DCMAKE_BUILD_TYPE=Release"
 CUDA_VERSION="8.0"
 
 #Debug
-echo $PATH
-echo $LD_LIBRARY_PATH
-echo $PREFIX
+gcc --version
+g++ --version
+echo $CC
+echno $CXX
+readlink -f `which cc`
+readlink -f `which c++`
 
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     #
