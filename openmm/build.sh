@@ -14,6 +14,8 @@ echo $CC
 echo $CXX
 readlink -f `which cc`
 readlink -f `which c++`
+export CC=gcc
+export CXX=g++
 
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     #
