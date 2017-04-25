@@ -8,15 +8,15 @@ CMAKE_FLAGS+=" -DCMAKE_BUILD_TYPE=Release"
 CUDA_VERSION="8.0"
 
 #Debug
-gcc --version
-g++ --version
-echo $CC
-echo $CXX
-readlink -f `which cc`
-readlink -f `which c++`
-export CC=/opt/rh/devtoolset-2/root/usr/bin/gcc
-export CXX=/opt/rh/devtoolset-2/root/usr/bin/g++
-readlink -f `which c++`
+#gcc --version
+#g++ --version
+#echo $CC
+#echo $CXX
+#readlink -f `which cc`
+#readlink -f `which c++`
+#export CC=/opt/rh/devtoolset-2/root/usr/bin/gcc
+#export CXX=/opt/rh/devtoolset-2/root/usr/bin/g++
+#readlink -f `which c++`
 
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     #
@@ -52,7 +52,8 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     #CMAKE_FLAGS+=" -DOPENCL_INCLUDE_DUR=${CUDA_PATH}/include/"
     #CMAKE_FLAGS+=" -DOPENCL_LIBRARY=${CUDA_PATH}/lib64/libOpenCL.so"
     # gcc from devtoolset-2
-    CMAKE_FLAGS+=" -DCMAKE_CXX_LINK_FLAGS=-Wl,-rpath,/opt/rh/devtoolset-2/root/usr/lib64"
+    #CMAKE_FLAGS+=" -DCMAKE_CXX_LINK_FLAGS=-Wl,-rpath,/opt/rh/devtoolset-2/root/usr/lib64"
+    CMAKE_FLAGS+=" -DCMAKE_CXX_FLAGS=--gcc-toolchain=/opt/rh/devtoolset-2/root/usr/"
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     # conda-build MACOSX_DEPLOYMENT_TARGET must be exported as an environment variable to override 10.7 default
     # cc: https://github.com/conda/conda-build/pull/1561
