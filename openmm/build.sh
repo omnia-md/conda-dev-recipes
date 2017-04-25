@@ -7,6 +7,11 @@ CMAKE_FLAGS+=" -DCMAKE_BUILD_TYPE=Release"
 
 CUDA_VERSION="8.0"
 
+#Debug
+echo $PATH
+echo $LD_LIBRARY_PATH
+echo $PREFIX
+
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     #
     # For Docker build
