@@ -31,7 +31,6 @@ requirements:
     - numpy
     # Get clang from conda-forge
     - clangdev ==3.8.1 [linux]
-    # - toolchain
 
   run:
     - python

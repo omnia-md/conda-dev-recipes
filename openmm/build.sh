@@ -7,17 +7,6 @@ CMAKE_FLAGS+=" -DCMAKE_BUILD_TYPE=Release"
 
 CUDA_VERSION="8.0"
 
-#Debug
-#gcc --version
-#g++ --version
-#echo $CC
-#echo $CXX
-#readlink -f `which cc`
-#readlink -f `which c++`
-#export CC=/opt/rh/devtoolset-2/root/usr/bin/gcc
-#export CXX=/opt/rh/devtoolset-2/root/usr/bin/g++
-#readlink -f `which c++`
-
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     #
     # For Docker build
@@ -28,11 +17,6 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     export CFLAGS="$MINIMAL_CFLAGS"
     export CXXFLAGS="$MINIMAL_CFLAGS"
     export LDFLAGS="$LDPATHFLAGS"
-
-    # Addtions from toolchain
-    export CFLAGS="$CFLAGS"
-    export CXXFLAGS="$CXXFLAGS"
-    export LDFLAGS="-L/opt/rh/devtoolset-2/root/usr/lib64 $LDFLAGS"
 
     # Use clang 3.8.1 from the clangdev package on conda-forge
     CMAKE_FLAGS+=" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++"
