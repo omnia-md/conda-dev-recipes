@@ -15,8 +15,8 @@ Packages are built twice daily by [the Travis CI cron trigger](http://traviscron
 
 To install a development package
 ```
-# Add the Omnia channel
-$ conda config --add channels omnia
+# Add the omnia and conda-forge
+$ conda config --add channels conda-forge --add channels omnia
 
 conda install openmm-dev
 ```
