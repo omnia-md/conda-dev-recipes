@@ -16,7 +16,7 @@ Packages are built twice daily by [the Travis CI cron trigger](http://traviscron
 To install a development package
 ```
 # Add the omnia and conda-forge
-$ conda config --add channels conda-forge --add channels omnia
+$ conda config --add channels omnia --add channels conda-forge
 
 conda install openmm-dev
 ```
@@ -31,10 +31,10 @@ two releases of Numpy.
 ### Building the packages
 
 The recipes here are automatically built using [Appveyor-CI](http://www.appveyor.com/)
-and [Travis-CI](https://travis-ci.org/). For linux, we use the
-[Holy Build Box](http://phusion.github.io/holy-build-box/) to ensure that the
-packages are fully compatible accross multiple linux distributions and versions.
+and [Travis-CI](https://travis-ci.org/). For linux, we use a modified
+[Conda-forge Linux Anvil](https://github.com/conda-forge/docker-images/tree/master/linux-anvil) to ensure that the
+packages are fully compatible across multiple linux distributions and versions.
 
 To build a package yourself, run `conda build <package_name>`, or
-`./conda-build-all ./*` to build multiple packages accross each of the
+`./conda-build-all ./*` to build multiple packages across each of the
 supported Python/Numpy configurations.
