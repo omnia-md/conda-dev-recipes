@@ -18,18 +18,20 @@ environment:
       CONDA_PY: "27"
       PYTHON_VERSION: "2.7.x"
       PYTHON_ARCH: "32"
+
     - PYTHON: "C:\\Miniconda-x64"
       CONDA_PY: "27"
       PYTHON_VERSION: "2.7.x"
       PYTHON_ARCH: "64"
 
     - PYTHON: "C:\\Miniconda3"
-      CONDA_PY: "34"
-      PYTHON_VERSION: "3.4.x"
+      CONDA_PY: "35"
+      PYTHON_VERSION: "3.5.x"
       PYTHON_ARCH: "32"
+
     - PYTHON: "C:\\Miniconda3-x64"
-      CONDA_PY: "34"
-      PYTHON_VERSION: "3.4.x"
+      CONDA_PY: "35"
+      PYTHON_VERSION: "3.5.x"
       PYTHON_ARCH: "64"
 
     - PYTHON: "C:\\Miniconda3"
@@ -38,17 +40,16 @@ environment:
       PYTHON_ARCH: "32"
 
     - PYTHON: "C:\\Miniconda3-x64"
-      CONDA_PY: "35"
-      PYTHON_VERSION: "3.5.x"
+      CONDA_PY: "36"
+      PYTHON_VERSION: "3.6.x"
       PYTHON_ARCH: "64"
 
 install:
   - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
   - conda update -yq --all
-  - conda config --set channel_priority false
-  - conda config --add channels conda-forge
-  - conda config --add channels omnia
   - conda install -yq conda-build jinja2 anaconda-client
+  - conda config --add channels omnia
+  - conda config --add channels conda-forge
   - powershell .\\devtools\\appveyor\\missing-headers.ps1
   # conda-build for some inane reason, effectively puts C:\cygwin\bin at the
   # front of the PATH, ahead of everything else, regardless. See
