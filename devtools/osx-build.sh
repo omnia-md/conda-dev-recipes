@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e -x
-
+export MACOSX_DEPLOYMENT_TARGET="10.9"
 # Update homebrew
 brew uninstall -y brew-cask || brew untap -y caskroom/cask || 1
 brew update -y --quiet
@@ -14,6 +14,8 @@ conda config --add channels omnia;
 conda config --add channels conda-forge;
 conda install -yq conda\>=4.3 conda-env conda-build jinja2 anaconda-client;
 conda config --show;
+
+# Do this step last to make sure conda-build, conda-env, and conda updates come from the same channel first
 
 
 #export INSTALL_CUDA=`./conda-build-all --dry-run -- openmm`
@@ -30,22 +32,17 @@ if [ "$INSTALL_OPENMM_PREREQUISITES" = true ] ; then
 
     # Install latex.
     export PATH="/usr/texbin:${PATH}:/usr/bin"
-    if brew cask install -y basictex
-    then
-        # Do nothing if the command completed
-        true
-    else
-        # Trap the error and install using new version
-        brew cask install basictex
-        mkdir -p /usr/texbin
-        # Path based on https://github.com/caskroom/homebrew-cask/blob/master/Casks/basictex.rb location
-        # .../texlive/{YEAR}basic/bin/{ARCH}/{Location of actual binaries}
-        # Sym link them to the /usr/texbin folder in the path
-        ln -s /usr/local/texlive/*basic/bin/*/* /usr/texbin/
-    fi
-    sudo tlmgr update --self
+    brew cask install basictex
+    mkdir -p /usr/texbin
+    # Path based on https://github.com/caskroom/homebrew-cask/blob/master/Casks/basictex.rb location
+    # .../texlive/{YEAR}basic/bin/{ARCH}/{Location of actual binaries}
+    # Sym link them to the /usr/texbin folder in the path
+    export TLREPO=http://ctan.math.utah.edu/ctan/tex-archive/systems/texlive/tlnet
+    ln -s /usr/local/texlive/*basic/bin/*/* /usr/texbin/
+    sudo tlmgr --repository=$TLREPO update --self
     sleep 5
-    sudo tlmgr --persistent-downloads install titlesec framed threeparttable wrapfig multirow collection-fontsrecommended hyphenat xstring \
+    sudo tlmgr --persistent-downloads --repository=$TLREPO install \
+        titlesec framed threeparttable wrapfig multirow collection-fontsrecommended hyphenat xstring \
         fncychap tabulary capt-of eqparbox environ trimspaces
 fi;
 
