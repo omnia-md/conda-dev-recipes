@@ -11,7 +11,7 @@ environment:
     # See: http://stackoverflow.com/a/13751649/163740
     CMD_IN_ENV: "cmd /E:ON /V:ON /C .\\devtools\\appveyor\\run_with_env.cmd"
     BINSTAR_TOKEN:
-      secure: 8CGRBLH7gfhVe1wDt8KF7AFqbwXwD7vAFmPJ5OaQiKWxmJgznaNXtAgxtcM1iLrT
+      secure: 0GgvExm8npHZLmZW7vBin+gl5nwSd04Clmjej+AAT9i2X9BgijQAQY25XR+6qa/j
 
   matrix:
     - PYTHON: "C:\\Miniconda"
