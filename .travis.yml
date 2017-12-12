@@ -11,6 +11,14 @@ sudo: required
 services:
   - docker
 
+cache:
+  directories:
+    # Disabled homebrew cache, did not appear to do anything
+    #- $HOME/Library/Caches/Homebrew
+    - $HOME/nvidia_cache
+  # https://docs.travis-ci.com/user/caching/#Setting-the-timeout
+  timeout: 900  # seconds: 15 min cache upload time (default is 3 min)
+
 env:
   matrix:
     - PY_BUILD_VERSION="27"
@@ -48,6 +56,7 @@ script:
     elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
 
         echo "Building osx...";
+        export NVIDIA_CACHE=$HOME/nvidia_cache;
         bash devtools/osx-build.sh;
 
     fi
