@@ -1,10 +1,10 @@
 package:
   name: openmm-forcefields
-  version: 0.0.0
+  version: 0.3.0
 
 source:
   git_url: https://github.com/choderalab/openmm-forcefields.git
-  #git_tag: 0.0.0
+  git_tag: 0.3.0
 
 source:
   path: ../..
