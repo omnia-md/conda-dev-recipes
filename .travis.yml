@@ -1,15 +1,15 @@
+# Use old trusty image since new one breaks our builds
+# See: https://blog.travis-ci.com/2017-12-12-new-trusty-images-q4-launch
+group: deprecated-2017Q4
+
 os:
   - linux
   - osx
 
-# Supported versions: https://docs.travis-ci.com/user/languages/objective-c/#Supported-Xcode-versions
+
+# Supported osx/xcode versions: https://docs.travis-ci.com/user/languages/objective-c/#Supported-Xcode-versions
+# See also: https://blog.travis-ci.com/2016-10-04-osx-73-default-image-live/
 osx_image: xcode6.4
-
-language: c
-sudo: required
-
-services:
-  - docker
 
 cache:
   directories:
@@ -19,11 +19,13 @@ cache:
   # https://docs.travis-ci.com/user/caching/#Setting-the-timeout
   timeout: 900  # seconds: 15 min cache upload time (default is 3 min)
 
+language: c
+sudo: required
+
+services:
+  - docker
+
 env:
-  matrix:
-    - PY_BUILD_VERSION="27"
-    - PY_BUILD_VERSION="35"
-    - PY_BUILD_VERSION="36"
   global:
     - CUDA_VERSION: "9.0"
     - CUDA_SHORT_VERSION: "90"
