@@ -13,6 +13,7 @@ export PATH=$HOME/anaconda/bin:$PATH;
 conda config --add channels omnia;
 conda config --add channels conda-forge;
 conda update -yq --all;
+conda config --add channels omnia/label/dev
 conda install -yq conda-env conda-build==2.1.7 jinja2 anaconda-client;
 conda config --show;
 
@@ -59,4 +60,4 @@ if [ "$INSTALL_OPENMM_PREREQUISITES" = true ] ; then
 fi;
 
 # Build packages
-./conda-build-all -v $UPLOAD -- *
+./conda-build-all -vvv --python $PY_BUILD_VERSION $UPLOAD -- *
