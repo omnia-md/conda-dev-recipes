@@ -26,6 +26,10 @@ services:
   - docker
 
 env:
+  matrix:
+    - PY_BUILD_VERSION="27"
+    - PY_BUILD_VERSION="35"
+    - PY_BUILD_VERSION="36"
   global:
     - CUDA_VERSION: "9.0"
     - CUDA_SHORT_VERSION: "90"
