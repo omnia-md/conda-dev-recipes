@@ -5,7 +5,9 @@ package:
 source:
   git_url: https://github.com/pandegroup/openmm.git
   patches:
-    - silent-build.patch # the patch file is expected to be found in the recipe
+    - silent-cmake.patch
+    - silent-doxygen.patch
+    - silent-latexpdf.patch
 
 build:
   number: 0
