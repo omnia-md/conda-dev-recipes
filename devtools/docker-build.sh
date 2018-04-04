@@ -9,8 +9,6 @@ conda update -yq --all
 conda config --add channels omnia/label/dev
 conda install -yq conda-build==2.1.17 jinja2 anaconda-client
 
-id
-ls -l /io/*
 /io/conda-build-all -vvv --python $PY_BUILD_VERSION $UPLOAD -- /io/*
 
 #mv /anaconda/conda-bld/linux-64/*tar.bz2 /io/ || true
