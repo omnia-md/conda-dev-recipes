@@ -25,7 +25,7 @@ requirements:
     # for building docs
     - sphinx ==1.5.6
     - sphinxcontrib-bibtex
-    - sphinxcontrib-lunrsearch
+    - sphinxcontrib-lunrsearch >=0.3
     - sphinxcontrib-autodoc_doxygen
     - lxml
     - numpy
