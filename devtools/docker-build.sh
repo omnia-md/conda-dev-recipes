@@ -5,7 +5,7 @@ conda config --add channels omnia
 # Move the conda-forge channel to the top
 # Cannot just append omnia otherwise default would have higher priority
 conda config --add channels conda-forge
-conda update -yq --all
+conda install -yq conda\<=4.3.34
 conda config --add channels omnia/label/dev
 conda install -yq conda-build==2.1.17 jinja2 anaconda-client
 
