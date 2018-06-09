@@ -82,3 +82,6 @@ mv sphinx-docs/developerguide/latex/*.pdf $PREFIX/docs/openmm/
 # Put examples into an appropriate subdirectory.
 mkdir $PREFIX/share/openmm/
 mv $PREFIX/examples $PREFIX/share/openmm/
+
+# Clean up
+make clean
