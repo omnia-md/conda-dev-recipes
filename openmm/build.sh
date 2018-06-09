@@ -5,7 +5,7 @@ CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=$PREFIX -DBUILD_TESTING=OFF"
 # Ensure we build a release
 CMAKE_FLAGS+=" -DCMAKE_BUILD_TYPE=Debug"
 
-CUDA_VERSION="9.1"
+CUDA_VERSION="9.0"
 
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     #
