@@ -13,7 +13,6 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     # For Docker build
     #
 
-    source /opt/docker/bin/entrypoint_source
     echo "PATH: $PATH"
     env
 
