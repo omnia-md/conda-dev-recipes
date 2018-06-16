@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=$PREFIX -DBUILD_TESTING=OFF"
 
 # Ensure we build a release
@@ -11,6 +12,10 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     #
     # For Docker build
     #
+
+    source /opt/docker/bin/entrypoint_source
+    echo "PATH: $PATH"
+    env
 
     # CFLAGS
     export MINIMAL_CFLAGS="-g -O3"
