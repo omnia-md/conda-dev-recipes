@@ -5,12 +5,14 @@ CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=$PREFIX -DBUILD_TESTING=OFF"
 # Ensure we build a release
 CMAKE_FLAGS+=" -DCMAKE_BUILD_TYPE=Debug"
 
-CUDA_VERSION="9.0"
-
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     #
     # For Docker build
     #
+
+    # JDC test
+    echo "PATH: $PATH"
+    env
 
     # CFLAGS
     export MINIMAL_CFLAGS="-g -O3"
@@ -22,16 +24,16 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     CMAKE_FLAGS+=" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++"
 
     # OpenMM build configuration
-    CUDA_PATH="/usr/local/cuda-${CUDA_VERSION}"
+    CUDA_PATH="/usr/local/cuda"
     CMAKE_FLAGS+=" -DCUDA_TOOLKIT_ROOT_DIR=${CUDA_PATH}/"
     # AMD APP SDK 3.0 OpenCL
-    CMAKE_FLAGS+=" -DOPENCL_INCLUDE_DIR=/opt/AMDAPPSDK-3.0/include/"
-    CMAKE_FLAGS+=" -DOPENCL_LIBRARY=/opt/AMDAPPSDK-3.0/lib/x86_64/libOpenCL.so"
+    CMAKE_FLAGS+=" -DOPENCL_INCLUDE_DIR=${CUDA_PATH}/include/"
+    CMAKE_FLAGS+=" -DOPENCL_LIBRARY=${CUDA_PATH}/lib64/libOpenCL.so"
     # CUDA OpenCL
     #CMAKE_FLAGS+=" -DOPENCL_INCLUDE_DUR=${CUDA_PATH}/include/"
     #CMAKE_FLAGS+=" -DOPENCL_LIBRARY=${CUDA_PATH}/lib64/libOpenCL.so"
     # gcc from devtoolset-2
-    #CMAKE_FLAGS+=" -DCMAKE_CXX_LINK_FLAGS=-Wl,-rpath,/opt/rh/devtoolset-2/root/usr/lib64"
+    #CMAKE_FLAGS+=" -DCMAKE_CXX_LINK_FLAGS=-Wl,-rpath,/opt/rh/devtoolset-2/root/usr/lib64" # JDC test
     CMAKE_FLAGS+=" -DCMAKE_CXX_FLAGS=--gcc-toolchain=/opt/rh/devtoolset-2/root/usr/"
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     # conda-build MACOSX_DEPLOYMENT_TARGET must be exported as an environment variable to override 10.7 default
@@ -73,6 +75,11 @@ make -j$CPU_COUNT install PythonInstall
 mkdir openmm-docs
 mv $PREFIX/docs/* openmm-docs
 mv openmm-docs $PREFIX/docs/openmm
+
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    # Add GLIBC_2.14 for pdflatex
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/glibc-2.14/lib
+fi
 
 # Build PDF manuals
 make -j$CPU_COUNT sphinxpdf

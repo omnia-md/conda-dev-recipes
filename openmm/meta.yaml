@@ -1,6 +1,6 @@
 package:
   name: openmm
-  version: 7.3.0
+  version: 7.3.2
 
 source:
   git_url: https://github.com/pandegroup/openmm.git
@@ -30,7 +30,7 @@ requirements:
     - lxml
     - numpy
     # Get clang from conda-forge
-    - clangdev ==3.8.1 [linux]
+    - clangdev ==6.0.0 [linux]
 
   run:
     - python
