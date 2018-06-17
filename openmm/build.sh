@@ -76,6 +76,11 @@ mkdir openmm-docs
 mv $PREFIX/docs/* openmm-docs
 mv openmm-docs $PREFIX/docs/openmm
 
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    # Add GLIBC_2.14 for pdflatex
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/glibc-2.14/lib
+fi
+
 # Build PDF manuals
 make -j$CPU_COUNT sphinxpdf
 mv sphinx-docs/userguide/latex/*.pdf $PREFIX/docs/openmm/
