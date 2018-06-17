@@ -16,6 +16,7 @@ conda install -yq conda\<=4.3.34;
 conda config --add channels omnia/label/dev
 conda install -yq conda-env conda-build==2.1.7 jinja2 anaconda-client;
 conda config --show;
+conda clean -tipsy;
 
 # Do this step last to make sure conda-build, conda-env, and conda updates come from the same channel first
 
@@ -38,8 +39,8 @@ if [ "$INSTALL_OPENMM_PREREQUISITES" = true ] ; then
     fi
     sudo tar -zxf cuda_mac_installer_tk.tar.gz -C /;
     sudo tar -zxf cuda_mac_installer_drv.tar.gz -C /;
-    # Don't delete the tarballs to cache the package
-    # rm -f cuda_mac_installer_tk.tar.gz cuda_mac_installer_drv.tar.gz
+    # TODO: Don't delete the tarballs to cache the package, if we can spare the space
+    rm -f cuda_mac_installer_tk.tar.gz cuda_mac_installer_drv.tar.gz
     # Now head back to work directory
     cd $TRAVIS_BUILD_DIR
 
@@ -57,6 +58,9 @@ if [ "$INSTALL_OPENMM_PREREQUISITES" = true ] ; then
     sudo tlmgr --persistent-downloads --repository=$TLREPO install \
         titlesec framed threeparttable wrapfig multirow collection-fontsrecommended hyphenat xstring \
         fncychap tabulary capt-of eqparbox environ trimspaces
+    # Clean up brew
+    brew cleanup -s
+    brew cask cleanup
 fi;
 
 # Build packages
