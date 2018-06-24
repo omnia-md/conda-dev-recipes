@@ -9,7 +9,7 @@ source:
     - 0001-Compatibility.patch
 
 build:
-  skip: True  # [win or py27]
+  skip: True  # [win or osx or py27]
 
 extra:
   maintainers:
