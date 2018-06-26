@@ -55,7 +55,7 @@ script:
   - echo $UPLOAD
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
 
-        docker run -e UPLOAD -e BINSTAR_TOKEN -e CUDA_VERSION -e TRAVIS_PULL_REQUEST
+        docker run -e UPLOAD -e BINSTAR_TOKEN -e CUDA_VERSION -e CUDA_SHORT_VERSION -e TRAVIS_PULL_REQUEST
             -t -i --rm -v `pwd`:/io ${DOCKER_IMAGE}
             bash /io/devtools/docker-build.sh;
 
