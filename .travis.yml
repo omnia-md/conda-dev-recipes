@@ -27,12 +27,11 @@ services:
 
 env:
   matrix:
-    - PY_BUILD_VERSION="27"
-    - PY_BUILD_VERSION="35"
-    - PY_BUILD_VERSION="36"
-  global:
-    - CUDA_VERSION: "9.2"
-    - CUDA_SHORT_VERSION: "92"
+    - CUDA_VERSION="7.5" CUDA_SHORT_VERSION="75"
+    - CUDA_VERSION="8.0" CUDA_SHORT_VERSION="80"
+    - CUDA_VERSION="9.0" CUDA_SHORT_VERSION="90"
+    - CUDA_VERSION="9.1" CUDA_SHORT_VERSION="91"
+    - CUDA_VERSION="9.2" CUDA_SHORT_VERSION="92"
   secure:
   - "hCc0rSIpg/NAZyub5OLcmFLzJ4qKIFwSyiQ3kExosoKTp6g8lWdXPoqLeDx2YBk0SEdtWEQlTUxcnoFXNT1IHxnS5+2EMHdibvpcF+undOCMPCbo26raZ/3rwSxz8FWEHOVaCKJTaFuDlZAxmpQnUBTqYjEhmKgSjp+F3GMZwAX+M3Ic7UraKAdiKYFQToLjcc9TkyEMcqrle+xIRnpaYorgdmsBCSQ6AX4wu0bRldiUfhCp+9eLL9Ik1xLe/qR8BZSGt99dlz+sihhU//mqQgGB21b1kDQfrwErcfVioIVhBR11a2dUxoWkaWs5yCouzzvA1HyMu1da1jm8K4YdjA3Jqu3pevp+mKJ9TzhEvkzKmCZOonACATLY4dSmcWrMAQEX69yWJyqYxqWW3L5SwXyPySZbqMUJgyoleklRgct1R2yw/wAHrYWNdYuBQf3Go0q6UG/V2/JEkHnwTI54QrYIGT1h6I/44ThVAmtJEsNLALhIuDX18SXcTUoLj/+8KG7OEihMKbhwxrEM4LhkMiTNfk09phhY4MEapDXSVKC2G44CBw07tf6RCPovw+jTxCafFM1iY+Rt3nEm0UZksNo8wxdgu8EkEctMenUpzAwXB3Cc3h65f0n+WR5dIrl2w+/gYrkGgY3KL+b47UxWv5+luytTBiy+jsOGeLT/L88="
 
@@ -56,7 +55,7 @@ script:
   - echo $UPLOAD
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
 
-        docker run -e UPLOAD -e BINSTAR_TOKEN -e CUDA_VERSION -e TRAVIS_PULL_REQUEST -e PY_BUILD_VERSION
+        docker run -e UPLOAD -e BINSTAR_TOKEN -e CUDA_VERSION -e TRAVIS_PULL_REQUEST
             -t -i --rm -v `pwd`:/io ${DOCKER_IMAGE}
             bash /io/devtools/docker-build.sh;
 
