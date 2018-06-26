@@ -64,6 +64,6 @@ if [ "$INSTALL_OPENMM_PREREQUISITES" = true ] ; then
 fi;
 
 # Build packages
-PY_BUILD_VERSION="27" ./conda-build-all -vvv --python $PY_BUILD_VERSION $UPLOAD -- *
-PY_BUILD_VERSION="35" ./conda-build-all -vvv --python $PY_BUILD_VERSION $UPLOAD -- *
-PY_BUILD_VERSION="36" ./conda-build-all -vvv --python $PY_BUILD_VERSION $UPLOAD -- *
+for PY_BUILD_VERSION in "27" "35" "36"; do
+    ./conda-build-all -vvv --python $PY_BUILD_VERSION $UPLOAD -- *
+done
