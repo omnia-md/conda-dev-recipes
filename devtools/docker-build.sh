@@ -37,7 +37,7 @@ conda config --add channels omnia/label/dev
 
 # Enable conda
 #source /opt/docker/bin/entrypoint_source
-
+export CUDA_SHORT_VERSION
 for PY_BUILD_VERSION in "27" "35" "36"; do
     /io/conda-build-all -vvv --python $PY_BUILD_VERSION $UPLOAD -- /io/*
 done

@@ -64,6 +64,7 @@ if [ "$INSTALL_OPENMM_PREREQUISITES" = true ] ; then
 fi;
 
 # Build packages
+export CUDA_SHORT_VERSION
 for PY_BUILD_VERSION in "27" "35" "36"; do
     ./conda-build-all -vvv --python $PY_BUILD_VERSION $UPLOAD -- *
 done

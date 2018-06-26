@@ -10,9 +10,9 @@ build:
   number: 0
   skip: True # [win]
   detect_binary_files_with_prefix: False
-  string: py{{py}}_cuda{{ environ['CUDA_SHORT_VERSION'] }}_0
+  string: py{{py}}_cuda{{ CUDA_SHORT_VERSION }}_0
   features:
-    - cuda{{ environ['CUDA_SHORT_VERSION'] }}
+    - cuda{{ CUDA_SHORT_VERSION }}
 
 requirements:
   build:
