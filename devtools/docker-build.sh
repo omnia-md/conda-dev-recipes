@@ -1,7 +1,6 @@
 #!/bin/bash
 echo "CUDA_VERSION: $CUDA_VERSION"
 echo "PATH: $PATH"
-export $CUDA_VERSION
 
 set -e
 set -x

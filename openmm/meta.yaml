@@ -41,6 +41,7 @@ requirements:
     - python
     - fftw3f
     - numpy
+    - cuda{{ CUDA_SHORT_VERSION }}
 
 test:
   requires:
