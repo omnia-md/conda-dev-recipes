@@ -42,15 +42,15 @@ requirements:
     - fftw3f
     - numpy
 
-test:
-  requires:
-    - python
-    - cuda{{ CUDA_SHORT_VERSION }}
-  imports:
-    - simtk
-    - simtk.openmm
-  commands:
-    - python -m simtk.testInstallation
+#test:
+#  requires:
+#    - python
+#    - cuda{{ CUDA_SHORT_VERSION }}
+#  imports:
+#    - simtk
+#    - simtk.openmm
+#  commands:
+#    - python -m simtk.testInstallation
 
 about:
   home: http://openmm.org
