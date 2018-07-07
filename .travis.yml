@@ -48,10 +48,8 @@ script:
   - chmod +x conda-build-all
   # Select upload destination
   - if [[ "${TRAVIS_PULL_REQUEST}" == "false" && "${TRAVIS_BRANCH}" == "master" ]]; then
-        #export UPLOAD="--upload omnia --dev --force";
         export UPLOAD="--upload omnia --force";
     else
-        #export UPLOAD="--dev --force";
         export UPLOAD="--force";
     fi
   - echo $UPLOAD
