@@ -6,11 +6,7 @@ source:
   git_url: https://github.com/pandegroup/openmm.git
 
 extra:
-{% if CUDA_SHORT_VERSION equals "cuda92" %}
-  upload: cuda{{ CUDA_SHORT_VERSION }},dev
-{% else %}
-  upload: cuda{{ CUDA_SHORT_VERSION }}
-{% endif %}
+  upload: cuda{{ CUDA_SHORT_VERSION }}{{ ",dev" if CUDA_SHORT_VERSION == "92" }}
 
 build:
   number: 0
