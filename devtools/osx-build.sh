@@ -66,14 +66,5 @@ fi;
 # Build packages
 export CUDA_SHORT_VERSION
 for PY_BUILD_VERSION in "27" "35" "36" "37"; do
-    if [ "$PY_BUILD_VERSION" = "27" ]; then
-       ./conda-build-all -vvv --python $PY_BUILD_VERSION --numpy "1.9,1.10,1.11,1.12,1.13,1.14,1.15" $UPLOAD -- *
-    elif [ "$PY_BUILD_VERSION" = "35" ]; then
-      ./conda-build-all -vvv --python $PY_BUILD_VERSION --numpy "1.9,1.10,1.11,1.12,1.13,1.14,1.15" $UPLOAD -- *
-    elif [ "$PY_BUILD_VERSION" = "36" ]; then
-      ./conda-build-all -vvv --python $PY_BUILD_VERSION --numpy "1.9,1.10,1.11,1.12,1.13,1.14,1.15" $UPLOAD -- *
-    elif [ "$PY_BUILD_VERSION" = "37" ]; then
-      # conda-forge only has numpy 1.9, 1.11, and 1.15 available for Python 3.7
-      ./conda-build-all -vvv --python $PY_BUILD_VERSION --numpy "1.9,1.11,1.15" $UPLOAD -- *
-    fi
+    ./conda-build-all -vvv --python $PY_BUILD_VERSION --numpy "1.15" $UPLOAD -- *
 done
