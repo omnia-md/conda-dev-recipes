@@ -8,6 +8,7 @@ source:
 
 extra:
   upload: betacuda{{ CUDA_SHORT_VERSION }}{{ ",beta" if CUDA_SHORT_VERSION == "92" else ""}}
+  #force_upload: True
 
 build:
   number: 0
