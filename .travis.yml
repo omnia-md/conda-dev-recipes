@@ -49,9 +49,9 @@ script:
   - chmod +x conda-build-all
   # Select upload destination
   - if [[ "${TRAVIS_PULL_REQUEST}" == "false" && "${TRAVIS_BRANCH}" == "master" ]]; then
-        export UPLOAD="--upload omnia --force";
+        export UPLOAD="--upload omnia";
     else
-        export UPLOAD="--force";
+        export UPLOAD="";
     fi
   - echo $UPLOAD
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
