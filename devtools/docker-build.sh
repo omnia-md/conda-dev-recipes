@@ -36,7 +36,8 @@ conda config --add channels omnia/label/dev
 
 # Enable conda
 #source /opt/docker/bin/entrypoint_source
-for PY_BUILD_VERSION in "27" "35" "36" "37"; do
+#for PY_BUILD_VERSION in "27" "35" "36" "37"; do
+for PY_BUILD_VERSION in "27" "35" "36"; do
     /io/conda-build-all -vvv --python $PY_BUILD_VERSION --numpy "1.15" $UPLOAD -- /io/*
 done
 
