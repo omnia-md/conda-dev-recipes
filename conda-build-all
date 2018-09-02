@@ -477,7 +477,8 @@ def execute(args, p):
         print()
     sys.stdout.flush()
 
-    to_build = list(required_builds(metadatas, pythons, numpys, channel_urls, verbose=args.verbose, force=args.force))
+    # Generate list of unique packages to build
+    to_build = list(set(required_builds(metadatas, pythons, numpys, channel_urls, verbose=args.verbose, force=args.force)))
 
     if len(to_build) > 0:
         print('[conda-build-all] Scheduling the following builds (%s):' % platform)
