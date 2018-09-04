@@ -1,0 +1,61 @@
+package:
+  name: openmmtests
+  version: 7.3.0
+
+source:
+  git_url: https://github.com/pandegroup/openmm.git
+  git_tag : 10aba26
+
+extra:
+  upload: betacuda{{ CUDA_SHORT_VERSION }}{{ ",beta" if CUDA_SHORT_VERSION == "92" else ""}}
+
+build:
+  number: 0
+  skip: True # [win]
+  detect_binary_files_with_prefix: False
+  string: py{{py}}_cuda{{ CUDA_SHORT_VERSION }}_1
+  #features:
+  #  - cuda{{ CUDA_SHORT_VERSION }}
+
+requirements:
+  build:
+    # on windows, need to install cmake manually
+    - cmake     [not win]
+    - jom       [win]
+    - python
+    # Pin fftw3f to 3.3.3 to work around OSX py34 issues
+    - fftw3f ==3.3.3 [osx]
+    - fftw3f ==3.3.4 [win or linux]
+    # swig is pinned to use omnia swig 3.0.8
+    - swig ==3.0.8
+    # on osx, need to install doxygen manually
+    - doxygen   [not osx]
+    # for building docs
+    - sphinx ==1.5.6
+    - sphinxcontrib-bibtex
+    - sphinxcontrib-lunrsearch >=0.3
+    - sphinxcontrib-autodoc_doxygen
+    - lxml
+    - numpy
+    # Get clang from conda-forge
+    - clangdev ==6.0.0 [linux]
+
+  run:
+    - python
+    - fftw3f
+    - numpy
+
+#test:
+#  requires:
+#    - python
+#    - cuda{{ CUDA_SHORT_VERSION }}
+#  imports:
+#    - simtk
+#    - simtk.openmm
+#  commands:
+#    - python -m simtk.testInstallation
+
+about:
+  home: http://openmm.org
+  license: LGPL and MIT
+  summary: A high performance toolkit for molecular simulation.

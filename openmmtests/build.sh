@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=$PREFIX -DBUILD_TESTING=OFF"
+CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=$PREFIX -DBUILD_TESTING=ON"
 
 # Ensure we build a release
 CMAKE_FLAGS+=" -DCMAKE_BUILD_TYPE=Debug"
@@ -64,9 +64,6 @@ cd build
 cmake .. $CMAKE_FLAGS
 make -j$CPU_COUNT all
 
-# DEBUG
-ls -ltr
-
 # PythonInstall uses the gcc/g++ 4.2.1 that anaconda was built with, so we can't add extraneous unrecognized compiler arguments.
 #export CXXFLAGS="$MINIMAL_CFLAGS"
 #export LDFLAGS="$LDPATHFLAGS"
@@ -92,7 +89,3 @@ mv sphinx-docs/developerguide/latex/*.pdf $PREFIX/docs/openmm/
 # Put examples into an appropriate subdirectory.
 mkdir $PREFIX/share/openmm/
 mv $PREFIX/examples $PREFIX/share/openmm/
-
-# Put tests into an appropriate subdirectory
-mkdir $PREFIX/share/openmm/tests/
-# TODO
