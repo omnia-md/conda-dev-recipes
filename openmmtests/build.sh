@@ -93,6 +93,6 @@ mv sphinx-docs/developerguide/latex/*.pdf $PREFIX/docs/openmm/
 mkdir $PREFIX/share/openmm/
 mv $PREFIX/examples $PREFIX/share/openmm/
 
-# Put tests into an appropriate subdirectory
-mkdir $PREFIX/share/openmm/tests/
-# TODO
+# Put tests into bin for now
+#mkdir $PREFIX/share/openmm/tests/
+mv Test* $PREFIX/bin
