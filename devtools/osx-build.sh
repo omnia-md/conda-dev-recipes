@@ -18,7 +18,7 @@ conda install -yq conda\<=4.3.34;
 # "conda config --add channels omnia/label/dev" will fail if ruamel_yaml > 0.15.54
 # This workaround is in place to avoid this failure until this is patched
 # See: https://github.com/conda/conda/issues/7672
-conda install --yes ruamel_yaml==0.15.54
+conda install --yes ruamel_yaml==0.15.53
 #####################################################################
 conda config --add channels omnia/label/dev
 conda install -yq conda-env conda-build==2.1.7 jinja2 anaconda-client;
