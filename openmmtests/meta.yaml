@@ -5,7 +5,11 @@ package:
 source:
   git_url: https://github.com/pandegroup/openmm.git
   git_tag : 10aba26
-
+  patches:
+    - silent-cmake.patch
+    - silent-doxygen.patch
+    - silent-latexpdf.patch
+    
 extra:
   upload: betacuda{{ CUDA_SHORT_VERSION }}{{ ",beta" if CUDA_SHORT_VERSION == "92" else ""}}
   force_upload: True
