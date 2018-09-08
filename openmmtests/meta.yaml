@@ -9,7 +9,7 @@ source:
     - silent-cmake.patch
     - silent-doxygen.patch
     - silent-latexpdf.patch
-    
+
 extra:
   upload: betacuda{{ CUDA_SHORT_VERSION }}{{ ",beta" if CUDA_SHORT_VERSION == "92" else ""}}
   force_upload: True
@@ -45,7 +45,7 @@ requirements:
     # Get clang from conda-forge
     - clangdev ==6.0.0 [linux]
     # Require the openmm package
-    - openmm ==7.3.0
+    #- openmm ==7.3.0
 
   run:
     - python
