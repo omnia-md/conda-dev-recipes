@@ -40,6 +40,7 @@ conda config --add channels omnia/label/dev
 
 # Make sure we have the appropriate channel added
 conda config --add channels omnia/label/betacuda${CUDA_SHORT_VERSION};
+conda config --add channels omnia/label/devcuda${CUDA_SHORT_VERSION};
 
 for PY_BUILD_VERSION in "27" "35" "36"; do
     /io/conda-build-all -vvv --python $PY_BUILD_VERSION --numpy "1.15" $UPLOAD -- /io/*
