@@ -44,13 +44,13 @@ requirements:
     - numpy
     # Get clang from conda-forge
     - clangdev ==6.0.0 [linux]
-    # Require the openmm package
-    #- openmm ==7.3.0
 
   run:
     - python
     - fftw3f
     - numpy
+    # Require the openmm package
+    - openmm ==7.3.0
 
 #test:
 #  requires:

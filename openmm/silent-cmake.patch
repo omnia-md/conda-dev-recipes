@@ -1,0 +1,21 @@
+--- CMakeLists.txt	2018-03-20 18:58:04.000000000 -0400
++++ CMakeLists-modified.txt	2018-03-20 18:58:25.000000000 -0400
+@@ -15,6 +15,18 @@
+ find_package(PythonInterp)
+ mark_as_advanced(CLEAR PYTHON_EXECUTABLE)
+ 
++# Suppress non-critical build messages
++function(message)
++  list(GET ARGV 0 MessageType)
++  if(MessageType STREQUAL FATAL_ERROR OR
++     MessageType STREQUAL SEND_ERROR OR
++     MessageType STREQUAL WARNING OR
++     MessageType STREQUAL AUTHOR_WARNING)
++    list(REMOVE_AT ARGV 0)
++    _message(${MessageType} "${ARGV}")
++  endif()
++endfunction()
++
+ # Don't create a new project name if this is part of a mega-build from the
+ # parent directory
+ IF( NOT PROJECT_NAME )
