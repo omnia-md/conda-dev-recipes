@@ -58,11 +58,37 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     CMAKE_FLAGS+=" -DFFTW_THREADS_LIBRARY=$PREFIX/lib/libfftw3f_threads.dylib"
 fi
 
-# Build in subdirectory, but don't install
+# Build in subdirectory and install.
 mkdir build
 cd build
 cmake .. $CMAKE_FLAGS
 make -j$CPU_COUNT all
+
+# PythonInstall uses the gcc/g++ 4.2.1 that anaconda was built with, so we can't add extraneous unrecognized compiler arguments.
+#export CXXFLAGS="$MINIMAL_CFLAGS"
+#export LDFLAGS="$LDPATHFLAGS"
+#export SHLIB_LDFLAGS="$LDPATHFLAGS"
+
+make -j$CPU_COUNT install PythonInstall
+
+# Clean up paths for API docs.
+mkdir openmm-docs
+mv $PREFIX/docs/* openmm-docs
+mv openmm-docs $PREFIX/docs/openmm
+
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    # Add GLIBC_2.14 for pdflatex
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/glibc-2.14/lib
+fi
+
+# Build PDF manuals
+make -j$CPU_COUNT sphinxpdf
+mv sphinx-docs/userguide/latex/*.pdf $PREFIX/docs/openmm/
+mv sphinx-docs/developerguide/latex/*.pdf $PREFIX/docs/openmm/
+
+# Put examples into an appropriate subdirectory.
+mkdir $PREFIX/share/openmm/
+mv $PREFIX/examples $PREFIX/share/openmm/
 
 # Move tests into bin
 mv Test* $PREFIX/bin

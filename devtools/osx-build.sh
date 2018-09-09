@@ -74,6 +74,7 @@ export CUDA_SHORT_VERSION
 
 # Make sure we have the appropriate channel added
 conda config --add channels omnia/label/betacuda${CUDA_SHORT_VERSION};
+conda config --add channels omnia/label/devcuda${CUDA_SHORT_VERSION};
 
 #for PY_BUILD_VERSION in "27" "35" "36" "37"; do
 for PY_BUILD_VERSION in "27" "35" "36"; do
