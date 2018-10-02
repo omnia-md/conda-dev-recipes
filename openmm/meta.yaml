@@ -9,7 +9,7 @@ source:
     - silent-cmake.patch
     - silent-doxygen.patch
     - silent-latexpdf.patch
-    
+
 extra:
   #upload: betacuda{{ CUDA_SHORT_VERSION }}{{ ",beta" if CUDA_SHORT_VERSION == "92" else ""}}
   upload: devcuda{{ CUDA_SHORT_VERSION }}{{ ",dev" if CUDA_SHORT_VERSION == "92" else ""}}
@@ -37,7 +37,7 @@ requirements:
     # on osx, need to install doxygen manually
     - doxygen   [not osx]
     # for building docs
-    - sphinx ==1.5.6
+    - sphinx
     - sphinxcontrib-bibtex
     - sphinxcontrib-lunrsearch >=0.3
     - sphinxcontrib-autodoc_doxygen
