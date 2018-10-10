@@ -12,18 +12,18 @@ bash Miniconda3-latest-MacOSX-x86_64.sh -b -p $HOME/anaconda;
 export PATH=$HOME/anaconda/bin:$PATH;
 conda config --add channels omnia;
 conda config --add channels conda-forge;
-conda install -yq conda\<=4.3.34;
+conda install -yq conda;
 #####################################################################
 # WORKAROUND FOR BUG WITH ruamel_yaml
 # "conda config --add channels omnia/label/dev" will fail if ruamel_yaml > 0.15.54
 # This workaround is in place to avoid this failure until this is patched
 # See: https://github.com/conda/conda/issues/7672
-conda install --yes ruamel_yaml==0.15.53 conda\<=4.3.34;
+conda install --yes ruamel_yaml==0.15.53 conda
 #####################################################################
 conda config --add channels omnia/label/dev
-conda install -yq conda-env conda-build==2.1.7 jinja2 anaconda-client;
-conda config --show;
-conda clean -tipsy;
+conda install -yq conda-env conda-build jinja2 anaconda-client
+conda config --show
+conda clean -tipsy
 
 # Do this step last to make sure conda-build, conda-env, and conda updates come from the same channel first
 
