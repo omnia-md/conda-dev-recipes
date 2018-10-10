@@ -1,11 +1,11 @@
 package:
   name: openmm
-  version: 7.6.0
+  version: 7.4.0
 
 source:
   git_url: https://github.com/pandegroup/openmm.git
   #git_tag : de666e305b61a1cff0bfc7d7f51c23de5d13ff43 # 7.5.0
-  git_tag: f6cbe7d
+  #git_tag: f6cbe7d # 7.6.0
   patches:
     - silent-cmake.patch
     - silent-doxygen.patch
