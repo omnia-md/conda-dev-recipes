@@ -81,7 +81,10 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/glibc-2.14/lib
 fi
 
-# DEBUG
+# DEBUG: Needed to band-aid current omnia-linux-anvil images
+tlmgr install varwidth
+
+# DEBUG: Needed for latest sphinx
 locale -a
 export LC_ALL=C
 #export LC_ALL="en_US.UTF-8"
