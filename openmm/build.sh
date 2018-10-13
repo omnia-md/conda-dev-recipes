@@ -82,10 +82,11 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
 fi
 
 # DEBUG
-#locale -a
-#export LC_ALL=C
-export LC_ALL="en_US.UTF-8"
-export LC_CTYPE="en_US.UTF-8"
+locale -a
+export LC_ALL=C
+#export LC_ALL="en_US.UTF-8"
+#export LC_CTYPE="en_US.UTF-8"
+locale -a
 #sudo dpkg-reconfigure locales
 
 # Build PDF manuals
