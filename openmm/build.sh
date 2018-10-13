@@ -81,9 +81,6 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/glibc-2.14/lib
 fi
 
-# DEBUG: Needed to band-aid current omnia-linux-anvil images
-tlmgr install varwidth
-
 # DEBUG: Needed for latest sphinx
 locale -a
 export LC_ALL=C
@@ -91,6 +88,9 @@ export LC_ALL=C
 #export LC_CTYPE="en_US.UTF-8"
 locale -a
 #sudo dpkg-reconfigure locales
+
+# DEBUG: Needed to band-aid current omnia-linux-anvil images
+#tlmgr install varwidth
 
 # Build PDF manuals
 make -j$CPU_COUNT sphinxpdf
