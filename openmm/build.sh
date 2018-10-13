@@ -81,6 +81,13 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/glibc-2.14/lib
 fi
 
+# DEBUG
+locale -a
+#export LC_ALL=C
+export LC_ALL="en_US.UTF-8"
+export LC_CTYPE="en_US.UTF-8"
+sudo dpkg-reconfigure locales
+
 # Build PDF manuals
 make -j$CPU_COUNT sphinxpdf
 mv sphinx-docs/userguide/latex/*.pdf $PREFIX/docs/openmm/
