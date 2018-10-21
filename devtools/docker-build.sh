@@ -42,17 +42,6 @@ conda config --add channels omnia/label/dev
 conda config --add channels omnia/label/betacuda${CUDA_SHORT_VERSION};
 conda config --add channels omnia/label/devcuda${CUDA_SHORT_VERSION};
 
-# DEBUG: Needed for latest sphinx
-locale -a
-export LC_ALL=C
-#export LC_ALL="en_US.UTF-8"
-#export LC_CTYPE="en_US.UTF-8"
-locale -a
-#sudo dpkg-reconfigure locales
-
-# DEBUG: Needed to band-aid current omnia-linux-anvil images
-sudo tlmgr install varwidth
-
 for PY_BUILD_VERSION in "37" "36" "35" "27" ; do
     /io/conda-build-all -vvv --python $PY_BUILD_VERSION --check-against omnia/label/beta --check-against omnia/label/betacuda${CUDA_SHORT_VERSION} --check-against omnia/label/dev --check-against omnia/label/devcuda${CUDA_SHORT_VERSION} --numpy "1.15" $UPLOAD -- /io/*
 done
