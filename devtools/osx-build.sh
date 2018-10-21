@@ -64,7 +64,10 @@ if [ "$INSTALL_OPENMM_PREREQUISITES" = true ] ; then
     sleep 5
     sudo tlmgr --persistent-downloads --repository=$TLREPO install \
         titlesec framed threeparttable wrapfig multirow collection-fontsrecommended hyphenat xstring \
-        fncychap tabulary capt-of eqparbox environ trimspaces
+        fncychap tabulary capt-of eqparbox environ trimspaces \
+        cmap fancybox titlesec framed fancyvrb threeparttable \
+        mdwtools wrapfig parskip upquote float multirow hyphenat caption \
+        xstring fncychap tabulary capt-of eqparbox environ trimspaces
     # Clean up brew
     brew cleanup -s
 fi;
