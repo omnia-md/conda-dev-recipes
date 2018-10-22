@@ -67,7 +67,7 @@ if [ "$INSTALL_OPENMM_PREREQUISITES" = true ] ; then
         fncychap tabulary capt-of eqparbox environ trimspaces \
         cmap fancybox titlesec framed fancyvrb threeparttable \
         mdwtools wrapfig parskip upquote float multirow hyphenat caption \
-        xstring fncychap tabulary capt-of eqparbox environ trimspaces
+        xstring fncychap tabulary capt-of eqparbox environ trimspaces varwidth
     # Clean up brew
     brew cleanup -s
 fi;
