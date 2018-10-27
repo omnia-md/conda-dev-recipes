@@ -1,10 +1,10 @@
 package:
   name: openmm
-  version: a8020ad
+  version: 7.4.0
 
 source:
   git_url: https://github.com/pandegroup/openmm.git
-  git_tag: a8020ad
+  #git_tag: a8020ad
   
   patches:
     - silent-cmake.patch
