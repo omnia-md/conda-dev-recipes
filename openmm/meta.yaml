@@ -1,10 +1,10 @@
 package:
   name: openmm
-  version: 3040bf9
+  version: debug
 
 source:
-  git_url: https://github.com/pandegroup/openmm.git
-  git_tag: 3040bf9
+  git_url: https://github.com/andrrizzi/openmm.git
+  git_tag: debug
   
   patches:
     - silent-cmake.patch
