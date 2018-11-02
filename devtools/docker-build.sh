@@ -8,6 +8,8 @@ set -x
 conda config --add channels conda-forge
 conda config --add channels omnia
 conda config --add channels omnia/label/dev
+conda config --add channels omnia-dev
+conda config --add channels omnia-dev/label/dev
 
 #conda install -yq conda\<=4.3.34
 #conda install -yq conda-build==2.1.17 jinja2 anaconda-client
