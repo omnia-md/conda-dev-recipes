@@ -65,5 +65,5 @@ requirements:
 
 about:
   home: http://openmm.org
-  license: LGPL and MIT
+  license: MIT
   summary: A high performance toolkit for molecular simulation.

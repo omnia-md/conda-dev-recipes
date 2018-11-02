@@ -97,3 +97,6 @@ mv sphinx-docs/developerguide/latex/*.pdf $PREFIX/docs/openmm/
 # Put examples into an appropriate subdirectory.
 mkdir $PREFIX/share/openmm/
 mv $PREFIX/examples $PREFIX/share/openmm/
+
+# Clean up directories with pycache
+find -type d -name __pycache__ -exec rmdir {} \;
