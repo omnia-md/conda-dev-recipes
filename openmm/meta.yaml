@@ -19,7 +19,7 @@ build:
   number: 0
   skip: True # [win]
   detect_binary_files_with_prefix: False
-  string: py{{py}}_cuda{{ CUDA_SHORT_VERSION }}_{{ GIT_DESCRIBE_HASH }}_1
+  string: py{{ py }}_cuda{{ CUDA_SHORT_VERSION }}_{{ environ.get("GIT_DESCRIBE_HASH", "")[1:8] }}_1
   #features:
   #  - cuda{{ CUDA_SHORT_VERSION }}
 
