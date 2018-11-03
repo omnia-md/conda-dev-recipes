@@ -54,7 +54,7 @@ script:
   - if [[ "${TRAVIS_PULL_REQUEST}" == "false" && "${TRAVIS_BRANCH}" == "master" ]]; then
         export UPLOAD="$CHECK_AGAINST --upload omnia-dev";
     else
-        export UPLOAD="%CHECK_AGAINST";
+        export UPLOAD="$CHECK_AGAINST";
     fi
   - echo $UPLOAD
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
