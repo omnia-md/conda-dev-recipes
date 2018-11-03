@@ -215,11 +215,14 @@ def conda_build_cmd():
 
 
 def get_bldpkg_path(m, python, numpy):
-    cfg = _CondaBuildConfig()
-    cfg.CONDA_PY = int(python.replace('.', ''))
-    cfg.CONDA_NPY = int(numpy.replace('.', ''))
-
-    m.config = cfg
+    #cfg = _CondaBuildConfig()
+    #cfg.CONDA_PY = int(python.replace('.', ''))
+    #cfg.CONDA_NPY = int(numpy.replace('.', ''))
+    #m.config = cfg
+    # DEBUG
+    m.config.CONDA_PY = int(python.replace('.', ''))
+    m.config.CONDA_NPY = int(numpy.replace('.', ''))
+    
     platform = m.info_index()['platform']
     if platform is None:
         platform = 'noarch'
