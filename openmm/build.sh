@@ -99,4 +99,4 @@ mkdir $PREFIX/share/openmm/
 mv $PREFIX/examples $PREFIX/share/openmm/
 
 # Clean up directories with pycache
-find -type d -name __pycache__ -exec rmdir {} \;
+find . -type d -name __pycache__ -exec rmdir {} \;
