@@ -12,14 +12,16 @@ source:
 
 extra:
   #upload: betacuda{{ CUDA_SHORT_VERSION }}{{ ",beta" if CUDA_SHORT_VERSION == "92" else ""}}
-  upload: devcuda{{ CUDA_SHORT_VERSION }}{{ ",dev" if CUDA_SHORT_VERSION == "92" else ""}}
+  #upload: devcuda{{ CUDA_SHORT_VERSION }}{{ ",dev" if CUDA_SHORT_VERSION == "92" else ""}}
+  upload: cuda{{ CUDA_SHORT_VERSION }}{{ ",main" if CUDA_SHORT_VERSION == "92" else ""}}
   force_upload: True
 
 build:
   number: 0
   skip: True # [win]
   detect_binary_files_with_prefix: False
-  string: py{{ py }}_cuda{{ CUDA_SHORT_VERSION }}_{{ environ.get("GIT_DESCRIBE_HASH", "")[1:8] }}_1
+  #string: py{{ py }}_cuda{{ CUDA_SHORT_VERSION }}_{{ environ.get("GIT_DESCRIBE_HASH", "")[1:8] }}_1 # this doesn't work with conda-build-all
+  string: py{{ py }}_cuda{{ CUDA_SHORT_VERSION }}_1
   #features:
   #  - cuda{{ CUDA_SHORT_VERSION }}
 
