@@ -15,10 +15,13 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     env
 
     # CFLAGS
-    export MINIMAL_CFLAGS="-g -O3"
+    #export MINIMAL_CFLAGS="-g -O3"
+    export MINIMAL_CFLAGS="-g -O1 -Wthread-safety -fsanitize=address -fsanitize=thread -fsanitize=memory -fsanitize=signed-integer-overflow,null,alignment -fsanitize=leak -fno-omit-frame-pointer -fsanitize-memory-track-origins -fsanitize-memory-use-after-dtor -fsanitize-address-use-after-scope -fsanitize-stats" # DEBUG
     export CFLAGS="$MINIMAL_CFLAGS"
     export CXXFLAGS="$MINIMAL_CFLAGS"
     export LDFLAGS="$LDPATHFLAGS"
+
+
 
     # Use clang 3.8.1 from the clangdev package on conda-forge
     CMAKE_FLAGS+=" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++"
