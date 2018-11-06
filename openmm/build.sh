@@ -15,8 +15,9 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     env
 
     # CFLAGS
-    #export MINIMAL_CFLAGS="-g -O3"
-    export MINIMAL_CFLAGS="-g -O1 -Wthread-safety -fsanitize=address -fsanitize=thread -fsanitize=memory -fsanitize=signed-integer-overflow,null,alignment -fsanitize=leak -fno-omit-frame-pointer -fsanitize-memory-track-origins -fsanitize-memory-use-after-dtor -fsanitize-address-use-after-scope -fsanitize-stats" # DEBUG
+    #export MINIMAL_CFLAGS="-g -O3 -Wthread-safety"
+    #export MINIMAL_CFLAGS="-g -O1 -fsanitize=address -fno-optimize-sibling-calls"
+    export MINIMAL_CFLAGS="-g -O1 -fsanitize=memory -fno-omit-frame-pointer"
     export CFLAGS="$MINIMAL_CFLAGS"
     export CXXFLAGS="$MINIMAL_CFLAGS"
     export LDFLAGS="$LDPATHFLAGS"
