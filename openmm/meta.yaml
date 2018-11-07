@@ -46,7 +46,7 @@ requirements:
     - lxml
     - numpy
     # Get clang from conda-forge
-    - clangdev ==6.0.0 [linux]
+    - clangdev ==7.0.0 [linux]
     # Required for sphinx
     - latexmk
 
