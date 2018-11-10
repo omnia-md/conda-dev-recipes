@@ -2,8 +2,11 @@
 
 CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=$PREFIX -DBUILD_TESTING=OFF"
 
-# Ensure we build a release
+# Ensure we build a debug version
 CMAKE_FLAGS+=" -DCMAKE_BUILD_TYPE=Debug"
+
+# Don't build static
+CMAKE_FLAGS+=" -DOPENMM_BUILD_STATIC_LIB=OFF"
 
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     #
