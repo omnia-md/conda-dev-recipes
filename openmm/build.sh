@@ -6,7 +6,8 @@ CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=$PREFIX -DBUILD_TESTING=OFF"
 CMAKE_FLAGS+=" -DCMAKE_BUILD_TYPE=Debug"
 
 # Don't build static
-CMAKE_FLAGS+=" -DOPENMM_BUILD_STATIC_LIB=OFF"
+CMAKE_FLAGS+=" -DOPENMM_BUILD_STATIC_LIB=OFF -DOPENMM_BUILD_SHARED_LIB=ON"
+CMAKE_FLAGS+=" -DCMAKE_LINKER=clang -DCMAKE_CXX_LINK_EXECUTABLE=clang++"
 
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     #
@@ -68,7 +69,9 @@ fi
 # Build in subdirectory and install.
 mkdir build
 cd build
+set # DEBUG
 cmake .. $CMAKE_FLAGS
+cat CMakeCache.txt # DEBUG
 make -j$CPU_COUNT all
 
 # PythonInstall uses the gcc/g++ 4.2.1 that anaconda was built with, so we can't add extraneous unrecognized compiler arguments.
