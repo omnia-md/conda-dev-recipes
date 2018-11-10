@@ -5,10 +5,6 @@ CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=$PREFIX -DBUILD_TESTING=OFF"
 # Ensure we build a debug version
 CMAKE_FLAGS+=" -DCMAKE_BUILD_TYPE=Debug"
 
-# Don't build static
-CMAKE_FLAGS+=" -DOPENMM_BUILD_STATIC_LIB=OFF -DOPENMM_BUILD_SHARED_LIB=ON"
-CMAKE_FLAGS+=" -DCMAKE_LINKER=clang -DCMAKE_CXX_LINK_EXECUTABLE=clang++"
-
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     #
     # For Docker build
@@ -21,7 +17,7 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     # CFLAGS
     #export MINIMAL_CFLAGS="-g -O3 -Wthread-safety"
     #export MINIMAL_CFLAGS="-g -O1 -fsanitize=address -fno-optimize-sibling-calls"
-    export MINIMAL_CFLAGS="-g -O1 -fsanitize=memory -fno-omit-frame-pointer"
+    export MINIMAL_CFLAGS="-g -O1 -fsanitize=memory -fno-omit-frame-pointer" # DEBUG: Check memory is properly initialized
     export CFLAGS="$MINIMAL_CFLAGS"
     export CXXFLAGS="$MINIMAL_CFLAGS"
     export LDFLAGS="$LDPATHFLAGS"
@@ -41,8 +37,7 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     #CMAKE_FLAGS+=" -DOPENCL_INCLUDE_DUR=${CUDA_PATH}/include/"
     #CMAKE_FLAGS+=" -DOPENCL_LIBRARY=${CUDA_PATH}/lib64/libOpenCL.so"
     # gcc from devtoolset-2
-    #CMAKE_FLAGS+=" -DCMAKE_CXX_LINK_FLAGS=-Wl,-rpath,/opt/rh/devtoolset-2/root/usr/lib64" # JDC test
-    #CMAKE_FLAGS+=" -DCMAKE_CXX_FLAGS=--gcc-toolchain=/opt/rh/devtoolset-2/root/usr/" # DEBUG
+    CMAKE_FLAGS+=" -DCMAKE_CXX_FLAGS=--gcc-toolchain=/opt/rh/devtoolset-2/root/usr/"
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     # conda-build MACOSX_DEPLOYMENT_TARGET must be exported as an environment variable to override 10.7 default
     # cc: https://github.com/conda/conda-build/pull/1561
