@@ -49,11 +49,13 @@ requirements:
     - clangdev ==6.0.0 [linux]
     # Required for sphinx
     - latexmk
+    - cython
 
   run:
     - python
     - fftw3f
     - numpy
+    - cython
 
 #test:
 #  requires:
