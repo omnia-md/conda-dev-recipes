@@ -55,7 +55,7 @@ install:
   - conda install -yq conda==4.3.34 conda-build==2.1.17 jinja2 anaconda-client
   - conda config --add channels omnia
   - conda config --add channels conda-forge
-  - conda config --add channels omnia/label/dev
+  - conda config --add channels omnia-dev
   - powershell .\\devtools\\appveyor\\missing-headers.ps1
   # conda-build for some inane reason, effectively puts C:\cygwin\bin at the
   # front of the PATH, ahead of everything else, regardless. See
@@ -72,5 +72,5 @@ install:
 build: false
 
 test_script:
-  - ps: if (($env:APPVEYOR_PULL_REQUEST_NUMBER -eq $null) -and ($env:APPVEYOR_REPO_BRANCH -eq "master")) { $env:UPLOAD = "--upload omnia --dev --force" } else { $env:UPLOAD = " " }
+  - ps: if (($env:APPVEYOR_PULL_REQUEST_NUMBER -eq $null) -and ($env:APPVEYOR_REPO_BRANCH -eq "master")) { $env:UPLOAD = "--check-against omnia-dev --upload omnia-dev --dev --force" } else { $env:UPLOAD = " " }
   - "%CMD_IN_ENV% python conda-build-all %UPLOAD% --python %CONDA_PY% *"
