@@ -79,6 +79,6 @@ fi;
 export CUDA_SHORT_VERSION
 
 # Build all support Python and numpy versions
-./conda-build-all -vvv --python "37,36,27" --numpy "1.14,1.15" $UPLOAD -- *
+./conda-build-all -vvv --python "37,36,27" --numpy "1.15" $UPLOAD -- *
 
 done

@@ -35,6 +35,6 @@ conda config --add channels omnia/label/cuda${CUDA_SHORT_VERSION}
 #pythonvers=`python -c 'import sys; print sys.version[:3]'`
 #export PYTHONPATH=/opt/rh/devtoolset-2/root/usr/lib64/python$pythonvers/site-packages:/opt/rh/devtoolset-2/root/usr/lib/python$pythonvers/site-packages${PYTHONPATH:+:${PYTHONPATH}}
 
-/io/conda-build-all -vvv --python "37,36,27" --numpy "1.14,1.15" $UPLOAD -- /io/*
+/io/conda-build-all -vvv --python "37,36,27" --numpy "1.15" $UPLOAD -- /io/*
 
 #mv /anaconda/conda-bld/linux-64/*tar.bz2 /io/ || true
