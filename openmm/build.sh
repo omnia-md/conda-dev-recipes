@@ -81,18 +81,16 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/glibc-2.14/lib
 fi
 
-# DEBUG: Needed for latest sphinx
-locale -a
+# Needed for latest sphinx
 export LC_ALL=C
 #export LC_ALL="en_US.UTF-8"
 #export LC_CTYPE="en_US.UTF-8"
-locale -a
 #sudo dpkg-reconfigure locales
 
 # Build PDF manuals
-make -j$CPU_COUNT sphinxpdf
-mv sphinx-docs/userguide/latex/*.pdf $PREFIX/docs/openmm/
-mv sphinx-docs/developerguide/latex/*.pdf $PREFIX/docs/openmm/
+#make -j$CPU_COUNT sphinxpdf
+#mv sphinx-docs/userguide/latex/*.pdf $PREFIX/docs/openmm/
+#mv sphinx-docs/developerguide/latex/*.pdf $PREFIX/docs/openmm/
 
 # Put examples into an appropriate subdirectory.
 mkdir $PREFIX/share/openmm/
