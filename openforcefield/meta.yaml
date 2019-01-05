@@ -13,7 +13,8 @@ build:
 
 extra:
   force_upload: True
-  
+  upload: main
+
 requirements:
   build:
     - python
@@ -25,9 +26,19 @@ requirements:
     - networkx >=2.0
     - lxml
     - icu 58*  # This is a lxml dependency but sometimes conda installs version 56
+    - packaging
+    # Should these be optional?
     - rdkit
     - ambertools
     #- parmed # uncomment when new ambermini (without parmed) is built
+    # Should we require this? It's useful for tests and examples, but not strictly required
+    - openmmtools # If we remove this we need to install openmm (which minimum version?)
+    # Serialization: Should these be optional?
+    - pyyaml
+    - toml
+    - bson
+    - msgpack-python
+    - xmltodict
 
 test:
   requires:
