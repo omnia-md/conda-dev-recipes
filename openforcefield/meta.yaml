@@ -1,0 +1,37 @@
+package:
+  name: openforcefield
+  version: 1.0a1
+
+source:
+    git_url: https://github.com/openforcefield/openforcefield.git
+    git_tag: topology
+
+build:
+  preserve_egg_dir: True
+  number: 0
+  #skip: True # [win]
+
+requirements:
+  build:
+    - python
+    - setuptools
+
+  run:
+    - python
+    - numpy >=1.14
+    - networkx >=2.0
+    - lxml
+    - icu 58*  # This is a lxml dependency but sometimes conda installs version 56
+    - rdkit
+    - ambertools
+    #- parmed # uncomment when new ambermini (without parmed) is built
+
+test:
+  requires:
+    - pytest
+  imports:
+    - openforcefield
+
+about:
+  home: https://github.com/openforcefield/openforcefield
+  license: MIT
