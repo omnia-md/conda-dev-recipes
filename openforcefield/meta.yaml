@@ -11,6 +11,9 @@ build:
   number: 0
   #skip: True # [win]
 
+extra:
+  force_upload: True
+  
 requirements:
   build:
     - python
