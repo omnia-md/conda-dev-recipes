@@ -1,6 +1,6 @@
 package:
   name: openforcefield
-  version: 1.0a1
+  version: 1.0.0
 
 source:
     git_url: https://github.com/openforcefield/openforcefield.git
@@ -8,12 +8,13 @@ source:
 
 build:
   preserve_egg_dir: True
-  number: 0
+  #number: 0 # Build number and string do not work together.
+  string: a1 # Alpha version 1.
   #skip: True # [win]
 
 extra:
   force_upload: True
-  upload: main
+  upload: main # Upload to anaconda with the "main" label.
 
 requirements:
   build:
