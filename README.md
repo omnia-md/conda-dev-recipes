@@ -1,5 +1,4 @@
 * Travis-CI `linux`and `osx` builds [![Travis Build Status](https://travis-ci.org/omnia-md/conda-dev-recipes.svg?branch=master)](https://travis-ci.org/omnia-md/conda-dev-recipes)
-* Appveyor-CI `windows` builds [![Build status](https://ci.appveyor.com/api/projects/status/661g5c1db9hbm8p8?svg=true)](https://ci.appveyor.com/project/jchodera/conda-dev-recipes)
 
 omnia-md/conda-dev-recipes
 --------------------------
@@ -13,14 +12,18 @@ versions of selected packages.
 
 Packages are built twice daily by [the Travis CI cron trigger](http://traviscron.pythonanywhere.com/).
 
-To install a development package
+To install a development package, use
+```bash
+conda install -c omnia-dev <package_name>
 ```
-# Add the omnia and conda-forge
-$ conda config --add channels omnia --add channels conda-forge
-
-conda install openmm-dev
+Or to install a specific commit hash, use
+```bash
+conda install -c omnia-dev <package_name>=<version>=<build_string>
 ```
-
+For example, to install the Python 3.7, CUDA 7.5 version of `openmm` with git hash 689e2bc, use
+```bash
+conda install -c omnia-dev openmm=7.4.0=openmm-7.4.0-py37_cuda75_689e2bc_1
+```
 
 ### Supported versions
 

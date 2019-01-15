@@ -4,22 +4,24 @@ package:
 
 source:
   git_url: https://github.com/pandegroup/openmm.git
-  #git_tag : 05e816ab8a0689fd6883531b924214ac9e501817
+
   patches:
     - silent-cmake.patch
     - silent-doxygen.patch
     - silent-latexpdf.patch
-    
+
 extra:
   #upload: betacuda{{ CUDA_SHORT_VERSION }}{{ ",beta" if CUDA_SHORT_VERSION == "92" else ""}}
-  upload: devcuda{{ CUDA_SHORT_VERSION }}{{ ",dev" if CUDA_SHORT_VERSION == "92" else ""}}
+  #upload: devcuda{{ CUDA_SHORT_VERSION }}{{ ",dev" if CUDA_SHORT_VERSION == "92" else ""}}
+  upload: cuda{{ CUDA_SHORT_VERSION }}{{ ",main" if CUDA_SHORT_VERSION == "92" else ""}}
   force_upload: True
 
 build:
   number: 0
   skip: True # [win]
   detect_binary_files_with_prefix: False
-  string: py{{py}}_cuda{{ CUDA_SHORT_VERSION }}_1
+  #string: py{{ py }}_cuda{{ CUDA_SHORT_VERSION }}_{{ environ.get("GIT_DESCRIBE_HASH", "")[1:8] }}_1 # this doesn't work with conda-build-all
+  string: py{{ py }}_cuda{{ CUDA_SHORT_VERSION }}_1
   #features:
   #  - cuda{{ CUDA_SHORT_VERSION }}
 
@@ -37,7 +39,7 @@ requirements:
     # on osx, need to install doxygen manually
     - doxygen   [not osx]
     # for building docs
-    - sphinx ==1.5.6
+    - sphinx
     - sphinxcontrib-bibtex
     - sphinxcontrib-lunrsearch >=0.3
     - sphinxcontrib-autodoc_doxygen
@@ -45,23 +47,26 @@ requirements:
     - numpy
     # Get clang from conda-forge
     - clangdev ==6.0.0 [linux]
+    # Required for sphinx
+    - latexmk
+    - cython
 
   run:
     - python
     - fftw3f
     - numpy
+    - cython
 
-#test:
-#  requires:
-#    - python
-#    - cuda{{ CUDA_SHORT_VERSION }}
-#  imports:
-#    - simtk
-#    - simtk.openmm
-#  commands:
-#    - python -m simtk.testInstallation
+test:
+  requires:
+    - python
+  imports:
+    - simtk
+    - simtk.openmm
+  commands:
+    - python -m simtk.testInstallation
 
 about:
   home: http://openmm.org
-  license: LGPL and MIT
+  license: MIT
   summary: A high performance toolkit for molecular simulation.

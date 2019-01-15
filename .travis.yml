@@ -34,8 +34,7 @@ env:
     - CUDA_VERSION="9.2" CUDA_SHORT_VERSION="92"
     - CUDA_VERSION="10.0" CUDA_SHORT_VERSION="100"
   secure:
-  - "hCc0rSIpg/NAZyub5OLcmFLzJ4qKIFwSyiQ3kExosoKTp6g8lWdXPoqLeDx2YBk0SEdtWEQlTUxcnoFXNT1IHxnS5+2EMHdibvpcF+undOCMPCbo26raZ/3rwSxz8FWEHOVaCKJTaFuDlZAxmpQnUBTqYjEhmKgSjp+F3GMZwAX+M3Ic7UraKAdiKYFQToLjcc9TkyEMcqrle+xIRnpaYorgdmsBCSQ6AX4wu0bRldiUfhCp+9eLL9Ik1xLe/qR8BZSGt99dlz+sihhU//mqQgGB21b1kDQfrwErcfVioIVhBR11a2dUxoWkaWs5yCouzzvA1HyMu1da1jm8K4YdjA3Jqu3pevp+mKJ9TzhEvkzKmCZOonACATLY4dSmcWrMAQEX69yWJyqYxqWW3L5SwXyPySZbqMUJgyoleklRgct1R2yw/wAHrYWNdYuBQf3Go0q6UG/V2/JEkHnwTI54QrYIGT1h6I/44ThVAmtJEsNLALhIuDX18SXcTUoLj/+8KG7OEihMKbhwxrEM4LhkMiTNfk09phhY4MEapDXSVKC2G44CBw07tf6RCPovw+jTxCafFM1iY+Rt3nEm0UZksNo8wxdgu8EkEctMenUpzAwXB3Cc3h65f0n+WR5dIrl2w+/gYrkGgY3KL+b47UxWv5+luytTBiy+jsOGeLT/L88="
-
+  - "ZqmnDgcGJTbq+2osztgAN57w6YNg851abtGtkiV0KBOubmPhESTT4he+NfWODt6NzdDysAJ4tFNUCHMoD/xZ+y26r3pBIqltaIHeKR9OGRSHfYjXTXLhO0gjtZEkc7A+ZicxyeKFtjOf/3BW50HzC3SvnpviCy4MSN/y8H8WCW6pBw1GDUArwQAKaIT04p7Y2tqIjKjcFANhhhSLtDK36DQaCI+vDLCbF9e80vA69izKKym0ZNDn4CNB0ngy8SVlxLpbHicH+5vH2SvDOiyUBdYj7RSOx84JxKWl20mbCos/v4kzASc7EAbaJURs5Swj/wOXbgzeKHQyrCa9yai2NgxFrpQvi5ZGnrbzbIjDB20iszGLMTzp3A0T5rau5AUaPHxvAJ0BE77clQoDZ67v1lD71O9Abc3NIOGVZhOMN3vDwacyo/WgTtA0UahVs2k/WY++rKbLS22XzIz4FjraUf2A/97FW0fKe45DoNrS95Y0GnEbKtGZbj6ycK9URK9RQL92IuR8LJ33yQoeuNTNZ2SlcpDgdvwtEhuPGTm6gUtQRKaUD856ZKtjKwOJ6tSjADfAT5ticBOQvx2A11qyaQAsyz/gu1wT3ZWmpwpn5E16xjFPM1n3wSLTDAq9XGC0BIcHgLmYZrfumMQ8Niy3FuoC9HiK/e5X5+wqOwlAV7E="
 
 install:
   - export DOCKER_IMAGE="jchodera/omnia-linux-anvil:texlive18-cuda${CUDA_SHORT_VERSION}"
@@ -49,13 +48,13 @@ script:
   #- wget -O conda-build-all --quiet https://raw.githubusercontent.com/omnia-md/conda-recipes/master/conda-build-all
   - chmod +x conda-build-all
   # Select upload destination
-  - export CHECK_AGAINST="--check-against omnia --check-against omnia/label/cuda${CUDA_SHORT_VERSION}"
-  - export CHECK_AGAINST="$CHECK_AGAINST --check-against omnia/label/beta --check-against omnia/label/betacuda${CUDA_SHORT_VERSION}"
-  - export CHECK_AGAISNT="$CHECK_AGAINST --check-against omnia/label/dev --check-against omnia/label/devcuda${CUDA_SHORT_VERSION}"
+  - export CHECK_AGAINST="--check-against omnia --check-against omnia-dev --check-against omnia-dev/label/cuda${CUDA_SHORT_VERSION}"
+  - export CHECK_AGAINST="$CHECK_AGAINST --check-against omnia-dev/label/beta --check-against omnia-dev/label/betacuda${CUDA_SHORT_VERSION}"
+  - export CHECK_AGAISNT="$CHECK_AGAINST --check-against omnia-dev/label/dev --check-against omnia-dev/label/devcuda${CUDA_SHORT_VERSION}"
   - if [[ "${TRAVIS_PULL_REQUEST}" == "false" && "${TRAVIS_BRANCH}" == "master" ]]; then
-        export UPLOAD="$CHECK_AGAINST --upload omnia";
+        export UPLOAD="$CHECK_AGAINST --upload omnia-dev";
     else
-        export UPLOAD="%CHECK_AGAINST";
+        export UPLOAD="$CHECK_AGAINST";
     fi
   - echo $UPLOAD
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then

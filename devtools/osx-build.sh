@@ -10,8 +10,11 @@ brew update
 curl -s -O https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh;
 bash Miniconda3-latest-MacOSX-x86_64.sh -b -p $HOME/anaconda;
 export PATH=$HOME/anaconda/bin:$PATH;
-conda config --add channels omnia;
-conda config --add channels conda-forge;
+conda config --add channels conda-forge
+conda config --add channels omnia
+conda config --add channels omnia/label/dev
+conda config --add channels omnia-dev
+conda config --add channels omnia-dev/label/dev
 conda install -yq conda;
 #####################################################################
 # WORKAROUND FOR BUG WITH ruamel_yaml
@@ -64,7 +67,11 @@ if [ "$INSTALL_OPENMM_PREREQUISITES" = true ] ; then
     sleep 5
     sudo tlmgr --persistent-downloads --repository=$TLREPO install \
         titlesec framed threeparttable wrapfig multirow collection-fontsrecommended hyphenat xstring \
-        fncychap tabulary capt-of eqparbox environ trimspaces
+        fncychap tabulary capt-of eqparbox environ trimspaces \
+        cmap fancybox titlesec framed fancyvrb threeparttable \
+        mdwtools wrapfig parskip upquote float multirow hyphenat caption \
+        xstring fncychap tabulary capt-of eqparbox environ trimspaces \
+        varwidth needspace
     # Clean up brew
     brew cleanup -s
 fi;
@@ -77,6 +84,6 @@ conda config --add channels omnia/label/betacuda${CUDA_SHORT_VERSION};
 conda config --add channels omnia/label/devcuda${CUDA_SHORT_VERSION};
 
 #for PY_BUILD_VERSION in "27" "35" "36" "37"; do
-for PY_BUILD_VERSION in "36" "35" "27"; do
+for PY_BUILD_VERSION in "37" "36" "27"; do
     ./conda-build-all -vvv --python $PY_BUILD_VERSION --check-against omnia/label/beta --check-against omnia/label/betacuda${CUDA_SHORT_VERSION} --check-against omnia/label/dev --check-against omnia/label/devcuda${CUDA_SHORT_VERSION} --numpy "1.15" $UPLOAD -- *
 done
