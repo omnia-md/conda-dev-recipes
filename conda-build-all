@@ -260,8 +260,10 @@ def required_builds(metas, channel_urls, verbose=0, force=False, rebuild=False):
                 print("Skipping {} as its already been built".format(package_base))
             # Sanity check
             ref_package = queued_packages[output_package]
-            if ref_package != meta:  # Not sure equality differs from `is` on conda_build Metapackages
-                print("WARNING: Two packages were queued to build to {} but do not have the same Metas"
+            if ref_package != meta and verbose > 2:  # Not sure equality differs from `is` on conda_build Metapackages
+                print("Warning: Two packages were queued to build to {} but do not have the same Metas. "
+                      "\nThis can happen, for example, if you have multiple NumPys, "
+                      "but NumPy is not pinned so may be harmless."
                       "\nPlease check that you do not have two meta.yaml files with the same package specs in "
                       "different folders:\n"
                       "\t-{}\n"
@@ -375,14 +377,20 @@ def build_package(meta, args):
 
 def execute(args):
     """Execute the building"""
-    # Parse the pythons and numpys into long and short form
+    # Parse the pythons, numpys, and cudas into long and short form
     pythons_short = re.split(',\s*|\s+', args.python)
     numpys_short = re.split(',\s*|\s+', args.numpy)
     pythons_long = [re.sub(r'^(\d)(\d)', r'\1.\2', python_spec) for python_spec in pythons_short]
     numpys_long = [re.sub(r'^(\d)(\d)', r'\1.\2', numpy_spec) for numpy_spec in numpys_short]
+    if args.cuda is None:
+        cudas = []
+    else:
+        # Cudas have a slightly different split order sequence, we operate on the short versions
+        cudas_split = re.split(',\s*|\s+', args.cuda)
+        cudas = [re.sub(r'^(\d+)\.?(\d\b)', r'\1\2', cuda_spec) for cuda_spec in cudas_split]
 
     # Compile variants, do them in reverse order because this variants system will build them in reverse
-    base_variants = {'python': pythons_long[::-1], 'numpy': numpys_long[::-1]}
+    base_variants = {'python': pythons_long[::-1], 'numpy': numpys_long[::-1], 'CUDA_SHORT_VERSION': cudas[::-1]}
 
     channel_urls = tuple(args.check_against) if args.check_against else ()
 
@@ -391,14 +399,15 @@ def execute(args):
         print('Verbosity: {}'.format(str(args.verbose)))
         print('Pythons: {}'.format(str(pythons_short)))
         print('NumPys: {}'.format(str(numpys_short)))
+        if cudas:
+            print('Cudas: {}'.format(str(cudas)))
         print('channel_urls: {}'.format(str(channel_urls)))  # DEBUG
 
     # Flatten all paths in target
     recipe_paths = reduce(add, (glob(recipe) for recipe in args.recipe))
-    print(recipe_paths)
 
     if args.verbose > 0:
-        print('Recipes provided (in random order):')
+        print('Possible recipes provided (in random order):')
         print(recipe_paths)
 
     metas = render_metadatas(recipe_paths, variants=base_variants, channel_urls=channel_urls)
@@ -437,7 +446,7 @@ def execute(args):
     for meta in queued_metas:
         try:
             build_package(meta, args)
-        except Exception as build_err:
+        except (Exception, SystemExit) as build_err:
             failed_builds.append((meta.dist(), build_err))
 
     if len(failed_builds) > 0:
@@ -506,13 +515,18 @@ def main():
         '--python',
         help="Set the Python version used by conda build",
         metavar="PYTHON_VER",
-        default='27,35,36,37',
+        default='27,36,37',
     )
     p.add_argument(
         '--numpy',
         help="Set the Minimum NumPy version used by conda build",
         metavar="NUMPY_VER",
-        default='1.09',
+        default='1.11',
+    )
+    p.add_argument(
+        '--cuda',
+        help="Build against specific CUDA variants",
+        metavar="CUDAS"
     )
     p.add_argument(
         '-c', '--clean',
