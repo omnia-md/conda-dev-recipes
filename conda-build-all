@@ -3,26 +3,34 @@ import os
 import re
 import sys
 import time
+import shutil
 import tarfile
+import tempfile
 import argparse
 from glob import glob
 from operator import add
 from functools import reduce
 from collections import defaultdict
+from contextlib import contextmanager
 from subprocess import call, check_call, CalledProcessError
 
 try:
     # Import Conda Build API things
+    import conda_build
     import conda_build.api as build_api
     from conda_build.exceptions import DependencyNeedsBuildingError
     # This might change in the future, but its functionality was stripped from the Conda API
-    # at some point with not indication as why nor what replaced it
+    # at some point with no indication as why nor what replaced it
     from conda.exports import get_index
+    cb_version = conda_build.__version__
+    if cb_version < "3":
+        raise ImportError("Conda version too low: {}".format(cb_version))
+
 except ImportError as e:
     print('ImportError encountered:')
     print(str(e))
     print('')
-    print('''This script requires conda-build >= 4.3 and anaconda-client and
+    print('''This script requires conda-build >= 3 and anaconda-client. It also 
     must run in the root conda environment.
 
       $ conda deactivate
@@ -40,6 +48,20 @@ STANDARD_LABELS = ('main',
                    'rc',
                    'beta',
                    )
+
+
+@contextmanager
+def temporary_directory():
+    """
+    Create a temporary directory which will be cleaned up on close
+
+    Python 2 compatible. Python 3.2+ can use tempfile.TemporaryDirectory to same effect
+    """
+    name = tempfile.mkdtemp()
+    try:
+        yield name
+    finally:
+        shutil.rmtree(name)
 
 
 def is_pre_release(pkg_meta):
@@ -78,7 +100,9 @@ def list_package_contents(filename, protocol='bz2'):
 
 
 def clean_builds():
-    cmd = ['conda', 'clean', '--source-cache', '--quiet', '--yes']
+    """Clean up build artifacts"""
+    # Conda clean --source-cache is deprecated, this is its replacement
+    cmd = ['conda', 'build', 'purge-all', '--quiet']
     print("Cleaning up source builds...")
     call(cmd)
 
@@ -147,7 +171,7 @@ def upload_to_anaconda(meta, username, max_retries=5,
     raise err
 
 
-def render_metadatas(paths, variants=None, channel_urls=()):
+def render_metadatas(paths, variants=None, channel_urls=(), cycle_packages=False):
     """
     Build out the incomplete Metadata's for all possible recipes we will be constructing
 
@@ -161,6 +185,8 @@ def render_metadatas(paths, variants=None, channel_urls=()):
         Channel URLs or Conda-style short names to search against to see if
         they are on the Anaconda.org cloud already
         Formatted as formal URLs or as shorthand such as 'omnia/label/main'
+    cycle_packages : bool, default False
+        Output sorted by cycling through packages instead off all variants of one package listed first
 
     Returns
     -------
@@ -168,35 +194,94 @@ def render_metadatas(paths, variants=None, channel_urls=()):
 
     """
     metas = []
+    meta_lookup = {}
+    # Do some pre-setup magic...
+    # The variant system has 2 fatal flaws:
+    # 1. If 1 variant fails for a package, they all fail
+    # 2. Source files have to be downloaded to finish rendering the package
+    # Solve 2 first here
+    # We (Omnia) don't care about the source material, we just want the output name.
+    # So long as the `build: string` does not need the git hash or something, we'd like to bypass to save space and time
+    # However, setting no_download_source fails if the "work_dir" is empty as CB assumes it needs this info in case
+    # someone makes a build string/jinja template a function of source material.
+    # Omnia won't allow that so we can do this:
+    # The work_dir = croot (Conda Build's build root) + build ID (package + epoch) + "work"
+    # So we first start by tricking the initial config check that there is a populated work dir, we'll clean later
+    # Caveat: This is conda_build.config:Config trickery, so this may break in the future since its not "API"
     for possible_recipe in paths:
-        try:
-            if os.path.isdir(possible_recipe):
-                # Skip if no meta.yaml file
-                if not os.path.exists(os.path.join(possible_recipe, 'meta.yaml')):
-                    print("Skipping {} because no meta.yaml file found".format(possible_recipe))
-                    continue
-                try:
-                    # This is the fastest metabuild and does 0 checks against jinja and finalization
-                    meta_bundle = build_api.render(possible_recipe,  # Path
-                                                   finalize=False,  # Speeds up render
-                                                   variants=variants,  # Parses all variants
-                                                   bypass_env_check=True,  # Skip the env check (dont resolve anything)
-                                                   filename_hashing=False,  # Uses old build string (--old-build-string)
-                                                   channel_urls=channel_urls,  # Config pass-through
-                                                   )
-                    # Flag each meta as incomplete (because it is, and finalize gets set if you have variants)
-                    # Flatten metadata for export
-                    for meta_tuple in meta_bundle:
-                        meta = meta_tuple[0]
-                        meta.final = False
-                        metas.append(meta)
-                except (RuntimeError, IOError, DependencyNeedsBuildingError):
-                    print('Failed to load recipe: {}'.format(possible_recipe))
-                    raise
-        except SystemExit:
-            print("Critical ERROR: Recipe {} has a fatal error that prevents processing".format(
-                possible_recipe))
-            raise
+        # Recreate the temp directory for each package because the act of cleaning up from the package removes
+        # the placeholder work directory
+        meta_lookup[possible_recipe] = []
+        with temporary_directory() as temp_dir:  # Make a faux `croot` temporary directory
+            build_id = "placeholder"  # Make a faux build_ID
+            work_dir = "work"  # Make the "work_dir" directory
+            work_path = os.path.join(temp_dir, build_id, work_dir)
+            os.makedirs(work_path)
+            with open(os.path.join(work_path, 'a_touched_file.magic'), 'w') as _:
+                # Touch a random file so the "work_dir" is not empty
+                pass
+
+            try:
+                if os.path.isdir(possible_recipe):
+                    # Skip if no meta.yaml file
+                    if not os.path.exists(os.path.join(possible_recipe, 'meta.yaml')):
+                        print("Skipping {} because no meta.yaml file found".format(possible_recipe))
+                        continue
+                    try:
+                        # This is the fastest metabuild and does 0 checks against jinja and finalization
+                        meta_bundle = build_api.render(
+                            possible_recipe,  # Path
+                            finalize=False,  # Speeds up render
+                            variants=variants,  # Parses all variants
+                            bypass_env_check=True,  # Skip the env check (dont resolve anything)
+                            filename_hashing=False,  # Uses old build string (--old-build-string)
+                            channel_urls=channel_urls,  # Config pass-through
+
+                            # Config-pass through no source downloading trickery (see above)
+                            # all of this must be undone before leaving this function
+                            # this is okay since we dont *build* any of these recipes... yet...
+                            # I think this is the minimum source
+                            no_download_source=True,  # Don't download anything (assume we have it)
+                            keep_old_work=True,  # Don't move the work folder around, its just a placeholder for now
+                            build_id=build_id,  # Force build ID to start set to this
+                            croot=temp_dir  # Force croot to start set to this
+                        )
+                        # Flatten metadata for export
+                        for variant_index, meta_tuple in enumerate(meta_bundle):
+                            meta = meta_tuple[0]
+                            meta.final = False  # Ensure meta is not final
+                            # Revert all Config trickery changes we made to speed render
+                            meta.config.keep_old_work = False  # Let work get moved around
+                            meta.config.croot = None  # This resets croot to default
+                            meta.config.no_download_source = False
+                            # Solve Conda Build fatal problem 1: Treat each "variant" as its own "build"
+                            # Because we have now undone all the Config trickery, this will ensure we get
+                            # Unique, proper build ID's for each variant , treating them as independent builds
+                            time.sleep(0.05)  # Add the small delay to help uniqueness (names are time.time()*1000)
+                            meta.config.compute_build_id(meta.name(), reset=True)
+                            # This process will make several empty build directories in your (true) conda build
+                            # croot, there may be a way around that, but they are all empty and go unused.
+                            # Running `conda build purge-all` will remove all build artifacts from everywhere (not just
+                            # those made from this script), or just run clean_build() function
+                            if not cycle_packages:
+                                metas.append(meta)
+                            else:
+                                meta_lookup[possible_recipe].append(meta)
+                    except (RuntimeError, IOError, DependencyNeedsBuildingError):
+                        print('Failed to load recipe: {}'.format(possible_recipe))
+                        raise
+            except SystemExit:
+                print("Critical ERROR: Recipe {} has a fatal error that prevents processing".format(
+                    possible_recipe))
+                raise
+    if cycle_packages:
+        while meta_lookup:  # While dict not empty
+            for possible_recipe in paths:  # Cycle through recipes
+                if possible_recipe in meta_lookup:  # If the recipe is in the dict
+                    metas.append(meta_lookup[possible_recipe].pop(0))
+                    if not meta_lookup[possible_recipe]:  # Remove recipe if empty
+                        meta_lookup.pop(possible_recipe)
+
     return metas
 
 
@@ -410,7 +495,10 @@ def execute(args):
         print('Possible recipes provided (in random order):')
         print(recipe_paths)
 
-    metas = render_metadatas(recipe_paths, variants=base_variants, channel_urls=channel_urls)
+    metas = render_metadatas(recipe_paths,
+                             variants=base_variants,
+                             channel_urls=channel_urls,
+                             cycle_packages=args.cycle)
 
     if args.verbose > 0:
         all_paths = []
@@ -510,6 +598,13 @@ def main():
         action='store_true',
         dest='notest',
         help="do not test the package"
+    )
+    p.add_argument(
+        '--cycle-packages',
+        action="store_true",
+        dest='cycle',
+        help="Order builds by rotating through packages. By default all variants for one package will be attempted "
+             "before any other package is attempted"
     )
     p.add_argument(
         '--python',
