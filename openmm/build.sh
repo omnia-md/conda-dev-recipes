@@ -12,7 +12,6 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
 
     # JDC test
     echo "PATH: $PATH"
-    env
 
     # CFLAGS
     export MINIMAL_CFLAGS="-g -O3"
@@ -23,8 +22,13 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     # Use clang 3.8.1 from the clangdev package on conda-forge
     CMAKE_FLAGS+=" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++"
 
+    # Get the CUDA version from the CUDA_SHORT_VERSION env needed to build the script
+    # Uses bash substring search
+    CUDA_MAJOR="${CUDA_SHORT_VERSION:0:${#CUDA_SHORT_VERSION}-1}"
+    CUDA_MINOR="${CUDA_SHORT_VERSION:${#CUDA_SHORT_VERSION}-1}"
+
     # OpenMM build configuration
-    CUDA_PATH="/usr/local/cuda"
+    CUDA_PATH="/usr/local/cuda-${CUDA_MAJOR}.${CUDA_MINOR}"
     CMAKE_FLAGS+=" -DCUDA_TOOLKIT_ROOT_DIR=${CUDA_PATH}/"
     # AMD APP SDK 3.0 OpenCL
     CMAKE_FLAGS+=" -DOPENCL_INCLUDE_DIR=${CUDA_PATH}/include/"

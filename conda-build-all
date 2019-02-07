@@ -102,7 +102,8 @@ def list_package_contents(filename, protocol='bz2'):
 def clean_builds():
     """Clean up build artifacts"""
     # Conda clean --source-cache is deprecated, this is its replacement
-    cmd = ['conda', 'build', 'purge-all', '--quiet']
+    # Replacing "purge" with  "purge-all" will also remove tarballs
+    cmd = ['conda', 'build', 'purge', '--quiet']
     print("Cleaning up source builds...")
     call(cmd)
 
