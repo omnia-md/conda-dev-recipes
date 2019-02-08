@@ -15,18 +15,18 @@ conda config --add channels omnia
 conda config --add channels omnia/label/dev
 conda config --add channels omnia-dev
 conda config --add channels omnia-dev/label/dev
-conda install -yq conda\<=4.3.34;
+conda install -yq conda;
 #####################################################################
 # WORKAROUND FOR BUG WITH ruamel_yaml
 # "conda config --add channels omnia/label/dev" will fail if ruamel_yaml > 0.15.54
 # This workaround is in place to avoid this failure until this is patched
 # See: https://github.com/conda/conda/issues/7672
-conda install --yes ruamel_yaml==0.15.53 conda\<=4.3.34;
+conda install --yes ruamel_yaml==0.15.53 conda
 #####################################################################
 conda config --add channels omnia/label/dev
-conda install -yq conda-env conda-build==2.1.7 jinja2 anaconda-client;
-conda config --show;
-conda clean -tipsy;
+conda install -yq conda-env conda-build jinja2 anaconda-client
+conda config --show
+conda clean -tipsy
 
 # Do this step last to make sure conda-build, conda-env, and conda updates come from the same channel first
 
@@ -36,7 +36,7 @@ export INSTALL_OPENMM_PREREQUISITES=true
 if [ "$INSTALL_OPENMM_PREREQUISITES" = true ] ; then
     # Install OpenMM dependencies that can't be installed through
     # conda package manager (doxygen + CUDA)
-    brew install -y https://raw.githubusercontent.com/Homebrew/homebrew-core/5b680fb58fedfb00cd07a7f69f5a621bb9240f3b/Formula/doxygen.rb
+    HOMEBREW_NO_AUTO_UPDATE=1 brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/5b680fb58fedfb00cd07a7f69f5a621bb9240f3b/Formula/doxygen.rb
     # Make the nvidia-cache if not there
     mkdir -p $NVIDIA_CACHE
     cd $NVIDIA_CACHE
@@ -84,6 +84,6 @@ conda config --add channels omnia/label/betacuda${CUDA_SHORT_VERSION};
 conda config --add channels omnia/label/devcuda${CUDA_SHORT_VERSION};
 
 #for PY_BUILD_VERSION in "27" "35" "36" "37"; do
-for PY_BUILD_VERSION in "37" "36" "35" "27"; do
-    ./conda-build-all -vvv --python $PY_BUILD_VERSION --check-against omnia/label/beta --check-against omnia/label/betacuda${CUDA_SHORT_VERSION} --check-against omnia/label/dev --check-against omnia/label/devcuda${CUDA_SHORT_VERSION} --numpy "1.15" $UPLOAD -- *
+for PY_BUILD_VERSION in "37" "36" "27"; do
+    ./conda-build-all -vvv --python $PY_BUILD_VERSION --check-against omnia/label/beta --check-against omnia/label/betacuda${CUDA_SHORT_VERSION} --check-against omnia/label/dev --check-against omnia/label/devcuda${CUDA_SHORT_VERSION} --numpy "1.15" --cuda ${CUDA_SHORT_VERSION} $UPLOAD -- *
 done
