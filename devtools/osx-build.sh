@@ -46,16 +46,13 @@ if [ "$INSTALL_OPENMM_PREREQUISITES" = true ] ; then
     cd $NVIDIA_CACHE
     # Download missing nvidia installers
     if ! [ -f cuda_mac_installer_tk.tar.gz ]; then
-        curl -O -# http://developer.download.nvidia.com/compute/cuda/${CUDA_VERSION}/Prod/network_installers/mac/x86_64/cuda_mac_installer_tk.tar.gz
+        curl -O - http://developer.download.nvidia.com/compute/cuda/${CUDA_VERSION}/Prod/network_installers/mac/x86_64/cuda_mac_installer_tk.tar.gz
     fi
     if ! [ -f cuda_mac_installer_drv.tar.gz ]; then
-        curl -O -# http://developer.download.nvidia.com/compute/cuda/${CUDA_VERSION}/Prod/network_installers/mac/x86_64/cuda_mac_installer_drv.tar.gz
+        curl -O - http://developer.download.nvidia.com/compute/cuda/${CUDA_VERSION}/Prod/network_installers/mac/x86_64/cuda_mac_installer_drv.tar.gz
     fi
-    pushd .
-    cd /
-    sudo tar -zxf cuda_mac_installer_tk.tar.gz
-    sudo tar -zxf cuda_mac_installer_drv.tar.gz
-    popd
+    sudo tar -zxf cuda_mac_installer_tk.tar.gz -C /;
+    sudo tar -zxf cuda_mac_installer_drv.tar.gz -C /;
     # TODO: Don't delete the tarballs to cache the package, if we can spare the space
     rm -f cuda_mac_installer_tk.tar.gz cuda_mac_installer_drv.tar.gz
     # Now head back to work directory
