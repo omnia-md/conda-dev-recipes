@@ -42,10 +42,10 @@ if [ "$INSTALL_OPENMM_PREREQUISITES" = true ] ; then
     cd $NVIDIA_CACHE
     # Download missing nvidia installers
     if ! [ -f cuda_mac_installer_tk.tar.gz ]; then
-        curl -O - http://developer.download.nvidia.com/compute/cuda/${CUDA_VERSION}/Prod/network_installers/mac/x86_64/cuda_mac_installer_tk.tar.gz
+        curl -O http://developer.download.nvidia.com/compute/cuda/${CUDA_VERSION}/Prod/network_installers/mac/x86_64/cuda_mac_installer_tk.tar.gz
     fi
     if ! [ -f cuda_mac_installer_drv.tar.gz ]; then
-        curl -O - http://developer.download.nvidia.com/compute/cuda/${CUDA_VERSION}/Prod/network_installers/mac/x86_64/cuda_mac_installer_drv.tar.gz
+        curl -O http://developer.download.nvidia.com/compute/cuda/${CUDA_VERSION}/Prod/network_installers/mac/x86_64/cuda_mac_installer_drv.tar.gz
     fi
     sudo tar -zxf cuda_mac_installer_tk.tar.gz -C /;
     sudo tar -zxf cuda_mac_installer_drv.tar.gz -C /;
