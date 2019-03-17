@@ -55,8 +55,8 @@ if [ "$INSTALL_OPENMM_PREREQUISITES" = true ] ; then
     #sudo tar -zxf cuda_mac_installer_drv.tar.gz -C /;
     cd /
     sudo touch testfile
-    sudo tar zxf $NVIDIA_CACHE/cuda_mac_installer_tk.tar.gz
-    sudo tar zxf $NVIDIA_CACHE/cuda_mac_installer_drv.tar.gz
+    sudo tar zxfm $NVIDIA_CACHE/cuda_mac_installer_tk.tar.gz
+    sudo tar zxfm $NVIDIA_CACHE/cuda_mac_installer_drv.tar.gz
     cd $NVIDIA_CACHE
 
     # TODO: Don't delete the tarballs to cache the package, if we can spare the space
