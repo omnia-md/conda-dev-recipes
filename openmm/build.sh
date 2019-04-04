@@ -101,3 +101,4 @@ mv $PREFIX/examples $PREFIX/share/openmm/
 
 # Clean up directories with pycache
 find . -type d -name __pycache__ -exec rm -rf {} \;
+find $PREFIX -type d -name __pycache__ -exec rm -rf {} \;
