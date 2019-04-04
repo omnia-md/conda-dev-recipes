@@ -101,4 +101,4 @@ mv $PREFIX/examples $PREFIX/share/openmm/
 
 # Clean up directories with pycache
 #find . -type d -name __pycache__ -exec rmdir {} \;
-find $PREFIX | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf
+#find $PREFIX | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf
