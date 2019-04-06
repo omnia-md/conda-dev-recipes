@@ -3,6 +3,13 @@ set -e -x
 export MACOSX_DEPLOYMENT_TARGET="10.9"
 # Clear existing locks
 rm -rf /usr/local/var/homebrew/locks
+
+# Workaround for
+# fatal: unable to access 'https://github.com/Homebrew/homebrew-cask/': Could not resolve host: github.com
+# https://github.com/Homebrew/brew/issues/1414
+git config --global --unset http.proxy
+git config --global --unset https.proxy
+
 # Update homebrew cant disable this yet, -y and --quiet do nothing
 brew update
 
