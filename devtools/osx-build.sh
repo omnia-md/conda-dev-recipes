@@ -3,6 +3,7 @@ set -e -x
 export MACOSX_DEPLOYMENT_TARGET="10.9"
 # Clear existing locks
 rm -rf /usr/local/var/homebrew/locks
+
 # Update homebrew cant disable this yet, -y and --quiet do nothing
 brew update
 

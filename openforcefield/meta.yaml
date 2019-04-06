@@ -1,6 +1,6 @@
 package:
   name: openforcefield
-  version: 1.0
+  version: 0.2.0
 
 source:
     git_url: https://github.com/openforcefield/openforcefield.git
@@ -8,8 +8,8 @@ source:
 
 build:
   preserve_egg_dir: True
-  #number: 0 # Build number and string do not work together.
-  string: py{{ py }}_a1 # Alpha version 1.
+  number: 0 # Build number and string do not work together.
+  #string: py{{ py }}_a1 # Alpha version 1.
   #skip: True # [win]
 
 extra:
@@ -20,19 +20,20 @@ requirements:
   build:
     - python
     - setuptools
+    - pandas
 
   run:
     - python
-    - numpy >=1.14
-    - networkx >=2.0
+    - numpy
+    - networkx
     - lxml
     - icu 58*  # This is a lxml dependency but sometimes conda installs version 56
-    - openmm
+    - parmed
+    - matplotlib
+    - pandas
     - packaging
-    # Should these be optional?
-    - rdkit
-    - ambertools
-    #- parmed # uncomment when new ambermini (without parmed) is built
+    # Should we require this? It's useful for tests and examples, but not strictly required
+    - openmmtools
     # Serialization: Should these be optional?
     - pyyaml
     - toml
@@ -40,12 +41,8 @@ requirements:
     - msgpack-python
     - xmltodict
 
-test:
-  requires:
-    - pytest
-  imports:
-    - openforcefield
-
 about:
   home: https://github.com/openforcefield/openforcefield
   license: MIT
+  license_file: LICENSE
+  description: The Open Forcefield Toolkit provides implementations of the SMIRNOFF format, parameterization engine, and other tools. 

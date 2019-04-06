@@ -89,14 +89,16 @@ export LC_ALL=C
 locale -a
 #sudo dpkg-reconfigure locales
 
-# Build PDF manuals
-make -j$CPU_COUNT sphinxpdf
-mv sphinx-docs/userguide/latex/*.pdf $PREFIX/docs/openmm/
-mv sphinx-docs/developerguide/latex/*.pdf $PREFIX/docs/openmm/
+# DEBUG: SKIP BUILDING OF DOCS
+## Build PDF manuals
+#make -j$CPU_COUNT sphinxpdf
+#mv sphinx-docs/userguide/latex/*.pdf $PREFIX/docs/openmm/
+#mv sphinx-docs/developerguide/latex/*.pdf $PREFIX/docs/openmm/
 
 # Put examples into an appropriate subdirectory.
 mkdir $PREFIX/share/openmm/
 mv $PREFIX/examples $PREFIX/share/openmm/
 
 # Clean up directories with pycache
-find . -type d -name __pycache__ -exec rmdir {} \;
+#find . -type d -name __pycache__ -exec rmdir {} \;
+#find $PREFIX | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf
