@@ -35,6 +35,7 @@ requirements:
     - bson
     - msgpack-python
     - xmltodict
+    - pyyaml
 
 about:
   home: https://github.com/openforcefield/openforcefield
