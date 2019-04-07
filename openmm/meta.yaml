@@ -18,7 +18,8 @@ extra:
 
 build:
   number: 0
-  skip: True # [win]
+  #skip: True # [win]
+  skip: True # DEBUG: Skip for now.
   detect_binary_files_with_prefix: False
   #string: py{{ py }}_cuda{{ CUDA_SHORT_VERSION }}_{{ environ.get("GIT_DESCRIBE_HASH", "")[1:8] }}_1 # this doesn't work with conda-build-all
   string: py{{ py }}_cuda{{ CUDA_SHORT_VERSION }}_1
