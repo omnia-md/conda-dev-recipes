@@ -27,7 +27,7 @@ requirements:
     - openmm
     - networkx
     - parmed
-    - rdkit
+    - rdkit ==2018.09.01 # pinned because conda-forge 2018.09.03 causes segfaults on osx py37
     - ambermini
     - packaging
     # Serialization: Should these be optional?
