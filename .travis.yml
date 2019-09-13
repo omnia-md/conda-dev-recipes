@@ -9,7 +9,7 @@ os:
 
 # Supported osx/xcode versions: https://docs.travis-ci.com/user/languages/objective-c/#Supported-Xcode-versions
 # See also: https://blog.travis-ci.com/2016-10-04-osx-73-default-image-live/
-osx_image: xcode6.4
+osx_image: xcode9.4
 
 #cache:
 #  directories:
@@ -33,6 +33,7 @@ env:
     - CUDA_VERSION="9.1" CUDA_SHORT_VERSION="91"
     - CUDA_VERSION="9.2" CUDA_SHORT_VERSION="92"
     - CUDA_VERSION="10.0" CUDA_SHORT_VERSION="100"
+    - CUDA_VERSION="10.1" CUDA_SHORT_VERSION="101"
   secure:
   - "ZqmnDgcGJTbq+2osztgAN57w6YNg851abtGtkiV0KBOubmPhESTT4he+NfWODt6NzdDysAJ4tFNUCHMoD/xZ+y26r3pBIqltaIHeKR9OGRSHfYjXTXLhO0gjtZEkc7A+ZicxyeKFtjOf/3BW50HzC3SvnpviCy4MSN/y8H8WCW6pBw1GDUArwQAKaIT04p7Y2tqIjKjcFANhhhSLtDK36DQaCI+vDLCbF9e80vA69izKKym0ZNDn4CNB0ngy8SVlxLpbHicH+5vH2SvDOiyUBdYj7RSOx84JxKWl20mbCos/v4kzASc7EAbaJURs5Swj/wOXbgzeKHQyrCa9yai2NgxFrpQvi5ZGnrbzbIjDB20iszGLMTzp3A0T5rau5AUaPHxvAJ0BE77clQoDZ67v1lD71O9Abc3NIOGVZhOMN3vDwacyo/WgTtA0UahVs2k/WY++rKbLS22XzIz4FjraUf2A/97FW0fKe45DoNrS95Y0GnEbKtGZbj6ycK9URK9RQL92IuR8LJ33yQoeuNTNZ2SlcpDgdvwtEhuPGTm6gUtQRKaUD856ZKtjKwOJ6tSjADfAT5ticBOQvx2A11qyaQAsyz/gu1wT3ZWmpwpn5E16xjFPM1n3wSLTDAq9XGC0BIcHgLmYZrfumMQ8Niy3FuoC9HiK/e5X5+wqOwlAV7E="
 
