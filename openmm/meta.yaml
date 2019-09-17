@@ -64,7 +64,7 @@ test:
     - simtk
     - simtk.openmm
   commands:
-    - python -m simtk.testInstallation
+    - python -m simtk.testInstallation  [not osx]
 
 about:
   home: http://openmm.org
