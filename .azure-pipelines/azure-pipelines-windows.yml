@@ -92,9 +92,9 @@ jobs:
         conda config --add channels omnia
         conda config --add channels conda-forge
 
-        conda update --yes conda conda-build anaconda-client
+        conda install --yes conda conda-build anaconda-client
 
         chmod +x $(Build.SourcesDirectory)/conda-build-all
 
-        $(Build.SourcesDirectory)/conda-build-all $CBA_FLAGS -m $(Build.SourcesDirectory)/$(CONFIG).yaml -- $(Build.SourcesDirectory)/*
+        $(Build.SourcesDirectory)/conda-build-all $CBA_FLAGS -m $(Build.SourcesDirectory)/.conda_configs/$(CONFIG).yaml -- $(Build.SourcesDirectory)/*
       displayName: Run Conda Builds

@@ -34,7 +34,7 @@ jobs:
     - script: |
         CUDA_INSTALL_NAME="CUDA_installer.dmg"
         CUDA_MOUNT_LOCATION="/Volumes/CUDAMacOSXInstaller.app/Contents/MacOS/CUDAMacOSXInstaller"
-        curl -L $(CUDA_URL) > $CUDA_INSTALL_NAME.dmg
+        curl -L $(CUDA_URL) > $CUDA_INSTALL_NAME
         # Instructions from NVIDIA
         export PATH=/Developer/NVIDIA/CUDA-10.2/bin${PATH:+:${PATH}}
         export DYLD_LIBRARY_PATH=/Developer/NVIDIA/CUDA-10.2/lib\
@@ -68,9 +68,9 @@ jobs:
         conda config --add channels omnia
         conda config --add channels conda-forge
 
-        conda update --yes conda conda-build anaconda-client
+        conda install --yes conda conda-build anaconda-client
 
         chmod +x $(Build.SourcesDirectory)/conda-build-all
 
-        $(Build.SourcesDirectory)/conda-build-all $CBA_FLAGS -m $(Build.SourcesDirectory)/$(CONFIG).yaml -- $(Build.SourcesDirectory)/*
+        $(Build.SourcesDirectory)/conda-build-all $CBA_FLAGS -m $(Build.SourcesDirectory)/.conda_configs/$(CONFIG).yaml -- $(Build.SourcesDirectory)/*
       displayName: Run Conda Build
