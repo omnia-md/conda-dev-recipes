@@ -44,6 +44,7 @@ jobs:
         updateConda: false
       displayName: Install conda-build and activate environment
 
+    # The condition here for the NVIDIA steps only should trigger if CUDA_VER is set
     - task: Cache@2
       inputs:
         key: 'CUDA'
@@ -66,34 +67,43 @@ jobs:
           New-Item -ItemType Directory -Force -Path $(NVIDIA_CUDA_DIR)/$(CUDA_VER)
           Invoke-WebRequest $(CUDA_URL) -OutFile $(NVIDIA_CUDA_DIR)/$(CUDA_VER)/CUDA_installer.exe
       displayName: Download CUDA Driver
-      condition: and(ne(variables['CUDA_VER'], ''), ne(variables.CUDA_RESTORED, 'true')) 
+      condition: and(ne(variables['CUDA_VER'], ''), ne(variables.CUDA_RESTORED, 'true'))
 
     - script: |
         $(NVIDIA_CUDA_DIR)/$(CUDA_VER)/CUDA_installer.exe -s
       displayName: Install the CUDA Files
       condition: ne(variables['CUDA_VER'], '') # Technically Null, but is cast as "To string: '' (the empty string)"
 
-#    - script: |
-#        export PROVIDER_DIR="$(basename $THISDIR)"
-#        export DEVBUILDS="$DEVBUILDS"
-#        CBA_FLAGS="-vvv --cycle-packages"
-#        if [ -n "$INCLUDE_JINJA" ]; then
-#          CBA_FLAGS="$CBA_FLAGS --build-only-jinja $INCLUDE_JINJA"
-#        fi
-#        if [ -n "EXCLUDE_JINJA" ]; then
-#          CBA_FLAGS="$CBA_FLAGS --no-build-jinja $INCLUDE_JINJA"
-#        fi
-#        if [ ! -z "NIGHTLY"]; then
-#          CBA_FLAGS="$CBA_FLAGS --dev --scheduled-only"
-#        fi
-#        export CBA_FLAGS=$CBA_FLAGS
-#      displayName: Assemble Variables
-#
-#    - script: |
-#        DOCKER_FLAGS="--rm"
-#        DOCKER_DIRS="-v `pwd`:/io"
-#        DOCKER_DIRS="$DOCKER_DIRS -v `pwd`/.conda_configs:/conda_configs"
-#        DOCKER_VARS="-e CBA_FLAGS -e CONFIG"
-#        DOCKER_COMMAND="bash /io/devtools/docker-build.sh"
-#        docker run ${DOCKER_FLAGS} ${DOCKER_DIRS} ${DOCKER_VARS} ${DOCKER_IMAGE} ${DOCKER_COMMAND}
-#      displayName: Run Docker Build
+    - script: |
+        export PROVIDER_DIR="$(basename $THISDIR)"
+        export DEVBUILDS="$DEVBUILDS"
+        CBA_FLAGS="-vvv --cycle-packages"
+        if [ -n "$INCLUDE_JINJA" ]; then
+          CBA_FLAGS="$CBA_FLAGS --build-only-jinja $INCLUDE_JINJA"
+        fi
+        if [ -n "EXCLUDE_JINJA" ]; then
+          CBA_FLAGS="$CBA_FLAGS --no-build-jinja $INCLUDE_JINJA"
+        fi
+        if [ ! -z "NIGHTLY"]; then
+          CBA_FLAGS="$CBA_FLAGS --dev --scheduled-only"
+        fi
+        export CBA_FLAGS=$CBA_FLAGS
+      displayName: Assemble Variables
+
+    - script: |
+        conda config --add channels omnia
+        conda config --add channels conda-forge
+
+        conda update --yes conda conda-build anaconda-client
+
+        chmod +x /io/conda-build-all
+
+        $(Build.SourcesDirectory)/conda-build-all $CBA_FLAGS -m /conda_configs/$(CONFIG).yaml -- $(Build.SourcesDirectory)/*
+
+        DOCKER_FLAGS="--rm"
+        DOCKER_DIRS="-v `pwd`:/io"
+        DOCKER_DIRS="$DOCKER_DIRS -v `pwd`/.conda_configs:/conda_configs"
+        DOCKER_VARS="-e CBA_FLAGS -e CONFIG"
+        DOCKER_COMMAND="bash /io/devtools/docker-build.sh"
+        docker run ${DOCKER_FLAGS} ${DOCKER_DIRS} ${DOCKER_VARS} ${DOCKER_IMAGE} ${DOCKER_COMMAND}
+      displayName: Run Conda Builds
