@@ -86,7 +86,6 @@ jobs:
           Set-Variable -Name CBAFLAGS -Value "$($CBAFLAGS) --dev --scheduled-only"
         }
         Write-Host "###vso[task.setvariable variable=CBA_FLAGS]$CBAFLAGS"
-        export CBA_FLAGS=$CBA_FLAGS
       displayName: Assemble Variables
 
     - script: |
@@ -97,5 +96,5 @@ jobs:
 
         chmod +x /io/conda-build-all
 
-        $(Build.SourcesDirectory)/conda-build-all $CBA_FLAGS -m /conda_configs/$(CONFIG).yaml -- $(Build.SourcesDirectory)/*
+        $(Build.SourcesDirectory)/conda-build-all $CBA_FLAGS -m $(Build.SourcesDirectory)/$(CONFIG).yaml -- $(Build.SourcesDirectory)/*
       displayName: Run Conda Builds

@@ -38,7 +38,7 @@ jobs:
         export PATH=/Developer/NVIDIA/CUDA-10.2/bin${PATH:+:${PATH}}
         export DYLD_LIBRARY_PATH=/Developer/NVIDIA/CUDA-10.2/lib\
                                  ${DYLD_LIBRARY_PATH:+:${DYLD_LIBRARY_PATH}}
-        $CUDA_INSTALL_NAME --accept-eula --silent --install-package=cuda-toolkit --install-package=cuda-driver
+        ./$CUDA_INSTALL_NAME --accept-eula --silent --install-package=cuda-toolkit --install-package=cuda-driver
       displayName: Download and Install the CUDA Files
       condition: ne(variables['CUDA_URL'], '') # Technically Null, but is cast as "To string: '' (the empty string)"
 
@@ -66,5 +66,5 @@ jobs:
 
         chmod +x /io/conda-build-all
 
-        $(Build.SourcesDirectory)/conda-build-all $CBA_FLAGS -m /conda_configs/$(CONFIG).yaml -- $(Build.SourcesDirectory)/*
+        $(Build.SourcesDirectory)/conda-build-all $CBA_FLAGS -m $(Build.SourcesDirectory)/$(CONFIG).yaml -- $(Build.SourcesDirectory)/*
       displayName: Run Conda Build
