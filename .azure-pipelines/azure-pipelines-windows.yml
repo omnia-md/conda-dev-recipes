@@ -40,8 +40,8 @@ jobs:
       inputs:
         key: 'CUDA'
         path: $(NVIDIA_CUDA_DIR)/$(CUDA_CACHE)
+        cacheHitVar: CUDA_RESTORED
       displayName: Cache the NVIDIA CUDA installer
-      cacheHitVar: CUDA_RESTORED
       condition: ne(variables['CUDA_CACHE'], 'Null')
 
 #    - task: Cache@2
