@@ -6,7 +6,6 @@ jobs:
   variables:
     NVIDIA_CUDA_DIR: $(Pipeline.Workspace)/.nvcuda
     NVIDIA_DRIVER_DIR: $(Pipeline.Workspace)/.nvdriver
-    CUDA_8.0_URL: https://developer.nvidia.com/compute/cuda/8.0/Prod2/network_installers/cuda_8.0.61_win10_network-exe
     CUDA_9.0_URL: https://developer.nvidia.com/compute/cuda/9.0/Prod/network_installers/cuda_9.0.176_win10_network-exe
     CUDA_9.1_URL: https://developer.nvidia.com/compute/cuda/9.1/Prod/network_installers/cuda_9.1.85_win10_network
     CUDA_9.2_URL: https://developer.nvidia.com/compute/cuda/9.2/Prod2/network_installers2/cuda_9.2.148_win10_network
@@ -22,7 +21,8 @@ jobs:
       windows_python2.7_cuda8.0:
         CONFIG: linux_python2.7_cuda8.0
         INCLUDE_JINJA: CUDA_SHORT_VERSION
-        CUDA_CACHE: 8.0
+        CUDA_VER: 8.0
+        CUDA_URL: https://developer.nvidia.com/compute/cuda/8.0/Prod2/network_installers/cuda_8.0.61_win10_network-exe
 
   steps:
     - script: |
@@ -47,10 +47,10 @@ jobs:
     - task: Cache@2
       inputs:
         key: 'CUDA'
-        path: $(NVIDIA_CUDA_DIR)/$(CUDA_CACHE)
+        path: $(NVIDIA_CUDA_DIR)/$(CUDA_VER)
         cacheHitVar: CUDA_RESTORED
       displayName: Cache the NVIDIA CUDA installer
-      condition: ne(variables['CUDA_CACHE'], 'Null')
+      condition: ne(variables['CUDA_VER'], 'Null')
 
 #    - task: Cache@2
 #      inputs:
@@ -63,14 +63,14 @@ jobs:
       inputs:
         targetType: 'inline'
         script: |
-          Invoke-WebRequest $(CUDA_"$(CUDA_CACHE)"_URL) -OutFile $(NVIDIA_CUDA_DIR)/$(CUDA_CACHE)/CUDA_installer.exe
+          Invoke-WebRequest $(CUDA_URL) -OutFile $(NVIDIA_CUDA_DIR)/$(CUDA_VER)/CUDA_installer.exe
       displayName: Download CUDA Driver
-      condition: and(ne(variables['CUDA_CACHE'], 'Null'), ne(variables.CUDA_RESTORED, 'true'))
+      condition: and(ne(variables['CUDA_VER'], 'Null'), ne(variables.CUDA_RESTORED, 'true'))
 
     - script: |
-        $(NVIDIA_CUDA_DIR)/$(CUDA_CACHE)/CUDA_installer.exe -s
+        $(NVIDIA_CUDA_DIR)/$(CUDA_VER)/CUDA_installer.exe -s
       displayName: Install the CUDA Files
-      condition: ne(variables['CUDA_CACHE'], 'Null')
+      condition: ne(variables['CUDA_VER'], 'Null')
 
 #    - script: |
 #        export PROVIDER_DIR="$(basename $THISDIR)"
