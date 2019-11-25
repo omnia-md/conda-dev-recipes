@@ -5,7 +5,8 @@ schedules:
   - cron: 0 2 * * *  # Every night at 2 AM
     always: True  # Run even without source code changes
     branches:
-      include: master
+      include:
+        - master
     displayName: Nightly Dev Builds
 
 jobs:
