@@ -6,7 +6,7 @@ conda update --yes conda conda-build anaconda-client
 
 chmod +x /io/conda-build-all
 
-/io/conda-build-all $CBA_FLAGS -m /conda_configs/$CONFIG --dry-run -- /io/*
+/io/conda-build-all $CBA_FLAGS -m /conda_configs/$CONFIG.yaml --dry-run -- /io/*
 
 
 ##!/bin/bash
