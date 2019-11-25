@@ -99,7 +99,7 @@ jobs:
     - script: |
         export PROVIDER_DIR="$(basename $THISDIR)"
         export DEVBUILDS="$DEVBUILDS"
-        CBA_FLAGS="-vvv --cycle-packages"
+        CBA_FLAGS="-vvv --cycle-packages --dry-run"
         if [ -n "$INCLUDE_JINJA" ]; then
           CBA_FLAGS="$CBA_FLAGS --build-only-jinja $INCLUDE_JINJA"
         fi
