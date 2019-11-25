@@ -1,0 +1,128 @@
+jobs:
+- job: linux
+  pool:
+    vmImage: ubuntu-16.04
+#  timeoutInMinutes: 360
+  strategy:
+    maxParallel: 8
+    matrix:
+      linux_python2.7:
+        CONFIG: linux_python2.7
+        DOCKER_IMAGE: condaforge/linux-anvil-comp7
+        EXCLUDE_JINJA: CUDA_SHORT_VERSION
+      linux_python2.7_cuda8.0:
+        CONFIG: linux_python2.7_cuda8.0
+        DOCKER_IMAGE: "omniamd/omnia-linux-anvil:condaforge-texlive19-cuda80"
+        INCLUDE_JINJA: CUDA_SHORT_VERSION
+#      linux_python2.7:
+#        CONFIG: linux_python2.7
+#        DOCKER_IMAGE: condaforge/linux-anvil-comp7
+#        EXCLUDE_JINJA: CUDA_SHORT_VERSION
+#      linux_python3.7:
+#        CONFIG: linux_python3.7
+#        DOCKER_IMAGE: condaforge/linux-anvil-comp7
+#        EXCLUDE_JINJA: CUDA_SHORT_VERSION
+#      linux_python3.8:
+#        CONFIG: linux_python3.8
+#        DOCKER_IMAGE: condaforge/linux-anvil-comp7
+#        EXCLUDE_JINJA: CUDA_SHORT_VERSION
+#
+#      linux_python2.7_cuda8.0:
+#        CONFIG: linux_python2.7_cuda8.0
+#        DOCKER_IMAGE: "omniamd/omnia-linux-anvil:condaforge-texlive19-cuda80"
+#        INCLUDE_JINJA: CUDA_SHORT_VERSION
+#      linux_python2.7_cuda9.0:
+#        CONFIG: linux_python2.7_cuda9.0
+#        DOCKER_IMAGE: "omniamd/omnia-linux-anvil:condaforge-texlive19-cuda90"
+#        INCLUDE_JINJA: CUDA_SHORT_VERSION
+#      linux_python2.7_cuda10.0:
+#        CONFIG: linux_python2.7_cuda10.0
+#        DOCKER_IMAGE: "omniamd/omnia-linux-anvil:condaforge-texlive19-cuda100"
+#        INCLUDE_JINJA: CUDA_SHORT_VERSION
+#      linux_python2.7_cuda10.1:
+#        CONFIG: linux_python2.7_cuda10.1
+#        DOCKER_IMAGE: "omniamd/omnia-linux-anvil:condaforge-texlive19-cuda101"
+#        INCLUDE_JINJA: CUDA_SHORT_VERSION
+#      linux_python2.7_cuda10.2:
+#        CONFIG: linux_python2.7_cuda10.2
+#        DOCKER_IMAGE: "omniamd/omnia-linux-anvil:condaforge-texlive19-cuda102"
+#        INCLUDE_JINJA: CUDA_SHORT_VERSION
+#
+#      linux_python3.7_cuda8.0:
+#        CONFIG: linux_python3.7_cuda8.0
+#        DOCKER_IMAGE: "omniamd/omnia-linux-anvil:condaforge-texlive19-cuda80"
+#        INCLUDE_JINJA: CUDA_SHORT_VERSION
+#      linux_python3.7_cuda9.0:
+#        CONFIG: linux_python3.7_cuda9.0
+#        DOCKER_IMAGE: "omniamd/omnia-linux-anvil:condaforge-texlive19-cuda90"
+#        INCLUDE_JINJA: CUDA_SHORT_VERSION
+#      linux_python3.7_cuda10.0:
+#        CONFIG: linux_python3.7_cuda10.0
+#        DOCKER_IMAGE: "omniamd/omnia-linux-anvil:condaforge-texlive19-cuda100"
+#        INCLUDE_JINJA: CUDA_SHORT_VERSION
+#      linux_python3.7_cuda10.1:
+#        CONFIG: linux_python3.7_cuda10.1
+#        DOCKER_IMAGE: "omniamd/omnia-linux-anvil:condaforge-texlive19-cuda101"
+#        INCLUDE_JINJA: CUDA_SHORT_VERSION
+#      linux_python3.7_cuda10.2:
+#        CONFIG: linux_python3.7_cuda10.2
+#        DOCKER_IMAGE: "omniamd/omnia-linux-anvil:condaforge-texlive19-cuda102"
+#        INCLUDE_JINJA: CUDA_SHORT_VERSION
+#
+#      linux_python3.8_cuda8.0:
+#        CONFIG: linux_python3.8_cuda8.0
+#        DOCKER_IMAGE: "omniamd/omnia-linux-anvil:condaforge-texlive19-cuda80"
+#        INCLUDE_JINJA: CUDA_SHORT_VERSION
+#      linux_python3.8_cuda9.0:
+#        CONFIG: linux_python3.8_cuda9.0
+#        DOCKER_IMAGE: "omniamd/omnia-linux-anvil:condaforge-texlive19-cuda90"
+#        INCLUDE_JINJA: CUDA_SHORT_VERSION
+#      linux_python3.8_cuda10.0:
+#        CONFIG: linux_python3.8_cuda10.0
+#        DOCKER_IMAGE: "omniamd/omnia-linux-anvil:condaforge-texlive19-cuda100"
+#        INCLUDE_JINJA: CUDA_SHORT_VERSION
+#      linux_python3.8_cuda10.1:
+#        CONFIG: linux_python3.8_cuda10.1
+#        DOCKER_IMAGE: "omniamd/omnia-linux-anvil:condaforge-texlive19-cuda101"
+#        INCLUDE_JINJA: CUDA_SHORT_VERSION
+#      linux_python3.8_cuda10.2:
+#        CONFIG: linux_python3.8_cuda10.2
+#        DOCKER_IMAGE: "omniamd/omnia-linux-anvil:condaforge-texlive19-cuda102"
+#        INCLUDE_JINJA: CUDA_SHORT_VERSION
+
+
+  - script: |
+      echo "##vso[task.setvariable variable=DEVBUILDS]true"
+    condition: eq(variables['Build.Reason'], 'Schedule'))
+    displayName: Set dev trigger if scheduled
+#  - script: |
+#      echo "##vso[task.setvariable variable=DEVBUILDS]false"
+#    condition: ne(variables['Build.Reason'], 'Schedule'))
+#    displayName: Unset dev trigger if not scheduled
+
+  - script: |
+      export PROVIDER_DIR="$(basename $THISDIR)"
+      export DEVBUILDS="$DEVBUILDS"
+      CBA_FLAGS="-vvv --cycle-packages"
+      if [ -n "$INCLUDE_JINJA" ]; then
+        CBA_FLAGS="$CBA_FLAGS --build-only-jinja $INCLUDE_JINJA"
+      fi
+      if [ -n "EXCLUDE_JINJA" ]; then
+        CBA_FLAGS="$CBA_FLAGS --no-build-jinja $INCLUDE_JINJA"
+      fi
+      if [ ! -z "$DEVBUILDS"]; then
+        CBA_FLAGS="$CBA_FLAGS --dev"
+      fi
+      export CBA_FLAGS=$CBA_FLAGS
+    displayName: Assemble Variables
+
+  - script: |
+      docker run -i -t --rm \
+        -v `pwd`:/io \  # Link all the recipes dir
+        -v `pwd`/.conda_configs:/conda_configs \  # Link the configs dir
+        -e CBA_FLAGS \  # Transfer the Conda-build-all flags
+        -e CONFIG \  # Transfer the config pointer
+        ${DOCKER_IMAGE} \
+        bash /io/devtools/docker-build.sh
+
+    displayName: Run Docker Build
