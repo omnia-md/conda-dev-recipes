@@ -93,7 +93,7 @@ jobs:
   steps:
     - script: |
         echo "##vso[task.setvariable variable=DEVBUILDS]true"
-      condition: eq(variables['Build.Reason'], 'Schedule'))
+      condition: eq(variables['Build.Reason'], 'Schedule')
       displayName: Set dev trigger if scheduled
   #  - script: |
   #      echo "##vso[task.setvariable variable=DEVBUILDS]false"
