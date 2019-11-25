@@ -32,9 +32,17 @@ jobs:
 
     - script: |
         ECHO ON
-        conda create -c conda-forge --yes -n cb python=3 conda-build
-      displayName: Create the conda environment
+#        conda create -c conda-forge --yes -n cb python=3 conda-build
+      displayName: "Echo UP!"
 
+    # Several mixed messages here: https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/package/conda-environment?view=azure-devops
+    # This is supposedly depreciated, but this is still required for Microsoft-hosted agents to use the conda env
+    - task: CondaEnvironment@1
+        inputs:
+          packageSpecs: 'python=3 conda-build conda'
+          installOptions: "-c conda-forge"
+          updateConda: false
+        displayName: Install conda-build and activate environment
 
     - task: Cache@2
       inputs:
@@ -55,7 +63,7 @@ jobs:
       inputs:
         targetType: 'inline'
         script: |
-          Invoke-WebRequest $(CUDA_$(CUDA_CACHE)_URL) -OutFile $(NVIDIA_CUDA_DIR)/$(CUDA_CACHE)/CUDA_installer.exe
+          Invoke-WebRequest $(CUDA_"$(CUDA_CACHE)"_URL) -OutFile $(NVIDIA_CUDA_DIR)/$(CUDA_CACHE)/CUDA_installer.exe
       displayName: Download CUDA Driver
       condition: and(ne(variables['CUDA_CACHE'], 'Null'), ne(variables.CUDA_RESTORED, 'true'))
 
