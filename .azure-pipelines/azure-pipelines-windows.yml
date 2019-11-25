@@ -91,7 +91,7 @@ jobs:
     - script: |
         echo "CBA_FLAGS are..."
         echo $(CBA_FLAGS)
-#        conda activate base  # Possible debug line
+        # conda activate base  # Possible debug line
         conda config --add channels omnia
         conda config --add channels conda-forge
 
