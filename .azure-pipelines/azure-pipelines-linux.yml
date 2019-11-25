@@ -103,7 +103,7 @@ jobs:
           CBA_FLAGS="$CBA_FLAGS --build-only-jinja $INCLUDE_JINJA"
         fi
         if [ -n "EXCLUDE_JINJA" ]; then
-          CBA_FLAGS="$CBA_FLAGS --no-build-jinja $INCLUDE_JINJA"
+          CBA_FLAGS="$CBA_FLAGS --no-build-jinja $EXCLUDE_JINJA"
         fi
         if [ ! -z "NIGHTLY"]; then
           CBA_FLAGS="$CBA_FLAGS --dev --scheduled-only"
@@ -112,6 +112,7 @@ jobs:
       displayName: Assemble Variables
 
     - script: |
+        echo $CBA_FLAGS
         DOCKER_FLAGS="--rm"
         DOCKER_DIRS="-v `pwd`:/io"
         DOCKER_DIRS="$DOCKER_DIRS -v `pwd`/.conda_configs:/conda_configs"
