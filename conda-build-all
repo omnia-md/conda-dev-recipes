@@ -546,8 +546,9 @@ def execute(args):
                                      variant_config_files=variant_config_files,
                                      channel_urls=channel_urls,
                                      cycle_packages=args.cycle,
-                                     jinja_include=set(args.build_only_jinja),
-                                     jinja_exclude=set(args.no_build_jinja))
+                                     jinja_include=set(args.build_only_jinja) if args.build_only_jinja else None,
+                                     jinja_exclude=set(args.no_build_jinja) if args.no_build_jinja else None
+                                     )
 
     if args.verbose > 0:
         all_paths = []
