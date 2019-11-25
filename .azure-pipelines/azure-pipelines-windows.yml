@@ -50,7 +50,7 @@ jobs:
         path: $(NVIDIA_CUDA_DIR)/$(CUDA_VER)
         cacheHitVar: CUDA_RESTORED
       displayName: Cache the NVIDIA CUDA installer
-      condition: ne(variables['CUDA_VER'], Null)
+      condition: ne(variables['CUDA_VER'], '')  # Technically Null, but is cast as "To string: '' (the empty string)"
 
 #    - task: Cache@2
 #      inputs:
