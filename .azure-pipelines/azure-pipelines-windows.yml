@@ -92,6 +92,7 @@ jobs:
         echo "CBA_FLAGS are..."
         echo $(CBA_FLAGS)
         REM conda activate base  # Possible debug line
+        SET PATH=%PATH%:C:/Miniconda/Library/bin
         conda config --add channels omnia
         conda config --add channels conda-forge
 
