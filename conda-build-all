@@ -254,7 +254,7 @@ def render_metadatas(paths, variant_config_files=(), channel_urls=(), cycle_pack
                                 # Do a quick basic YAML load/dump to drop any commented lines and not misread the Jinja
                                 meta_text = yaml.dump(yaml.safe_load(meta_text))
                                 # This will correctly match the jinja template inside the {{ }}
-                                meta_jinja = re.findall(r"(?<={{).*?(?=}})", meta_text.read())
+                                meta_jinja = re.findall(r"(?<={{).*?(?=}})", meta_text)
                                 meta_jinja_set = set([match.strip() for match in meta_jinja])
                                 if jinja_include and (not meta_jinja_set & jinja_include):
                                     if verbose > 0:

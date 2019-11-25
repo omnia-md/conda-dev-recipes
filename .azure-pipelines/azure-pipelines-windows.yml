@@ -39,7 +39,7 @@ jobs:
     # This is supposedly depreciated, but this is still required for Microsoft-hosted agents to use the conda env
     - task: CondaEnvironment@1
       inputs:
-        packageSpecs: 'python=3 conda-build conda conda-package-handling'
+        packageSpecs: 'python=3 conda-build conda'
         installOptions: "-c conda-forge"
         updateConda: false
       displayName: Install conda-build and activate environment
@@ -91,11 +91,11 @@ jobs:
     - script: |
         echo "CBA_FLAGS are..."
         echo $(CBA_FLAGS)
-        # conda activate base  # Possible debug line
+        REM conda activate base  # Possible debug line
         conda config --add channels omnia
         conda config --add channels conda-forge
 
-        conda install --yes conda conda-build anaconda-client
+        conda install --yes conda conda-build anaconda-client python-libarchive-c
 
         chmod +x $(Build.SourcesDirectory)/conda-build-all
 
