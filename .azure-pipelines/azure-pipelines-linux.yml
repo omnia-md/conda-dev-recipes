@@ -117,7 +117,7 @@ jobs:
       displayName: Assemble Variables
 
     - script: |
-        DOCKER_FLAGS="-it --rm"
+        DOCKER_FLAGS="--rm"
         DOCKER_DIRS="-v `pwd`:/io"
         DOCKER_DIRS="$DOCKER_DIRS -v `pwd`/.conda_configs:/conda_configs"
         DOCKER_VARS="-e CBA_FLAGS -e CONFIG"
