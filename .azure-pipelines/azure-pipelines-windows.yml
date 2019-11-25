@@ -50,7 +50,7 @@ jobs:
         path: $(NVIDIA_CUDA_DIR)/$(CUDA_VER)
         cacheHitVar: CUDA_RESTORED
       displayName: Cache the NVIDIA CUDA installer
-      condition: ne(variables['CUDA_VER'], 'Null')
+      condition: ne(variables['CUDA_VER'], Null)
 
 #    - task: Cache@2
 #      inputs:
@@ -63,6 +63,7 @@ jobs:
       inputs:
         targetType: 'inline'
         script: |
+          New-Item -ItemType Directory -Force -Path $(NVIDIA_CUDA_DIR)/$(CUDA_VER)
           Invoke-WebRequest $(CUDA_URL) -OutFile $(NVIDIA_CUDA_DIR)/$(CUDA_VER)/CUDA_installer.exe
       displayName: Download CUDA Driver
       condition: and(ne(variables['CUDA_VER'], 'Null'), ne(variables.CUDA_RESTORED, 'true'))
