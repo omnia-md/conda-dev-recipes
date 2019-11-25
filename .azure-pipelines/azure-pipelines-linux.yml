@@ -90,39 +90,39 @@ jobs:
 #        DOCKER_IMAGE: "omniamd/omnia-linux-anvil:condaforge-texlive19-cuda102"
 #        INCLUDE_JINJA: CUDA_SHORT_VERSION
 
+  steps:
+    - script: |
+        echo "##vso[task.setvariable variable=DEVBUILDS]true"
+      condition: eq(variables['Build.Reason'], 'Schedule'))
+      displayName: Set dev trigger if scheduled
+  #  - script: |
+  #      echo "##vso[task.setvariable variable=DEVBUILDS]false"
+  #    condition: ne(variables['Build.Reason'], 'Schedule'))
+  #    displayName: Unset dev trigger if not scheduled
 
-  - script: |
-      echo "##vso[task.setvariable variable=DEVBUILDS]true"
-    condition: eq(variables['Build.Reason'], 'Schedule'))
-    displayName: Set dev trigger if scheduled
-#  - script: |
-#      echo "##vso[task.setvariable variable=DEVBUILDS]false"
-#    condition: ne(variables['Build.Reason'], 'Schedule'))
-#    displayName: Unset dev trigger if not scheduled
+    - script: |
+        export PROVIDER_DIR="$(basename $THISDIR)"
+        export DEVBUILDS="$DEVBUILDS"
+        CBA_FLAGS="-vvv --cycle-packages"
+        if [ -n "$INCLUDE_JINJA" ]; then
+          CBA_FLAGS="$CBA_FLAGS --build-only-jinja $INCLUDE_JINJA"
+        fi
+        if [ -n "EXCLUDE_JINJA" ]; then
+          CBA_FLAGS="$CBA_FLAGS --no-build-jinja $INCLUDE_JINJA"
+        fi
+        if [ ! -z "$DEVBUILDS"]; then
+          CBA_FLAGS="$CBA_FLAGS --dev"
+        fi
+        export CBA_FLAGS=$CBA_FLAGS
+      displayName: Assemble Variables
 
-  - script: |
-      export PROVIDER_DIR="$(basename $THISDIR)"
-      export DEVBUILDS="$DEVBUILDS"
-      CBA_FLAGS="-vvv --cycle-packages"
-      if [ -n "$INCLUDE_JINJA" ]; then
-        CBA_FLAGS="$CBA_FLAGS --build-only-jinja $INCLUDE_JINJA"
-      fi
-      if [ -n "EXCLUDE_JINJA" ]; then
-        CBA_FLAGS="$CBA_FLAGS --no-build-jinja $INCLUDE_JINJA"
-      fi
-      if [ ! -z "$DEVBUILDS"]; then
-        CBA_FLAGS="$CBA_FLAGS --dev"
-      fi
-      export CBA_FLAGS=$CBA_FLAGS
-    displayName: Assemble Variables
+    - script: |
+        docker run -i -t --rm \
+          -v `pwd`:/io \  # Link all the recipes dir
+          -v `pwd`/.conda_configs:/conda_configs \  # Link the configs dir
+          -e CBA_FLAGS \  # Transfer the Conda-build-all flags
+          -e CONFIG \  # Transfer the config pointer
+          ${DOCKER_IMAGE} \
+          bash /io/devtools/docker-build.sh
 
-  - script: |
-      docker run -i -t --rm \
-        -v `pwd`:/io \  # Link all the recipes dir
-        -v `pwd`/.conda_configs:/conda_configs \  # Link the configs dir
-        -e CBA_FLAGS \  # Transfer the Conda-build-all flags
-        -e CONFIG \  # Transfer the config pointer
-        ${DOCKER_IMAGE} \
-        bash /io/devtools/docker-build.sh
-
-    displayName: Run Docker Build
+      displayName: Run Docker Build
