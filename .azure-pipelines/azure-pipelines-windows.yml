@@ -74,19 +74,18 @@ jobs:
       displayName: Install the CUDA Files
       condition: ne(variables['CUDA_VER'], '') # Technically Null, but is cast as "To string: '' (the empty string)"
 
-    - script: |
-        export PROVIDER_DIR="$(basename $THISDIR)"
-        export DEVBUILDS="$DEVBUILDS"
-        CBA_FLAGS="-vvv --cycle-packages"
-        if [ -n "$INCLUDE_JINJA" ]; then
-          CBA_FLAGS="$CBA_FLAGS --build-only-jinja $INCLUDE_JINJA"
-        fi
-        if [ -n "EXCLUDE_JINJA" ]; then
-          CBA_FLAGS="$CBA_FLAGS --no-build-jinja $INCLUDE_JINJA"
-        fi
-        if [ ! -z "NIGHTLY"]; then
-          CBA_FLAGS="$CBA_FLAGS --dev --scheduled-only"
-        fi
+    - powershell: |
+        Set-Variable -Name CBAFLAGS -Value "-vvv --cycle-packages --dry-run"
+        If ($($INCLUDE_JINJA)) {
+          Set-Variable -Name CBAFLAGS -Value "$($CBAFLAGS) --build-only-jinja $(INCLUDE_JINJA)"
+        }
+        If ($(EXCLUDE_JINJA)) {
+          Set-Variable -Name CBAFLAGS -Value "$($CBAFLAGS) --no-build-jinja $(EXCLUDE_JINJA)"
+        }
+        If ($(NIGHTLY)) {
+          Set-Variable -Name CBAFLAGS -Value "$($CBAFLAGS) --dev --scheduled-only"
+        }
+        Write-Host "###vso[task.setvariable variable=CBA_FLAGS]$CBAFLAGS"
         export CBA_FLAGS=$CBA_FLAGS
       displayName: Assemble Variables
 
@@ -99,11 +98,4 @@ jobs:
         chmod +x /io/conda-build-all
 
         $(Build.SourcesDirectory)/conda-build-all $CBA_FLAGS -m /conda_configs/$(CONFIG).yaml -- $(Build.SourcesDirectory)/*
-
-        DOCKER_FLAGS="--rm"
-        DOCKER_DIRS="-v `pwd`:/io"
-        DOCKER_DIRS="$DOCKER_DIRS -v `pwd`/.conda_configs:/conda_configs"
-        DOCKER_VARS="-e CBA_FLAGS -e CONFIG"
-        DOCKER_COMMAND="bash /io/devtools/docker-build.sh"
-        docker run ${DOCKER_FLAGS} ${DOCKER_DIRS} ${DOCKER_VARS} ${DOCKER_IMAGE} ${DOCKER_COMMAND}
       displayName: Run Conda Builds

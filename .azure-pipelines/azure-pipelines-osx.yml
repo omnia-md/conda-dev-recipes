@@ -1,0 +1,59 @@
+jobs:
+- job: osx
+  pool:
+    vmImage: macOS-10.13
+#  timeoutInMinutes: 360
+  strategy:
+    maxParallel: 8
+    matrix:
+      osx_python2.7:
+        CONFIG: linux_python2.7
+        EXCLUDE_JINJA: CUDA_SHORT_VERSION
+      osx_python2.7_cuda:
+        CONFIG: linux_python2.7_cuda8.0
+        INCLUDE_JINJA: CUDA_SHORT_VERSION
+        CUDA_URL: http://developer.download.nvidia.com/compute/cuda/10.2/Prod/network_installers/cuda_10.2.89_mac_network.dmg
+
+  steps:
+    - script: |
+        echo "##vso[task.setvariable variable=NIGHTLY]true"
+      condition: eq(variables['Build.Reason'], 'Schedule')
+      displayName: Set dev trigger if scheduled
+
+    - bash: |
+        echo "##vso[task.prependpath]$CONDA/bin"
+        sudo chown -R $USER $CONDA
+      displayName: Add conda to PATH
+
+    - script: |
+        source activate base
+        conda install -n base -c conda-forge --quiet --yes conda-build
+        conda update --yes --quiet -c conda-forge -c defaults --all
+      displayName: Add and update conda-forge
+
+    - script: |
+        export PROVIDER_DIR="$(basename $THISDIR)"
+        export DEVBUILDS="$DEVBUILDS"
+        CBA_FLAGS="-vvv --cycle-packages --dry-run"
+        if [ -n "$INCLUDE_JINJA" ]; then
+          CBA_FLAGS="$CBA_FLAGS --build-only-jinja $INCLUDE_JINJA"
+        fi
+        if [ -n "EXCLUDE_JINJA" ]; then
+          CBA_FLAGS="$CBA_FLAGS --no-build-jinja $INCLUDE_JINJA"
+        fi
+        if [ ! -z "NIGHTLY"]; then
+          CBA_FLAGS="$CBA_FLAGS --dev --scheduled-only"
+        fi
+        export CBA_FLAGS=$CBA_FLAGS
+      displayName: Assemble Variables
+
+    - script: |
+        conda config --add channels omnia
+        conda config --add channels conda-forge
+
+        conda update --yes conda conda-build anaconda-client
+
+        chmod +x /io/conda-build-all
+
+        $(Build.SourcesDirectory)/conda-build-all $CBA_FLAGS -m /conda_configs/$(CONFIG).yaml -- $(Build.SourcesDirectory)/*
+      displayName: Run Conda Build
