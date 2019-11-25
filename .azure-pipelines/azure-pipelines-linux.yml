@@ -117,12 +117,10 @@ jobs:
       displayName: Assemble Variables
 
     - script: |
-        docker run -i -t --rm \
-          -v `pwd`:/io \  # Link all the recipes dir
-          -v `pwd`/.conda_configs:/conda_configs \  # Link the configs dir
-          -e CBA_FLAGS \  # Transfer the Conda-build-all flags
-          -e CONFIG \  # Transfer the config pointer
-          ${DOCKER_IMAGE} \
-          bash /io/devtools/docker-build.sh
-
+        DOCKER_FLAGS="-it --rm"
+        DOCKER_DIRS="-v `pwd`:/io"
+        DOCKER_DIRS="$DOCKER_DIRS -v `pwd`/.conda_configs:/conda_configs"
+        DOCKER_VARS="-e CBA_FLAGS -e CONFIG"
+        DOCKER_COMMAND="bash /io/devtools/docker-build.sh"
+        docker run ${DOCKER_FLAGS} ${DOCKER_DIRS} ${DOCKER_VARS} ${DOCKER_IMAGE} ${DOCKER_COMMAND}
       displayName: Run Docker Build
