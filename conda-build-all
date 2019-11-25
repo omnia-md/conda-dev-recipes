@@ -328,7 +328,7 @@ def render_metadatas(paths, variant_config_files=(), channel_urls=(), cycle_pack
     return metas, errors
 
 
-def required_builds(metas, channel_urls, verbose=0, force=False, rebuild=False):
+def required_builds(metas, channel_urls, verbose=0, force=False, rebuild=False, scheduled_only=False):
     """
     Generator to determine which builds need to be uploaded based on existing builds on Anaconda
 
@@ -356,6 +356,9 @@ def required_builds(metas, channel_urls, verbose=0, force=False, rebuild=False):
     rebuild : bool, Default False
         If package is already found built locally, force it to be built
         Distinct from ``force``
+    scheduled_only : bool, Default False
+        Will only build package if its marked as a package which undergoes scheduled builds.
+        Even if `force` or `rebuild` is set, this supersedes it
 
     Returns
     -------
@@ -398,11 +401,18 @@ def required_builds(metas, channel_urls, verbose=0, force=False, rebuild=False):
                       "\t-{}".format(package_base, ref_package.path, meta.path))
             continue
 
+        # Skip if the package is not scheduled and we only are building scheduled
+        if scheduled_only and not (meta.get_section('extra') and meta.get_section('extra').get('scheduled', False)):
+            if verbose > 1:
+                print(f'Package {package_base} skipped because we are only building packages which are build on a '
+                      f'schedule.')
+            continue
+
         # Allow package recipe to force rebuild and upload in recipe.
         if meta.get_section('extra') and 'force_upload' in meta.get_section('extra') and (
                 meta.get_section('extra')['force_upload'] == 'True'):
             if verbose > 1:
-                print('Scheduling package due to force_upload={}: {}'.format(
+                print('Queueing package due to force_upload={}: {}'.format(
                     str(meta.get_section('extra')['force_upload']), meta.name()))
                 print('  full_name: {}'.format(package_base))
             yield meta
@@ -431,7 +441,7 @@ def required_builds(metas, channel_urls, verbose=0, force=False, rebuild=False):
             continue
 
         if verbose > 1:
-            print('Scheduling package: {}'.format(meta.name()))
+            print('Queueing package: {}'.format(meta.name()))
             print('  full_name: {}'.format(package_base))
             print('  build variant Python: {}'.format(meta.config.variants[0].get('python', 'undefined')))
 
@@ -507,7 +517,8 @@ def execute(args):
     # Parse the pythons, numpys, and cudas into long and short form
 
     variant_config_files = fcf('.')
-    variant_config_files.extend(args.variant_config_files)
+    if args.variant_config_files:
+        variant_config_files.extend(args.variant_config_files)
 
     py_sets = []
     for index, variant_config_file in enumerate(variant_config_files):
@@ -564,7 +575,8 @@ def execute(args):
     queued_metas = list(required_builds(metas, channel_urls,
                                         verbose=args.verbose,
                                         force=args.force,
-                                        rebuild=args.rebuild))
+                                        rebuild=args.rebuild,
+                                        scheduled_only=args.scheduled_only))
 
     # Helpful data
     print('\n[conda-build-all] Scheduling the following {} builds:'.format(len(queued_metas)))
@@ -672,6 +684,11 @@ def main():
         '--no-build-jinja',
         action='append',
         help="EXCLUDE recipes which have ANY of these Jinja2 templates in them."
+    )
+    p.add_argument(
+        '--scheduled-only',
+        action='store_true',
+        help="Specify only to build packages which set the {extra: {scheduled: True}} flag in their meta"
     )
     p.add_argument(
         '-c', '--clean',

@@ -92,13 +92,9 @@ jobs:
 
   steps:
     - script: |
-        echo "##vso[task.setvariable variable=DEVBUILDS]true"
+        echo "##vso[task.setvariable variable=NIGHTLY]true"
       condition: eq(variables['Build.Reason'], 'Schedule')
       displayName: Set dev trigger if scheduled
-  #  - script: |
-  #      echo "##vso[task.setvariable variable=DEVBUILDS]false"
-  #    condition: ne(variables['Build.Reason'], 'Schedule'))
-  #    displayName: Unset dev trigger if not scheduled
 
     - script: |
         export PROVIDER_DIR="$(basename $THISDIR)"
@@ -110,8 +106,8 @@ jobs:
         if [ -n "EXCLUDE_JINJA" ]; then
           CBA_FLAGS="$CBA_FLAGS --no-build-jinja $INCLUDE_JINJA"
         fi
-        if [ ! -z "$DEVBUILDS"]; then
-          CBA_FLAGS="$CBA_FLAGS --dev"
+        if [ ! -z "NIGHTLY"]; then
+          CBA_FLAGS="$CBA_FLAGS --dev --scheduled-only"
         fi
         export CBA_FLAGS=$CBA_FLAGS
       displayName: Assemble Variables
