@@ -32,6 +32,17 @@ jobs:
       displayName: Add and update conda-forge
 
     - script: |
+        CUDA_INSTALL_NAME="CUDA_installer.dmg"
+        curl -L $(CUDA_URL) > $CUDA_INSTALL_NAME
+        # Instructions from NVIDIA
+        export PATH=/Developer/NVIDIA/CUDA-10.2/bin${PATH:+:${PATH}}
+        export DYLD_LIBRARY_PATH=/Developer/NVIDIA/CUDA-10.2/lib\
+                                 ${DYLD_LIBRARY_PATH:+:${DYLD_LIBRARY_PATH}}
+        $CUDA_INSTALL_NAME --accept-eula --silent --install-package=cuda-toolkit --install-package=cuda-driver
+      displayName: Download and Install the CUDA Files
+      condition: ne(variables['CUDA_URL'], '') # Technically Null, but is cast as "To string: '' (the empty string)"
+
+    - script: |
         export PROVIDER_DIR="$(basename $THISDIR)"
         export DEVBUILDS="$DEVBUILDS"
         CBA_FLAGS="-vvv --cycle-packages --dry-run"

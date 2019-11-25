@@ -76,13 +76,13 @@ jobs:
 
     - powershell: |
         Set-Variable -Name CBAFLAGS -Value "-vvv --cycle-packages --dry-run"
-        If ($($INCLUDE_JINJA)) {
+        If ($INCLUDE_JINJA) {
           Set-Variable -Name CBAFLAGS -Value "$($CBAFLAGS) --build-only-jinja $(INCLUDE_JINJA)"
         }
-        If ($(EXCLUDE_JINJA)) {
+        If ($EXCLUDE_JINJA) {
           Set-Variable -Name CBAFLAGS -Value "$($CBAFLAGS) --no-build-jinja $(EXCLUDE_JINJA)"
         }
-        If ($(NIGHTLY)) {
+        If ($NIGHTLY) {
           Set-Variable -Name CBAFLAGS -Value "$($CBAFLAGS) --dev --scheduled-only"
         }
         Write-Host "###vso[task.setvariable variable=CBA_FLAGS]$CBAFLAGS"
