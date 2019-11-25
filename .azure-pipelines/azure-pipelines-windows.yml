@@ -38,11 +38,11 @@ jobs:
     # Several mixed messages here: https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/package/conda-environment?view=azure-devops
     # This is supposedly depreciated, but this is still required for Microsoft-hosted agents to use the conda env
     - task: CondaEnvironment@1
-        inputs:
-          packageSpecs: 'python=3 conda-build conda'
-          installOptions: "-c conda-forge"
-          updateConda: false
-        displayName: Install conda-build and activate environment
+      inputs:
+        packageSpecs: 'python=3 conda-build conda'
+        installOptions: "-c conda-forge"
+        updateConda: false
+      displayName: Install conda-build and activate environment
 
     - task: Cache@2
       inputs:
