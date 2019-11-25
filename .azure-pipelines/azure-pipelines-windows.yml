@@ -66,12 +66,12 @@ jobs:
           New-Item -ItemType Directory -Force -Path $(NVIDIA_CUDA_DIR)/$(CUDA_VER)
           Invoke-WebRequest $(CUDA_URL) -OutFile $(NVIDIA_CUDA_DIR)/$(CUDA_VER)/CUDA_installer.exe
       displayName: Download CUDA Driver
-      condition: and(ne(variables['CUDA_VER'], 'Null'), ne(variables.CUDA_RESTORED, 'true'))
+      condition: and(ne(variables['CUDA_VER'], ''), ne(variables.CUDA_RESTORED, 'true')) 
 
     - script: |
         $(NVIDIA_CUDA_DIR)/$(CUDA_VER)/CUDA_installer.exe -s
       displayName: Install the CUDA Files
-      condition: ne(variables['CUDA_VER'], 'Null')
+      condition: ne(variables['CUDA_VER'], '') # Technically Null, but is cast as "To string: '' (the empty string)"
 
 #    - script: |
 #        export PROVIDER_DIR="$(basename $THISDIR)"
