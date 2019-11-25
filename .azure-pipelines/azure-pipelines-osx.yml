@@ -33,12 +33,18 @@ jobs:
 
     - script: |
         CUDA_INSTALL_NAME="CUDA_installer.dmg"
-        curl -L $(CUDA_URL) > $CUDA_INSTALL_NAME
+        CUDA_MOUNT_LOCATION="/Volumes/CUDAMacOSXInstaller.app/Contents/MacOS/CUDAMacOSXInstaller"
+        curl -L $(CUDA_URL) > $CUDA_INSTALL_NAME.dmg
         # Instructions from NVIDIA
         export PATH=/Developer/NVIDIA/CUDA-10.2/bin${PATH:+:${PATH}}
         export DYLD_LIBRARY_PATH=/Developer/NVIDIA/CUDA-10.2/lib\
                                  ${DYLD_LIBRARY_PATH:+:${DYLD_LIBRARY_PATH}}
-        ./$CUDA_INSTALL_NAME --accept-eula --silent --install-package=cuda-toolkit --install-package=cuda-driver
+        # Mount the DMG
+        hdiutil attach $CUDA_INSTALL_NAME
+        # Run the installer
+        $CUDA_MOUNT_LOCATION --accept-eula --silent --install-package=cuda-toolkit --install-package=cuda-driver
+        # Detach
+        hdiutil detach /Volumes/CUDAMacOSXInstaller
       displayName: Download and Install the CUDA Files
       condition: ne(variables['CUDA_URL'], '') # Technically Null, but is cast as "To string: '' (the empty string)"
 
@@ -64,7 +70,7 @@ jobs:
 
         conda update --yes conda conda-build anaconda-client
 
-        chmod +x /io/conda-build-all
+        chmod +x $(Build.SourcesDirectory)/conda-build-all
 
         $(Build.SourcesDirectory)/conda-build-all $CBA_FLAGS -m $(Build.SourcesDirectory)/$(CONFIG).yaml -- $(Build.SourcesDirectory)/*
       displayName: Run Conda Build

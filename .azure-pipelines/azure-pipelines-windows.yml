@@ -94,7 +94,7 @@ jobs:
 
         conda update --yes conda conda-build anaconda-client
 
-        chmod +x /io/conda-build-all
+        chmod +x $(Build.SourcesDirectory)/conda-build-all
 
         $(Build.SourcesDirectory)/conda-build-all $CBA_FLAGS -m $(Build.SourcesDirectory)/$(CONFIG).yaml -- $(Build.SourcesDirectory)/*
       displayName: Run Conda Builds
