@@ -43,9 +43,9 @@ jobs:
       condition: ne(variables['CUDA_URL'], '')  # Technically Null, but is cast as "To string: '' (the empty string)"
 
     - script: |
-      export PATH=/Developer/NVIDIA/CUDA-10.2/bin${PATH:+:${PATH}}
-      export DYLD_LIBRARY_PATH=/Developer/NVIDIA/CUDA-10.2/lib\
-                               ${DYLD_LIBRARY_PATH:+:${DYLD_LIBRARY_PATH}}
+        export PATH=/Developer/NVIDIA/CUDA-10.2/bin${PATH:+:${PATH}}
+        export DYLD_LIBRARY_PATH=/Developer/NVIDIA/CUDA-10.2/lib\
+                                 ${DYLD_LIBRARY_PATH:+:${DYLD_LIBRARY_PATH}}
       condition: ne(variables['CUDA_URL'], '')
       displayName: Set the CUDA PATHs for OSX
 
@@ -92,6 +92,8 @@ jobs:
         chmod +x $(Build.SourcesDirectory)/conda-build-all
 
         echo $CBA_FLAGS
+        echo $PATH
+        echo $DYLD_LIBRARY_PATH
 
         python $(Build.SourcesDirectory)/conda-build-all $CBA_FLAGS -m $(Build.SourcesDirectory)/.conda_configs/$(CONFIG).yaml -- $(Build.SourcesDirectory)/*
       displayName: Run Conda Build
