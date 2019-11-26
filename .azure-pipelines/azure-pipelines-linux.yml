@@ -112,8 +112,6 @@ jobs:
       displayName: Assemble Variables
 
     - script: |
-        echo "CBA_FLAGS are..."
-        echo $CBA_FLAGS
         DOCKER_FLAGS="--rm"
         DOCKER_DIRS="-v `pwd`:/io"
         DOCKER_DIRS="$DOCKER_DIRS -v `pwd`/.conda_configs:/conda_configs"
