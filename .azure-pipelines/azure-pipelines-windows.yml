@@ -97,12 +97,12 @@ jobs:
         call C:\Miniconda\Scripts\activate
         REM conda init cmd.exe
         echo "Now setting up conda stuff
-        conda config --add channels omnia
-        conda config --add channels conda-forge
+        conda config -vvv --add channels omnia
+        conda config -vvv --add channels conda-forge
 
-        conda install --yes conda conda-build anaconda-client python-libarchive-c
+        conda install -vvv --yes conda conda-build anaconda-client python-libarchive-c
 
-        chmod +x $(Build.SourcesDirectory)/conda-build-all
+        REM chmod +x $(Build.SourcesDirectory)/conda-build-all
 
         python $(Build.SourcesDirectory)/conda-build-all $(CBA_FLAGS) -m $(Build.SourcesDirectory)/.conda_configs/$(CONFIG).yaml -- $(Build.SourcesDirectory)/*
       displayName: Run Conda Builds

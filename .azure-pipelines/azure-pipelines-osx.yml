@@ -47,7 +47,7 @@ jobs:
     - task: Cache@2
       inputs:
         key: 'CUDA | "$(CUDA_VER)" | Driver'
-        path: /Developers/NVIDIA/$(CUDA_VER)
+        path: /Library/Frameworks/CUDA.framework
         cacheHitVar: CUDA_DRIVER_RESTORED
       displayName: Cache the NVIDIA Driver installation
       condition: ne(variables['CUDA_URL'], '')  # Technically Null, but is cast as "To string: '' (the empty string)"
@@ -55,7 +55,7 @@ jobs:
     - task: Cache@2
       inputs:
         key: 'CUDA | "$(CUDA_VER)" | Stub'
-        path: /Developers/NVIDIA/$(CUDA_VER)
+        path: //usr/local/cuda
         cacheHitVar: CUDA_STUB_RESTORED
       displayName: Cache the NVIDIA Driver Stub for Unix
       condition: ne(variables['CUDA_URL'], '')  # Technically Null, but is cast as "To string: '' (the empty string)"
