@@ -1,6 +1,6 @@
 package:
   name: openmm
-  version: 7.4.0
+  version: 7.5.0
 
 source:
   git_url: https://github.com/pandegroup/openmm.git
@@ -13,7 +13,7 @@ source:
 extra:
   #upload: betacuda{{ CUDA_SHORT_VERSION }}{{ ",beta" if CUDA_SHORT_VERSION == "92" else ""}}
   #upload: devcuda{{ CUDA_SHORT_VERSION }}{{ ",dev" if CUDA_SHORT_VERSION == "92" else ""}}
-  upload: cuda{{ CUDA_SHORT_VERSION }}{{ ",main" if CUDA_SHORT_VERSION == "92" else ""}}
+  upload: cuda{{ CUDA_SHORT_VERSION }}{{ ",main" if CUDA_SHORT_VERSION == "101" else ""}}
   force_upload: True
 
 build:
@@ -64,7 +64,7 @@ test:
     - simtk
     - simtk.openmm
   commands:
-    - python -m simtk.testInstallation
+    - python -m simtk.testInstallation  [not osx]
 
 about:
   home: http://openmm.org
