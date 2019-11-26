@@ -12,7 +12,9 @@ jobs:
       osx_python2.7_cuda:
         CONFIG: linux_python2.7_cuda8.0
         INCLUDE_JINJA: CUDA_SHORT_VERSION
-        CUDA_URL: http://developer.download.nvidia.com/compute/cuda/10.2/Prod/network_installers/cuda_10.2.89_mac_network.dmg
+        # CUDA_URL: http://developer.download.nvidia.com/compute/cuda/10.2/Prod/network_installers/cuda_10.2.89_mac_network.dmg
+        CUDA_URL: http://developer.download.nvidia.com/compute/cuda/10.2/Prod/local_installers/cuda_10.2.89_mac.dmg
+        CUDA_VER: 10.2
 
   steps:
     - script: |
@@ -31,10 +33,26 @@ jobs:
         conda update --yes --quiet -c conda-forge -c defaults --all
       displayName: Add and update conda-forge
 
+    # The condition here for the NVIDIA steps only should trigger if CUDA_URL is set
+    - task: Cache@2
+      inputs:
+        key: 'CUDA | "$(CUDA_VER)"'
+        path: /Developers/NVIDIA/$(CUDA_VER)
+        cacheHitVar: CUDA_RESTORED
+      displayName: Cache the NVIDIA CUDA installation
+      condition: ne(variables['CUDA_URL'], '')  # Technically Null, but is cast as "To string: '' (the empty string)"
+
+    - script: |
+      export PATH=/Developer/NVIDIA/CUDA-10.2/bin${PATH:+:${PATH}}
+      export DYLD_LIBRARY_PATH=/Developer/NVIDIA/CUDA-10.2/lib\
+                               ${DYLD_LIBRARY_PATH:+:${DYLD_LIBRARY_PATH}}
+      condition: ne(variables['CUDA_URL'], '')
+      displayName: Set the CUDA PATHs for OSX
+
     - script: |
         CUDA_INSTALL_NAME="CUDA_installer.dmg"
         CUDA_MOUNT_LOCATION="/Volumes/CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/MacOS/CUDAMacOSXInstaller"
-        curl -L $(CUDA_URL) > $CUDA_INSTALL_NAME
+        curl -L $(CUDA_URL) --output $CUDA_INSTALL_NAME
         # Instructions from NVIDIA
         export PATH=/Developer/NVIDIA/CUDA-10.2/bin${PATH:+:${PATH}}
         export DYLD_LIBRARY_PATH=/Developer/NVIDIA/CUDA-10.2/lib\
@@ -46,7 +64,7 @@ jobs:
         # Detach
         hdiutil detach /Volumes/CUDAMacOSXInstaller
       displayName: Download and Install the CUDA Files
-      condition: ne(variables['CUDA_URL'], '') # Technically Null, but is cast as "To string: '' (the empty string)"
+      condition: and(ne(variables['CUDA_URL'], ''), ne(variables.CUDA_RESTORED, 'true'))
 
     - script: |
         export PROVIDER_DIR="$(basename $THISDIR)"

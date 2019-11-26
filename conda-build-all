@@ -226,6 +226,37 @@ def render_metadatas(paths, variant_config_files=(), channel_urls=(), cycle_pack
     # Caveat: This is conda_build.config:Config trickery, so this may break in the future since its not "API"
     for possible_recipe in paths:
         try:
+            if os.path.isdir(possible_recipe):
+                # Skip if no meta.yaml file
+                if not os.path.exists(os.path.join(possible_recipe, 'meta.yaml')):
+                    print(f"Skipping {possible_recipe} because no meta.yaml file found")
+                    continue
+                elif possible_recipe[0] == '.':
+                    if verbose > 0:
+                        print(f"Skipping {possible_recipe} because its a hidden folder starting with \".\"")
+                    continue
+                # Skip from jinja includes/excludes
+                elif check_jinja:
+                    with open(os.path.join(possible_recipe, 'meta.yaml'), 'r') as meta_text:
+                        # Do a quick basic YAML load/dump to drop any commented lines and not misread the Jinja
+                        meta_text = yaml.dump(yaml.safe_load(meta_text))
+                        # This will correctly match the jinja template inside the {{ }}
+                        meta_jinja = re.findall(r"(?<={{).*?(?=}})", meta_text)
+                        meta_jinja_set = set([match.strip() for match in meta_jinja])
+                        if jinja_include and (not meta_jinja_set & jinja_include):
+                            if verbose > 0:
+                                print(f"Skipping {possible_recipe} because it does not have any of the "
+                                      f"Jinja keys in {jinja_include}")
+                            continue
+                        if jinja_exclude and (meta_jinja_set & jinja_exclude):
+                            if verbose > 0:
+                                print(f"Skipping {possible_recipe} because it has been excluded by the "
+                                      f"Jinja keys in {jinja_exclude}")
+                            continue
+            else:
+                if verbose > 2:
+                    print(f"Skipping {possible_recipe} because its not a directory")
+                continue
             # Recreate the temp directory for each package because the act of cleaning up from the package removes
             # the placeholder work directory
             meta_lookup[possible_recipe] = []
@@ -237,79 +268,50 @@ def render_metadatas(paths, variant_config_files=(), channel_urls=(), cycle_pack
                 with open(os.path.join(work_path, 'a_touched_file.magic'), 'w') as _:
                     # Touch a random file so the "work_dir" is not empty
                     pass
-
                 try:
-                    if os.path.isdir(possible_recipe):
-                        # Skip if no meta.yaml file
-                        if not os.path.exists(os.path.join(possible_recipe, 'meta.yaml')):
-                            print(f"Skipping {possible_recipe} because no meta.yaml file found")
-                            continue
-                        elif possible_recipe[0] == '.':
-                            if verbose > 0:
-                                print(f"Skipping {possible_recipe} because its a hidden folder starting with \".\"")
-                            continue
-                        # Skip from jinja includes/excludes
-                        elif check_jinja:
-                            with open(os.path.join(possible_recipe, 'meta.yaml'), 'r') as meta_text:
-                                # Do a quick basic YAML load/dump to drop any commented lines and not misread the Jinja
-                                meta_text = yaml.dump(yaml.safe_load(meta_text))
-                                # This will correctly match the jinja template inside the {{ }}
-                                meta_jinja = re.findall(r"(?<={{).*?(?=}})", meta_text)
-                                meta_jinja_set = set([match.strip() for match in meta_jinja])
-                                if jinja_include and (not meta_jinja_set & jinja_include):
-                                    if verbose > 0:
-                                        print(f"Skipping {possible_recipe} because it does not have any of the "
-                                              f"Jinja keys in {jinja_include}")
-                                    continue
-                                if jinja_exclude and (meta_jinja_set & jinja_exclude):
-                                    if verbose > 0:
-                                        print(f"Skipping {possible_recipe} because it has been excluded by the "
-                                              f"Jinja keys in {jinja_exclude}")
-                                    continue
-                        try:
-                            # This is the fastest metabuild and does 0 checks against jinja and finalization
-                            meta_bundle = build_api.render(
-                                possible_recipe,  # Path
-                                finalize=False,  # Speeds up render
-                                # variants=variants,  # Parses all variants
-                                bypass_env_check=True,  # Skip the env check (dont resolve anything)
-                                filename_hashing=False,  # Uses old build string (--old-build-string)
-                                channel_urls=channel_urls,  # Config pass-through
-                                variant_config_files=variant_config_files,  # Config pass-through
+                    # This is the fastest metabuild and does 0 checks against jinja and finalization
+                    meta_bundle = build_api.render(
+                        possible_recipe,  # Path
+                        finalize=False,  # Speeds up render
+                        # variants=variants,  # Parses all variants
+                        bypass_env_check=True,  # Skip the env check (dont resolve anything)
+                        filename_hashing=False,  # Uses old build string (--old-build-string)
+                        channel_urls=channel_urls,  # Config pass-through
+                        variant_config_files=variant_config_files,  # Config pass-through
 
-                                # Config-pass through no source downloading trickery (see above)
-                                # all of this must be undone before leaving this function
-                                # this is okay since we dont *build* any of these recipes... yet...
-                                # I think this is the minimum source
-                                no_download_source=True,  # Don't download anything (assume we have it)
-                                keep_old_work=True,  # Don't move the work folder around, its just a placeholder for now
-                                build_id=build_id,  # Force build ID to start set to this
-                                croot=temp_dir,  # Force croot to start set to this
-                            )
-                            # Flatten metadata for export
-                            for variant_index, meta_tuple in enumerate(meta_bundle):
-                                meta = meta_tuple[0]
-                                meta.final = False  # Ensure meta is not final
-                                # Revert all Config trickery changes we made to speed render
-                                meta.config.keep_old_work = False  # Let work get moved around
-                                meta.config.croot = None  # This resets croot to default
-                                meta.config.no_download_source = False
-                                # Solve Conda Build fatal problem 1: Treat each "variant" as its own "build"
-                                # Because we have now undone all the Config trickery, this will ensure we get
-                                # Unique, proper build ID's for each variant , treating them as independent builds
-                                time.sleep(0.05)  # Add the small delay to help uniqueness (names are time.time()*1000)
-                                meta.config.compute_build_id(meta.name(), reset=True)
-                                # This process will make several empty build directories in your (true) conda build
-                                # croot, there may be a way around that, but they are all empty and go unused.
-                                # Running `conda build purge-all` will remove all build artifacts from everywhere (not
-                                # just those made from this script), or just run clean_build() function
-                                if not cycle_packages:
-                                    metas.append(meta)
-                                else:
-                                    meta_lookup[possible_recipe].append(meta)
-                        except (RuntimeError, IOError, DependencyNeedsBuildingError):
-                            print('Failed to load recipe: {}'.format(possible_recipe))
-                            raise
+                        # Config-pass through no source downloading trickery (see above)
+                        # all of this must be undone before leaving this function
+                        # this is okay since we dont *build* any of these recipes... yet...
+                        # I think this is the minimum source
+                        no_download_source=True,  # Don't download anything (assume we have it)
+                        keep_old_work=True,  # Don't move the work folder around, its just a placeholder for now
+                        build_id=build_id,  # Force build ID to start set to this
+                        croot=temp_dir,  # Force croot to start set to this
+                    )
+                    # Flatten metadata for export
+                    for variant_index, meta_tuple in enumerate(meta_bundle):
+                        meta = meta_tuple[0]
+                        meta.final = False  # Ensure meta is not final
+                        # Revert all Config trickery changes we made to speed render
+                        meta.config.keep_old_work = False  # Let work get moved around
+                        meta.config.croot = None  # This resets croot to default
+                        meta.config.no_download_source = False
+                        # Solve Conda Build fatal problem 1: Treat each "variant" as its own "build"
+                        # Because we have now undone all the Config trickery, this will ensure we get
+                        # Unique, proper build ID's for each variant , treating them as independent builds
+                        time.sleep(0.05)  # Add the small delay to help uniqueness (names are time.time()*1000)
+                        meta.config.compute_build_id(meta.name(), reset=True)
+                        # This process will make several empty build directories in your (true) conda build
+                        # croot, there may be a way around that, but they are all empty and go unused.
+                        # Running `conda build purge-all` will remove all build artifacts from everywhere (not
+                        # just those made from this script), or just run clean_build() function
+                        if not cycle_packages:
+                            metas.append(meta)
+                        else:
+                            meta_lookup[possible_recipe].append(meta)
+                except (RuntimeError, IOError, DependencyNeedsBuildingError):
+                    print('Failed to load recipe: {}'.format(possible_recipe))
+                    raise
                 except SystemExit:
                     print("Critical ERROR: Recipe {} has a fatal error that prevents processing".format(
                         possible_recipe))
@@ -558,7 +560,8 @@ def execute(args):
                                      channel_urls=channel_urls,
                                      cycle_packages=args.cycle,
                                      jinja_include=set(args.build_only_jinja) if args.build_only_jinja else None,
-                                     jinja_exclude=set(args.no_build_jinja) if args.no_build_jinja else None
+                                     jinja_exclude=set(args.no_build_jinja) if args.no_build_jinja else None,
+                                     verbose=args.verbose
                                      )
 
     if args.verbose > 0:
