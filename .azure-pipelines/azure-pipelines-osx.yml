@@ -9,13 +9,13 @@ jobs:
       osx_python2.7:
         CONFIG: linux_python2.7
         EXCLUDE_JINJA: CUDA_SHORT_VERSION
-      osx_python2.7_cuda:
-        CONFIG: linux_python2.7_cuda8.0
-        INCLUDE_JINJA: CUDA_SHORT_VERSION
-        # CUDA_URL: http://developer.download.nvidia.com/compute/cuda/10.2/Prod/network_installers/cuda_10.2.89_mac_network.dmg
-        CUDA_URL: http://developer.download.nvidia.com/compute/cuda/10.2/Prod/local_installers/cuda_10.2.89_mac.dmg
-        CUDA_DRIVER_URL: http://us.download.nvidia.com/Mac/cuda_418/cudadriver_418.163_macos.dmg
-        CUDA_VER: 10.2
+#      osx_python2.7_cuda:
+#        CONFIG: linux_python2.7_cuda8.0
+#        INCLUDE_JINJA: CUDA_SHORT_VERSION
+#        # CUDA_URL: http://developer.download.nvidia.com/compute/cuda/10.2/Prod/network_installers/cuda_10.2.89_mac_network.dmg
+#        CUDA_URL: http://developer.download.nvidia.com/compute/cuda/10.2/Prod/local_installers/cuda_10.2.89_mac.dmg
+#        CUDA_DRIVER_URL: http://us.download.nvidia.com/Mac/cuda_418/cudadriver_418.163_macos.dmg
+#        CUDA_VER: 10.2
 
   steps:
     - script: |
@@ -107,7 +107,7 @@ jobs:
           CBA_FLAGS="$CBA_FLAGS --no-build-jinja $EXCLUDE_JINJA"
         fi
         if [ ! -z "$NIGHTLY"]; then
-          CBA_FLAGS="$CBA_FLAGS --dev --scheduled-only"
+          CBA_FLAGS="$CBA_FLAGS --dev --scheduled-only --upload omnia-dev"
         fi
         export CBA_FLAGS=$CBA_FLAGS
         echo "##vso[task.setvariable variable=CBA_FLAGS]$CBA_FLAGS"

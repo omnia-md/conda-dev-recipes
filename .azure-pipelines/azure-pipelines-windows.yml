@@ -47,7 +47,7 @@ jobs:
     # The condition here for the NVIDIA steps only should trigger if CUDA_VER is set
     - task: Cache@2
       inputs:
-        key: 'CUDA'
+        key: 'CUDA | "$(CUDA_VER)"'
         path: $(NVIDIA_CUDA_DIR)/$(CUDA_VER)
         cacheHitVar: CUDA_RESTORED
       displayName: Cache the NVIDIA CUDA installer
@@ -83,7 +83,7 @@ jobs:
           Set-Variable -Name CBAFLAGS -Value "$($CBAFLAGS) --no-build-jinja $(EXCLUDE_JINJA)"
         }
         If ($NIGHTLY) {
-          Set-Variable -Name CBAFLAGS -Value "$($CBAFLAGS) --dev --scheduled-only"
+          Set-Variable -Name CBAFLAGS -Value "$($CBAFLAGS) --dev --scheduled-only --upload omnia-dev"
         }
         Write-Host "###vso[task.setvariable variable=CBA_FLAGS]$CBAFLAGS"
       displayName: Assemble Variables
@@ -96,7 +96,7 @@ jobs:
         REM SET PATH=%PATH%:C:/Miniconda/Library/bin
         call C:\Miniconda\Scripts\activate
         REM conda init cmd.exe
-        echo "Now setting up conda stuff
+        echo "Now setting up conda stuff"
         conda config -vvv --add channels omnia
         conda config -vvv --add channels conda-forge
 
