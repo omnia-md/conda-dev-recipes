@@ -94,8 +94,8 @@ jobs:
         echo $(CBA_FLAGS)
         call C:\Miniconda\Scripts\activate
         echo "Now setting up conda stuff"
-        conda config -vvv --add channels omnia
-        conda config -vvv --add channels conda-forge
+        REM conda config -vvv --add channels omnia
+        REM conda config -vvv --add channels conda-forge
         conda install -vvv --yes conda conda-build anaconda-client python-libarchive-c
         python $(Build.SourcesDirectory)/conda-build-all $(CBA_FLAGS) -m $(Build.SourcesDirectory)/.conda_configs/$(CONFIG).yaml $(Build.SourcesDirectory)/*
       displayName: Run Conda Builds
