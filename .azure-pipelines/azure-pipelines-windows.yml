@@ -191,18 +191,33 @@ jobs:
       displayName: Install the CUDA Files
       condition: ne(variables['CUDA_VER'], '') # Technically Null, but is cast as "To string: '' (the empty string)"
 
-    - powershell: |
-        Set-Variable -Name CBAFLAGS -Value "-vvv --cycle-packages --dry-run"
-        If ($INCLUDE_JINJA) {
-          Set-Variable -Name CBAFLAGS -Value "$($CBAFLAGS) --build-only-jinja $(INCLUDE_JINJA)"
-        }
-        If ($EXCLUDE_JINJA) {
-          Set-Variable -Name CBAFLAGS -Value "$($CBAFLAGS) --no-build-jinja $(EXCLUDE_JINJA)"
-        }
-        If ($NIGHTLY) {
-          Set-Variable -Name CBAFLAGS -Value "$($CBAFLAGS) --dev --scheduled-only --upload omnia-dev"
-        }
-        Write-Host "###vso[task.setvariable variable=CBA_FLAGS]$CBAFLAGS"
+#    - powershell: |
+#        Set-Variable -Name CBAFLAGS -Value "-vvv --cycle-packages --dry-run"
+#        If ($INCLUDE_JINJA) {
+#          Set-Variable -Name CBAFLAGS -Value "$($CBAFLAGS) --build-only-jinja $(INCLUDE_JINJA)"
+#        }
+#        If ($EXCLUDE_JINJA) {
+#          Set-Variable -Name CBAFLAGS -Value "$($CBAFLAGS) --no-build-jinja $(EXCLUDE_JINJA)"
+#        }
+#        If ($NIGHTLY) {
+#          Set-Variable -Name CBAFLAGS -Value "$($CBAFLAGS) --dev --scheduled-only --upload omnia-dev"
+#        }
+#        Write-Host "###vso[task.setvariable variable=CBA_FLAGS]$CBAFLAGS"
+#      displayName: Assemble Variables
+
+    # Assembling in Bash because it makes more sense then powershell
+    - bash: |
+        CBA_FLAGS="-vvv --cycle-packages --dry-run"
+        if [ -n "$INCLUDE_JINJA" ]; then
+          CBA_FLAGS="$CBA_FLAGS --build-only-jinja $INCLUDE_JINJA"
+        fi
+        if [ -n "$EXCLUDE_JINJA" ]; then
+          CBA_FLAGS="$CBA_FLAGS --no-build-jinja $EXCLUDE_JINJA"
+        fi
+        if [ ! -z "$NIGHTLY"]; then
+          CBA_FLAGS="$CBA_FLAGS --dev --scheduled-only --upload omnia-dev"
+        fi
+        echo "##vso[task.setvariable variable=CBA_FLAGS]$CBA_FLAGS"
       displayName: Assemble Variables
 
     - script: |
