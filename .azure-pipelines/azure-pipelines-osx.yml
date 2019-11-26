@@ -7,7 +7,13 @@ jobs:
     maxParallel: 8
     matrix:
       osx_python2.7:
-        CONFIG: linux_python2.7
+        CONFIG: python2.7
+        EXCLUDE_JINJA: CUDA_SHORT_VERSION
+      osx_python3.7:
+        CONFIG: python3.7
+        EXCLUDE_JINJA: CUDA_SHORT_VERSION
+      osx_python3.8:
+        CONFIG: python3.8
         EXCLUDE_JINJA: CUDA_SHORT_VERSION
 
   steps:
