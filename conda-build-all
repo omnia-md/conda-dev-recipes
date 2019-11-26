@@ -322,7 +322,8 @@ def render_metadatas(paths, variant_config_files=(), channel_urls=(), cycle_pack
     if cycle_packages:
         while meta_lookup:  # While dict not empty
             for possible_recipe in paths:  # Cycle through recipes
-                if possible_recipe in meta_lookup:  # If the recipe is in the dict
+                # If the recipe is in the dict and not empty
+                if possible_recipe in meta_lookup and meta_lookup[possible_recipe]:
                     metas.append(meta_lookup[possible_recipe].pop(0))
                     if not meta_lookup[possible_recipe]:  # Remove recipe if empty
                         meta_lookup.pop(possible_recipe)
