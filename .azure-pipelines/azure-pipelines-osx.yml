@@ -14,6 +14,7 @@ jobs:
         INCLUDE_JINJA: CUDA_SHORT_VERSION
         # CUDA_URL: http://developer.download.nvidia.com/compute/cuda/10.2/Prod/network_installers/cuda_10.2.89_mac_network.dmg
         CUDA_URL: http://developer.download.nvidia.com/compute/cuda/10.2/Prod/local_installers/cuda_10.2.89_mac.dmg
+        CUDA_DRIVER_URL: http://us.download.nvidia.com/Mac/cuda_418/cudadriver_418.163_macos.dmg
         CUDA_VER: 10.2
 
   steps:
@@ -36,13 +37,31 @@ jobs:
     # The condition here for the NVIDIA steps only should trigger if CUDA_URL is set
     - task: Cache@2
       inputs:
-        key: 'CUDA | "$(CUDA_VER)"'
+        key: 'CUDA | "$(CUDA_VER)" | CUDA'
         path: /Developers/NVIDIA/$(CUDA_VER)
         cacheHitVar: CUDA_RESTORED
       displayName: Cache the NVIDIA CUDA installation
       condition: ne(variables['CUDA_URL'], '')  # Technically Null, but is cast as "To string: '' (the empty string)"
 
+    # So... NVIDIA's instructions *say* there is a Driver with the 10.2 and 10.1 toolkit, there is not. Good times
+    - task: Cache@2
+      inputs:
+        key: 'CUDA | "$(CUDA_VER)" | Driver'
+        path: /Developers/NVIDIA/$(CUDA_VER)
+        cacheHitVar: CUDA_DRIVER_RESTORED
+      displayName: Cache the NVIDIA Driver installation
+      condition: ne(variables['CUDA_URL'], '')  # Technically Null, but is cast as "To string: '' (the empty string)"
+
+    - task: Cache@2
+      inputs:
+        key: 'CUDA | "$(CUDA_VER)" | Stub'
+        path: /Developers/NVIDIA/$(CUDA_VER)
+        cacheHitVar: CUDA_STUB_RESTORED
+      displayName: Cache the NVIDIA Driver Stub for Unix
+      condition: ne(variables['CUDA_URL'], '')  # Technically Null, but is cast as "To string: '' (the empty string)"
+
     - script: |
+        # Instructions from NVIDIA
         export PATH=/Developer/NVIDIA/CUDA-10.2/bin${PATH:+:${PATH}}
         export DYLD_LIBRARY_PATH=/Developer/NVIDIA/CUDA-10.2/lib\
                                  ${DYLD_LIBRARY_PATH:+:${DYLD_LIBRARY_PATH}}
@@ -51,20 +70,31 @@ jobs:
 
     - script: |
         CUDA_INSTALL_NAME="CUDA_installer.dmg"
-        CUDA_MOUNT_LOCATION="/Volumes/CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/MacOS/CUDAMacOSXInstaller"
+        CUDA_MOUNT_LOCATION="/Volumes/CUDAMacOSXInstaller"
+        CUDA_INSTALLER_LOCATION="$CUDA_MOUNT_LOCATION/CUDAMacOSXInstaller.app/Contents/MacOS/CUDAMacOSXInstaller"
         curl -L $(CUDA_URL) --output $CUDA_INSTALL_NAME
-        # Instructions from NVIDIA
-        export PATH=/Developer/NVIDIA/CUDA-10.2/bin${PATH:+:${PATH}}
-        export DYLD_LIBRARY_PATH=/Developer/NVIDIA/CUDA-10.2/lib\
-                                 ${DYLD_LIBRARY_PATH:+:${DYLD_LIBRARY_PATH}}
         # Mount the DMG
         hdiutil attach $CUDA_INSTALL_NAME
         # Run the installer
-        $CUDA_MOUNT_LOCATION --accept-eula --silent --install-package=cuda-toolkit --install-package=cuda-driver
+        $CUDA_INSTALLER_LOCATION --accept-eula --silent --install-package=cuda-toolkit
         # Detach
-        hdiutil detach /Volumes/CUDAMacOSXInstaller
+        hdiutil detach $CUDA_MOUNT_LOCATION
       displayName: Download and Install the CUDA Files
       condition: and(ne(variables['CUDA_URL'], ''), ne(variables.CUDA_RESTORED, 'true'))
+
+    - script: |
+        CUDA_DRIVER_NAME="CUDA_Driver_installer.dmg"
+        CUDA_DRIVER_MOUNT_LOCATION="/Volumes/CUDADriver"
+        CUDA_DRIVER_INSTALLER_LOCATION="$CUDA_DRIVER_MOUNT_LOCATION/CUDADriver.pkg"
+        curl -L $(CUDA_DRIVER_URL) --output $CUDA_DRIVER_NAME
+        # Mount the DMG
+        hdiutil attach $CUDA_DRIVER_NAME
+        # Run the installer
+        installer -store -pkg "$CUDA_DRIVER_INSTALLER_LOCATION" -target / -verbose
+        # Detach
+        hdiutil detach $CUDA_DRIVER_MOUNT_LOCATION
+      displayName: Download and Install the CUDA Driver
+      condition: and(ne(variables['CUDA_URL'], ''), ne(variables.CUDA_DRIVER_RESTORED, 'true'), ne(variables.CUDA_STUB_RESTORED, 'true'))
 
     - script: |
         export PROVIDER_DIR="$(basename $THISDIR)"
@@ -72,10 +102,10 @@ jobs:
         if [ -n "$INCLUDE_JINJA" ]; then
           CBA_FLAGS="$CBA_FLAGS --build-only-jinja $INCLUDE_JINJA"
         fi
-        if [ -n "EXCLUDE_JINJA" ]; then
+        if [ -n "$EXCLUDE_JINJA" ]; then
           CBA_FLAGS="$CBA_FLAGS --no-build-jinja $EXCLUDE_JINJA"
         fi
-        if [ ! -z "NIGHTLY"]; then
+        if [ ! -z "$NIGHTLY"]; then
           CBA_FLAGS="$CBA_FLAGS --dev --scheduled-only"
         fi
         export CBA_FLAGS=$CBA_FLAGS
