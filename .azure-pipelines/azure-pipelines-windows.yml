@@ -44,6 +44,21 @@ jobs:
         updateConda: false
       displayName: Install conda-build and activate environment
 
+    - script: |
+        call C:\Miniconda\Scripts\activate
+        conda config --add channels omnia
+      displayName: Add Omnia to the conda channels
+
+    - script: |
+        call C:\Miniconda\Scripts\activate
+        conda config --add channels conda-forge
+      displayName: Add Conda-forge to the conda channels
+
+    - script: |
+        call C:\Miniconda\Scripts\activate
+        conda config --show channels
+      displayName: Debug
+
     # The condition here for the NVIDIA steps only should trigger if CUDA_VER is set
     - task: Cache@2
       inputs:
@@ -90,12 +105,7 @@ jobs:
 
     - script: |
         ECHO ON
-        echo "CBA_FLAGS are..."
-        echo $(CBA_FLAGS)
         call C:\Miniconda\Scripts\activate
-        echo "Now setting up conda stuff"
-        REM conda config -vvv --add channels omnia
-        REM conda config -vvv --add channels conda-forge
-        conda install -vvv --yes conda conda-build anaconda-client python-libarchive-c
+        conda install --yes conda conda-build anaconda-client
         python $(Build.SourcesDirectory)/conda-build-all $(CBA_FLAGS) -m $(Build.SourcesDirectory)/.conda_configs/$(CONFIG).yaml $(Build.SourcesDirectory)/*
       displayName: Run Conda Builds
