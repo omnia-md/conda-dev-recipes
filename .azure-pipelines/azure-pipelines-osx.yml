@@ -69,17 +69,18 @@ jobs:
       displayName: Set the CUDA PATHs for OSX
 
     - script: |
+        echo "Downloading CUDA Toolkit"
         CUDA_INSTALL_NAME="CUDA_installer.dmg"
         CUDA_MOUNT_LOCATION="/Volumes/CUDAMacOSXInstaller"
         CUDA_INSTALLER_LOCATION="$CUDA_MOUNT_LOCATION/CUDAMacOSXInstaller.app/Contents/MacOS/CUDAMacOSXInstaller"
-        curl -L $(CUDA_URL) --output $CUDA_INSTALL_NAME
+        curl -v -L $(CUDA_URL) --output $CUDA_INSTALL_NAME
         # Mount the DMG
         hdiutil attach $CUDA_INSTALL_NAME
         # Run the installer
         $CUDA_INSTALLER_LOCATION --accept-eula --silent --install-package=cuda-toolkit
         # Detach
         hdiutil detach $CUDA_MOUNT_LOCATION
-      displayName: Download and Install the CUDA Files
+      displayName: Download and Install the CUDA Toolkit
       condition: and(ne(variables['CUDA_URL'], ''), ne(variables.CUDA_RESTORED, 'true'))
 
     - script: |
