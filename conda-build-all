@@ -179,7 +179,8 @@ def upload_to_anaconda(meta, username, max_retries=5,
 
 
 def render_metadatas(paths, variant_config_files=(), channel_urls=(), cycle_packages=False, verbose=0,
-                     jinja_include=None, jinja_exclude=None):
+                     jinja_include=None, jinja_exclude=None,
+                     debug=False):
     """
     Build out the incomplete Metadata's for all possible recipes we will be constructing
 
@@ -197,6 +198,14 @@ def render_metadatas(paths, variant_config_files=(), channel_urls=(), cycle_pack
         Output sorted by cycling through packages instead off all variants of one package listed first
     verbose: int, default 0
         Verbosity level
+    jinja_include: iterable of str, optional
+        A list of Jinja strings to search for, if a recipe's meta.yaml includes ANY of the strings, it will be built
+        otherwise will be skipped
+    jinja_exclude: iterable of str, optional
+        A list of Jinja strings to search for, if a recipe's meta.yaml includes ANY of the strings, it will NOT be
+        built.
+    debug: bool
+        A debug flag for recipes. If set, the first recipe to throw an error will stop the whole build process.
 
     Returns
     -------
@@ -237,22 +246,24 @@ def render_metadatas(paths, variant_config_files=(), channel_urls=(), cycle_pack
                     continue
                 # Skip from jinja includes/excludes
                 elif check_jinja:
-                    with open(os.path.join(possible_recipe, 'meta.yaml'), 'r') as meta_text:
-                        # Do a quick basic YAML load/dump to drop any commented lines and not misread the Jinja
-                        meta_text = yaml.dump(yaml.safe_load(meta_text))
-                        # This will correctly match the jinja template inside the {{ }}
-                        meta_jinja = re.findall(r"(?<={{).*?(?=}})", meta_text)
-                        meta_jinja_set = set([match.strip() for match in meta_jinja])
-                        if jinja_include and (not meta_jinja_set & jinja_include):
-                            if verbose > 0:
-                                print(f"Skipping {possible_recipe} because it does not have any of the "
-                                      f"Jinja keys in {jinja_include}")
-                            continue
-                        if jinja_exclude and (meta_jinja_set & jinja_exclude):
-                            if verbose > 0:
-                                print(f"Skipping {possible_recipe} because it has been excluded by the "
-                                      f"Jinja keys in {jinja_exclude}")
-                            continue
+                    with open(os.path.join(possible_recipe, 'meta.yaml'), 'r') as meta_file:
+                        meta_text = meta_file.read()
+                    # Strip commneted lines out
+                    meta_stripped = re.sub(r"^[\s]*?#.*\n", "", meta_text, flags=re.MULTILINE)
+                    # Find all the Jinja
+                    # This will correctly match the jinja template inside the {{ }} and inside {% %}
+                    meta_jinja = re.findall(r"(?<={{).*?(?=}})|(?<={%).*?(?=%})", meta_stripped)
+                    meta_jinja_set = set([match.strip() for match in meta_jinja])
+                    if jinja_include and (not meta_jinja_set & jinja_include):
+                        if verbose > 0:
+                            print(f"Skipping {possible_recipe} because it does not have any of the "
+                                  f"Jinja keys in {jinja_include}")
+                        continue
+                    if jinja_exclude and (meta_jinja_set & jinja_exclude):
+                        if verbose > 0:
+                            print(f"Skipping {possible_recipe} because it has been excluded by the "
+                                  f"Jinja keys in {jinja_exclude}")
+                        continue
             else:
                 if verbose > 2:
                     print(f"Skipping {possible_recipe} because its not a directory")
@@ -319,6 +330,8 @@ def render_metadatas(paths, variant_config_files=(), channel_urls=(), cycle_pack
         except (Exception, SystemExit) as err:
             print(err)
             errors[possible_recipe] = str(err)
+            if debug:
+                raise
     if cycle_packages:
         while meta_lookup:  # While dict not empty
             for possible_recipe in paths:  # Cycle through recipes
@@ -562,7 +575,8 @@ def execute(args):
                                      cycle_packages=args.cycle,
                                      jinja_include=set(args.build_only_jinja) if args.build_only_jinja else None,
                                      jinja_exclude=set(args.no_build_jinja) if args.no_build_jinja else None,
-                                     verbose=args.verbose
+                                     verbose=args.verbose,
+                                     debug=args.debug
                                      )
 
     if args.verbose > 0:
@@ -609,6 +623,7 @@ def execute(args):
         for build, error in failed_builds:
             print('  {}: {}'.format(build, error), file=sys.stderr)
         sys.stderr.flush()
+        print()  # One blank line for good measure
 
     return len(failed_builds)
 
@@ -705,6 +720,12 @@ def main():
         help='Give more output. Option is additive, and can be used up to 3 times.',
         dest='verbose',
         action='count',
+    )
+    p.add_argument(
+        '-d', '--debug',
+        help="Causes this script to fail out immediately if a build throws an error. Meant for debugging the script "
+             "itself",
+        action="store_true"
     )
     args = p.parse_args()
     if args.verbose is None:

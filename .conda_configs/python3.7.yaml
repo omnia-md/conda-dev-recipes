@@ -3,3 +3,6 @@ python:
 
 numpy:
   - 1.14
+
+MACOSX_DEPLOYMENT_TARGET:
+  - 10.9

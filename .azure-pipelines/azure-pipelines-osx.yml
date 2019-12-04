@@ -6,6 +6,9 @@ jobs:
   strategy:
     maxParallel: 8
     matrix:
+      osx_python3.6:
+        CONFIG: python3.6
+        EXCLUDE_JINJA: CUDA_SHORT_VERSION
       osx_python3.7:
         CONFIG: python3.7
         EXCLUDE_JINJA: CUDA_SHORT_VERSION
