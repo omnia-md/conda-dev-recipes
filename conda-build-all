@@ -548,7 +548,7 @@ def execute(args):
         # Case of No pythons found at all in any config anywhere
         warnings.warn("There do not appear to be any Python's to build against in the configs, falling back"
                       f"to current version of {sys.version_info[0]}.{sys.version_info[1]}")
-        py_sets.append(set(float(f'{sys.version_info[0]}' + '.' + f'{sys.version_info[1]}')))
+        py_sets.append({float(f'{sys.version_info[0]}' + '.' + f'{sys.version_info[1]}'), })
     pythons = set.intersection(*py_sets)
     if not pythons:
         raise RuntimeError(f"The Union of Python versions found among the config files of {variant_config_files} is "
@@ -589,6 +589,11 @@ def execute(args):
         print(', '.join(all_paths))
         print()
     sys.stdout.flush()
+
+    if args.verbose > 1 and errors:
+        print("The following metas had these errors:")
+        for path, err in errors.items():
+            print(f"{path}:\n\t{err}")
 
     queued_metas = list(required_builds(metas, channel_urls,
                                         verbose=args.verbose,
