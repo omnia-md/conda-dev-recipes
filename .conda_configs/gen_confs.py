@@ -32,7 +32,7 @@ def gen_yamls():
             f.write(dump_indent_add_lines(no_cuda_dict))
         for cuda in CUDAS:
             cuda_short = int(str(cuda).replace('.', ''))
-            cuda_dict = {**no_cuda_dict, "CUDA_SHORT_VERSION": [cuda_short]}
+            cuda_dict = {**no_cuda_dict, "CUDA_SHORT_VERSION": [cuda_short], "CUDA_VERSION": [cuda]}
             with open(f"python{python}_cuda{cuda}.yaml", 'w') as f:
                 f.write(dump_indent_add_lines(cuda_dict))
 
