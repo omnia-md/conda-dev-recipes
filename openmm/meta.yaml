@@ -1,56 +1,66 @@
+{% if CUDA_SHORT_VERSION is defined %}
+{% set CUDA_STR = "_cuda" + CUDA_SHORT_VERSION %}
+{% elif OSX_ARCH is defined %}
+{% set CUDA_STR = "" %}
+{% else %}
+{% set CUDA_STR = "_nocuda" %}
+{% endif %}
+
 package:
   name: openmm
-  version: 7.5.0
+  version: 7.4.1
 
 source:
-  git_url: https://github.com/pandegroup/openmm.git
+  git_url: https://github.com/openmm/openmm.git
 
   patches:
     - silent-cmake.patch
-    - silent-doxygen.patch
-    - silent-latexpdf.patch
+#    - silent-doxygen.patch
+#    - silent-latexpdf.patch
 
 extra:
   #upload: betacuda{{ CUDA_SHORT_VERSION }}{{ ",beta" if CUDA_SHORT_VERSION == "92" else ""}}
   #upload: devcuda{{ CUDA_SHORT_VERSION }}{{ ",dev" if CUDA_SHORT_VERSION == "92" else ""}}
-  upload: cuda{{ CUDA_SHORT_VERSION }}{{ ",main" if CUDA_SHORT_VERSION == "101" else ""}}
+  upload: {{ CUDA_STR[1:] }}
   force_upload: True
 
 build:
   number: 0
-  skip: True # [win]
+  #skip: True # [win]
   detect_binary_files_with_prefix: False
   #string: py{{ py }}_cuda{{ CUDA_SHORT_VERSION }}_{{ environ.get("GIT_DESCRIBE_HASH", "")[1:8] }}_1 # this doesn't work with conda-build-all
-  string: py{{ py }}_cuda{{ CUDA_SHORT_VERSION }}_1
+  string: py{{ py }}{{ CUDA_STR }}_{{ PKG_BUILDNUM }}
   #features:
   #  - cuda{{ CUDA_SHORT_VERSION }}
 
 requirements:
   build:
     # on windows, need to install cmake manually
-    - cmake     [not win]
-    - jom       [win]
-    - python
-    # Pin fftw3f to 3.3.3 to work around OSX py34 issues
-    - fftw3f ==3.3.3 [osx]
-    - fftw3f ==3.3.4 [win or linux]
+    - cmake    # [not win]
+    - jom      # [win]
     # swig is pinned to use omnia swig 3.0.8
-    - swig ==3.0.8
+#    - swig ==3.0.8
     # on osx, need to install doxygen manually
-    - doxygen   [not osx]
+#    - doxygen   # [not osx]
     # for building docs
     - sphinx
     - sphinxcontrib-bibtex
     - sphinxcontrib-lunrsearch >=0.3
     - sphinxcontrib-autodoc_doxygen
-    - lxml
-    - numpy
     # Get clang from conda-forge
-    - clangdev ==6.0.0 [linux]
+    - clangdev ==9.0.0 # [linux]
     # Required for sphinx
-    - latexmk
-    - cython
+#    - latexmk
+#    - cython
 
+  host:
+    - python
+    - fftw3f
+    - swig
+    - lxml
+    - doxygen 1.8.14
+    - cython
+    - numpy
   run:
     - python
     - fftw3f
@@ -64,7 +74,7 @@ test:
     - simtk
     - simtk.openmm
   commands:
-    - python -m simtk.testInstallation  [not osx]
+    - python -m simtk.testInstallation  # [not osx]
 
 about:
   home: http://openmm.org

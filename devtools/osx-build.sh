@@ -25,12 +25,12 @@ conda install -yq conda\<=4.3.34;
 # "conda config --add channels omnia/label/dev" will fail if ruamel_yaml > 0.15.54
 # This workaround is in place to avoid this failure until this is patched
 # See: https://github.com/conda/conda/issues/7672
-conda install --yes ruamel_yaml==0.15.53 conda\<=4.3.34;
+conda install --yes ruamel_yaml==0.15.53 conda
 #####################################################################
 conda config --add channels omnia/label/dev
-conda install -yq conda-env conda-build==2.1.7 jinja2 anaconda-client;
-conda config --show;
-conda clean -tipsy;
+conda install -yq conda-env conda-build jinja2 anaconda-client
+conda config --show
+conda clean -tipsy
 
 # Do this step last to make sure conda-build, conda-env, and conda updates come from the same channel first
 
@@ -40,30 +40,36 @@ export INSTALL_OPENMM_PREREQUISITES=true
 if [ "$INSTALL_OPENMM_PREREQUISITES" = true ] ; then
     # Install OpenMM dependencies that can't be installed through
     # conda package manager (doxygen + CUDA)
-    brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/5b680fb58fedfb00cd07a7f69f5a621bb9240f3b/Formula/doxygen.rb
+    HOMEBREW_NO_AUTO_UPDATE=1 brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/5b680fb58fedfb00cd07a7f69f5a621bb9240f3b/Formula/doxygen.rb
+    # Make the nvidia-cache if not there
+    mkdir -p $NVIDIA_CACHE
+    cd $NVIDIA_CACHE
+    # Download missing nvidia installers
+    if ! [ -f cuda_mac_installer_tk.tar.gz ]; then
+        curl -O http://developer.download.nvidia.com/compute/cuda/${CUDA_VERSION}/Prod/network_installers/mac/x86_64/cuda_mac_installer_tk.tar.gz
+        tar zxf cuda_mac_installer_tk.tar.gz
+        rm -f cuda_mac_installer_tk.tar.gz
+    fi
+    if ! [ -f cuda_mac_installer_drv.tar.gz ]; then
+        curl -O http://developer.download.nvidia.com/compute/cuda/${CUDA_VERSION}/Prod/network_installers/mac/x86_64/cuda_mac_installer_drv.tar.gz
+        tar zxf cuda_mac_installer_drv.tar.gz
+        rm -f cuda_mac_installer_drv.tar.gz
+    fi
+    cd ..
+    ls -ltr $NVIDIA_CACHE
+    sudo cp -r $NVIDIA_CACHE/* /
 
-    # Install CUDA
-    # Use solution from https://github.com/JuliaGPU/CUDAapi.jl/pull/81/files
-    declare -A installers
-    installers["7.5"]="http://developer.download.nvidia.com/compute/cuda/7.5/Prod/local_installers/cuda_7.5.27_mac.dmg"
-    installers["8.0"]="https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_mac-dmg"
-    installers["9.0"]="https://developer.nvidia.com/compute/cuda/9.0/Prod/local_installers/cuda_9.0.176_mac-dmg"
-    installers["9.1"]="https://developer.nvidia.com/compute/cuda/9.1/Prod/local_installers/cuda_9.1.128_mac"
-    installers["9.2"]="https://developer.nvidia.com/compute/cuda/9.2/Prod/local_installers/cuda_9.2.64_mac"
-    installers["10.0"]="https://developer.nvidia.com/compute/cuda/10.0/Prod/local_installers/cuda_10.0.130_mac"
-    installers["10.1"]="https://developer.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.105_mac.dmg"
-    installer=${installers[$CUDA_VERSION]}
-    wget -O cuda.dmg "$installer"
+    #sudo tar -zxf cuda_mac_installer_tk.tar.gz -C /;
+    #sudo tar -zxf cuda_mac_installer_drv.tar.gz -C /;
 
-    brew install p7zip
-    7z x cuda.dmg
-    [[ -f 5.hfs ]] && 7z x 5.hfs
+    sudo touch testfile
+    cd $NVIDIA_CACHE
 
-    brew install gnu-tar
-    # Install CUDA driver (which contains libcuda.so)
-    sudo gtar -x --skip-old-files --exclude='*uninstall*' -f CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/Resources/payload/cuda_mac_installer_drv.tar.gz -C /
-    # Install CUDA toolkit
-    sudo gtar -x --skip-old-files --exclude='*uninstall*' -f CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/Resources/payload/cuda_mac_installer_tk.tar.gz -C /
+    # TODO: Don't delete the tarballs to cache the package, if we can spare the space
+    #rm -f cuda_mac_installer_tk.tar.gz cuda_mac_installer_drv.tar.gz
+
+    # Now head back to work directory
+    cd $TRAVIS_BUILD_DIR
 
     # Install latex.
 #    echo $PATH
