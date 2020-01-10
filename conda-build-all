@@ -36,12 +36,12 @@ except ImportError as e:
     print('ImportError encountered:')
     print(str(e))
     print('')
-    print('''This script requires conda-build >= 3 and anaconda-client. It also 
+    print('''This script requires conda-build >= 3 and anaconda-client. It also
     must run in the root conda environment.
 
       $ conda deactivate
       $ conda install conda-build anaconda-client
-      
+
       ''', file=sys.stderr)
     raise
 

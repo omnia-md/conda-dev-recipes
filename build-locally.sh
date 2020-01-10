@@ -18,8 +18,8 @@ export CBA_FLAGS=${CBA_FLAGS}
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 DOCKER_FLAGS="--rm -it"
-DOCKER_DIRS="-v $DIR:/io"
-DOCKER_DIRS+=" -v $DIR/.conda_configs:/conda_configs"
+DOCKER_DIRS="-v $DIR:/io:rw,z"
+DOCKER_DIRS+=" -v $DIR/openmm:/home/conda/recipe_root:ro,z"
 DOCKER_VARS="-e CBA_FLAGS -e CONFIG"
 DOCKER_COMMAND="bash" # /io/devtools/docker-build.sh"
 docker run ${DOCKER_FLAGS} ${DOCKER_DIRS} ${DOCKER_VARS} ${DOCKER_IMAGE} ${DOCKER_COMMAND}
