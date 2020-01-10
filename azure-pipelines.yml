@@ -1,6 +1,7 @@
 trigger:
   branches:
     - master
+    - conda-build3-v2
   pr:
     - master
 
