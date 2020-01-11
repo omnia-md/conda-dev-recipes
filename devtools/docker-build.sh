@@ -1,11 +1,9 @@
 #!/bin/bash
 
 set -xeuo pipefail
+
 export PYTHONUNBUFFERED=1
-export FEEDSTOCK_ROOT="${FEEDSTOCK_ROOT:-/io}"
-export RECIPE_ROOT="${RECIPE_ROOT:-/io/openmm}"
-export CI_SUPPORT="${FEEDSTOCK_ROOT}/.conda_configs"
-export CONFIG_FILE="${CI_SUPPORT}/${CONFIG}.yaml"
+export CONFIG_FILE="/conda_configs/${CONFIG}.yaml"
 export CONDA_BLD_PATH="${HOME}/build_artifacts"
 mkdir -p ${CONDA_BLD_PATH}
 
@@ -31,5 +29,5 @@ conda config --show-sources
 conda list --show-channel-urls
 
 
-${FEEDSTOCK_ROOT}/conda-build-all $CBA_FLAGS -m ${CONFIG_FILE} -- /io/*
+/io/conda-build-all $CBA_FLAGS -m ${CONFIG_FILE} -- /io/*/
 
