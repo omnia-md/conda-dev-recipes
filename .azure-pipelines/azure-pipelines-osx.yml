@@ -62,6 +62,7 @@ jobs:
         conda list --show-channel-urls
         
         chmod +x $(Build.SourcesDirectory)/conda-build-all
-
-        $(Build.SourcesDirectory)/conda-build-all $CBA_FLAGS -m $(Build.SourcesDirectory)/.conda_configs/$(CONFIG).yaml -- $(Build.SourcesDirectory)/*/
+        
+        which python
+        ${CONDA_PREFIX}/bin/python $(Build.SourcesDirectory)/conda-build-all $CBA_FLAGS -m $(Build.SourcesDirectory)/.conda_configs/$(CONFIG).yaml -- $(Build.SourcesDirectory)/*/
       displayName: Run Conda Build
