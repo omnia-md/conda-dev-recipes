@@ -63,5 +63,5 @@ jobs:
         
         chmod +x $(Build.SourcesDirectory)/conda-build-all
 
-        python $(Build.SourcesDirectory)/conda-build-all $CBA_FLAGS -m $(Build.SourcesDirectory)/.conda_configs/$(CONFIG).yaml -- $(Build.SourcesDirectory)/*/
+        $(Build.SourcesDirectory)/conda-build-all $CBA_FLAGS -m $(Build.SourcesDirectory)/.conda_configs/$(CONFIG).yaml -- $(Build.SourcesDirectory)/*/
       displayName: Run Conda Build
