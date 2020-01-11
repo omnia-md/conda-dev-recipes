@@ -1,7 +1,7 @@
 #!/bin/bash
 
 export CONFIG=python3.7_cuda10.0
-export DOCKER_IMAGE="omniamd/omnia-linux-anvil:condaforge-texlive19-cuda100"
+export DOCKER_IMAGE="condaforge/linux-anvil-cuda:10.0"
 export INCLUDE_JINJA=CUDA_STR
 
 CBA_FLAGS="-vvv --cycle-packages"

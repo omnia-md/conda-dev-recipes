@@ -29,6 +29,10 @@ build:
   detect_binary_files_with_prefix: False
   #string: py{{ py }}_cuda{{ CUDA_SHORT_VERSION }}_{{ environ.get("GIT_DESCRIBE_HASH", "")[1:8] }}_1 # this doesn't work with conda-build-all
   string: py{{ py }}{{ CUDA_STR }}_{{ PKG_BUILDNUM }}
+  missing_dso_whitelist:
+    - "*/libcuda.*"  # [linux]
+    - "*/libOpenCL.*"
+
   #features:
   #  - cuda{{ CUDA_SHORT_VERSION }}
 
@@ -50,11 +54,11 @@ requirements:
     - cython
     - doxygen 1.8.14
     # docs
-    - pydot
-    - sphinx
-    - sphinxcontrib-bibtex
-    - sphinxcontrib-lunrsearch >=0.3
-    - sphinxcontrib-autodoc_doxygen
+    # - pydot
+    # - sphinx
+    # - sphinxcontrib-bibtex
+    # - sphinxcontrib-lunrsearch >=0.3
+    # - sphinxcontrib-autodoc_doxygen
   run:
     - python
     - fftw
@@ -79,9 +83,6 @@ test:
     - cd $CONDA_PREFIX/share/openmm/examples 
     - python benchmark.py --test=rf --seconds=10 --platform=Reference
     - python benchmark.py --test=rf --seconds=10 --platform=CPU
-    - python benchmark.py --test=rf --seconds=10 --platform=OpenCL
-    - python benchmark.py --test=rf --seconds=10 --platform=CUDA  # [not osx]
-
 
 about:
   home: http://openmm.org

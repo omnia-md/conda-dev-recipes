@@ -7,7 +7,7 @@ CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=$PREFIX -DBUILD_TESTING=OFF -DCMAKE_BUILD_TY
 if [[ "$target_platform" == linux* ]]; then
     # CFLAGS
     # JRG: Had to add -ldl to prevent linking errors (dlopen, etc)
-    CUDA_HOME="/usr/local/cuda-${CUDA_VERSION}"
+    CUDA_HOME="/usr/local/cuda"
     MINIMAL_CFLAGS+=" -O3 -ldl -I${CUDA_HOME}/include"
     CFLAGS+=" $MINIMAL_CFLAGS"
     CXXFLAGS+=" $MINIMAL_CFLAGS"
