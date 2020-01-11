@@ -31,7 +31,7 @@ build:
   string: py{{ py }}{{ CUDA_STR }}_{{ PKG_BUILDNUM }}
   missing_dso_whitelist:
     - "*/libcuda.*"  # [linux]
-    - "*/libOpenCL.*"
+    - "*/libOpenCL.*" # [unix]
 
   #features:
   #  - cuda{{ CUDA_SHORT_VERSION }}
@@ -77,8 +77,9 @@ test:
     - test -f $PREFIX/lib/plugins/libOpenMMCUDA$SHLIB_EXT  # [linux]
     # Existence tests Windows
     - if not exist %LIBRARY_LIB%/OpenMM.lib exit 1  # [win]
-    - if not exist %LIBRARY_LIB%/plugins/OpenMMOpenCL.lib exit 1  # [win]
     - if not exist %LIBRARY_LIB%/plugins/OpenMMCPU.lib exit 1  # [win]
+    - if not exist %LIBRARY_LIB%/plugins/OpenMMOpenCL.lib exit 1  # [win]
+    - if not exist %LIBRARY_LIB%/plugins/OpenMMCUDA.lib exit 1  # [win]
     # Run a small MD
     - cd $CONDA_PREFIX/share/openmm/examples 
     - python benchmark.py --test=rf --seconds=10 --platform=Reference
