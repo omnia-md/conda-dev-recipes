@@ -23,7 +23,7 @@ jobs:
       displayName: Set dev trigger if scheduled
 
     - bash: |
-        echo "##vso[task.prependpath]$CONDA/condabin"
+        echo "##vso[task.prependpath]$CONDA/bin"
         sudo chown -R $USER $CONDA
       displayName: Add conda to PATH
 
@@ -64,5 +64,5 @@ jobs:
         chmod +x $(Build.SourcesDirectory)/conda-build-all
         
         which python
-        ${CONDA_PREFIX}/bin/python $(Build.SourcesDirectory)/conda-build-all $CBA_FLAGS -m $(Build.SourcesDirectory)/.conda_configs/$(CONFIG).yaml -- $(Build.SourcesDirectory)/*/
+        python $(Build.SourcesDirectory)/conda-build-all $CBA_FLAGS -m $(Build.SourcesDirectory)/.conda_configs/$(CONFIG).yaml -- $(Build.SourcesDirectory)/*/
       displayName: Run Conda Build
