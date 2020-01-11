@@ -23,18 +23,18 @@ jobs:
       displayName: Set dev trigger if scheduled
 
     - bash: |
-        echo "##vso[task.prependpath]$CONDA/bin"
+        echo "##vso[task.prependpath]$CONDA/condabin"
         sudo chown -R $USER $CONDA
       displayName: Add conda to PATH
 
     - script: |
         source activate base
-        conda install -n base -c conda-forge --quiet --yes conda-build
+        conda install -n base -c conda-forge --quiet --yes conda-build conda anaconda-client
         conda update --yes --quiet -c conda-forge -c defaults --all
       displayName: Add and update conda-forge
 
     - script: |
-        CBA_FLAGS="-vvv --cycle-packages --dry-run"
+        CBA_FLAGS="-vvv --cycle-packages"
         if [ -n "$INCLUDE_JINJA" ]; then
           CBA_FLAGS="$CBA_FLAGS --build-only-jinja $INCLUDE_JINJA"
         fi
@@ -53,9 +53,15 @@ jobs:
         conda config --add channels omnia
         conda config --add channels conda-forge
 
-        conda install --yes conda conda-build anaconda-client
+        conda config --set show_channel_urls true
+        conda config --set auto_update_conda false
+        conda config --set add_pip_as_python_dependency false
 
+        conda info
+        conda config --show-sources
+        conda list --show-channel-urls
+        
         chmod +x $(Build.SourcesDirectory)/conda-build-all
 
-        python $(Build.SourcesDirectory)/conda-build-all $CBA_FLAGS -m $(Build.SourcesDirectory)/.conda_configs/$(CONFIG).yaml -- $(Build.SourcesDirectory)/*
+        python $(Build.SourcesDirectory)/conda-build-all $CBA_FLAGS -m $(Build.SourcesDirectory)/.conda_configs/$(CONFIG).yaml -- $(Build.SourcesDirectory)/*/
       displayName: Run Conda Build
