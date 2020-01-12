@@ -10,6 +10,7 @@ c_compiler:
   - vs2008                     # [win]
   - vs2015                     # [win]
   - vs2015                     # [win]
+  - vs2015                     # [win]
 c_compiler_version:            # [unix]
   - 9                          # [osx]
   - 7                          # [linux64 or aarch64]
@@ -18,6 +19,7 @@ cxx_compiler:
   - gxx                        # [linux]
   - clangxx                    # [osx]
   - vs2008                     # [win]
+  - vs2015                     # [win]
   - vs2015                     # [win]
   - vs2015                     # [win]
 cxx_compiler_version:          # [unix]
@@ -573,6 +575,7 @@ tiledb:
   - 1.7.0
 vc:                    # [win]
   - 9                  # [win]
+  - 14                 # [win]
   - 14                 # [win]
   - 14                 # [win]
 vlfeat:
