@@ -6,10 +6,12 @@ cmake.exe .. -G "NMake Makefiles JOM" ^
     -DCMAKE_PREFIX_PATH="%LIBRARY_PREFIX%" ^
     -DCMAKE_BUILD_TYPE=Release ^
     -DBUILD_TESTING=OFF ^
+    -DCUDA_TOOLKIT_ROOT_DIR="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v%CUDA_VER%" ^
+    -DOPENCL_INCLUDE_DIR="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v%CUDA_VER%/include" ^
+    -DOPENCL_LIBRARY="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v%CUDA_VER%/lib/x64/OpenCL.lib" ^
     || goto :error
 
 :: Re-add above when CUDA is available
-::    -DCUDA_TOOLKIT_ROOT_DIR="%LIBRARY_BIN%" ^
 
 jom -j %NUMBER_OF_PROCESSORS% || goto :error
 jom -j %NUMBER_OF_PROCESSORS% install || goto :error
