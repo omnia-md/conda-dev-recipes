@@ -12,10 +12,6 @@ package:
 
 source:
   git_url: https://github.com/openmm/openmm.git
-#  patches:
-#    - silent-cmake.patch
-#    - silent-doxygen.patch
-#    - silent-latexpdf.patch
 
 extra:
   #upload: betacuda{{ CUDA_SHORT_VERSION }}{{ ",beta" if CUDA_SHORT_VERSION == "92" else ""}}
@@ -25,9 +21,6 @@ extra:
 
 build:
   number: 0
-  #skip: True # [win]
-  detect_binary_files_with_prefix: False
-  #string: py{{ py }}_cuda{{ CUDA_SHORT_VERSION }}_{{ environ.get("GIT_DESCRIBE_HASH", "")[1:8] }}_1 # this doesn't work with conda-build-all
   string: py{{ py }}{{ CUDA_STR }}_{{ PKG_BUILDNUM }}
   missing_dso_whitelist:
     - "*/libcuda.*"  # [linux]
