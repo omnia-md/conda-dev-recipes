@@ -186,7 +186,7 @@ jobs:
 
     # Assembling in Bash because it makes more sense then powershell
     - bash: |
-        CBA_FLAGS="-vvv --cycle-packages --dry-run"
+        CBA_FLAGS="-vvv --cycle-packages"
         if [ -n "$INCLUDE_JINJA" ]; then
           CBA_FLAGS="$CBA_FLAGS --build-only-jinja $INCLUDE_JINJA"
         fi
@@ -201,5 +201,5 @@ jobs:
 
     - script: |
         call C:\Miniconda\Scripts\activate
-        python $(Build.SourcesDirectory)/conda-build-all $(CBA_FLAGS) -m $(Build.SourcesDirectory)/.conda_configs/$(CONFIG).yaml $(Build.SourcesDirectory)/*
+        python $(Build.SourcesDirectory)/conda-build-all $(CBA_FLAGS) -m $(Build.SourcesDirectory)/.conda_configs/$(CONFIG).yaml $(Build.SourcesDirectory)/*/
       displayName: Run Conda Builds
