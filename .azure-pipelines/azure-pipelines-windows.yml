@@ -181,9 +181,10 @@ jobs:
 
     - script: |
         $(NVIDIA_CUDA_DIR)/$(CUDA_VER)/CUDA_installer.exe -s
-        echo "##vso[task.prependpath]C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v$(CUDA_VER)\bin"
       displayName: Install the CUDA Files
       condition: ne(variables['CUDA_VER'], '') # Technically Null, but is cast as "To string: '' (the empty string)"
+      # Readd this above if needed
+      # echo "##vso[task.prependpath]C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v$(CUDA_VER)\bin"
 
     # Assembling in Bash because it makes more sense then powershell
     - bash: |
