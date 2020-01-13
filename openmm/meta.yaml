@@ -81,7 +81,8 @@ test:
     - if not exist %LIBRARY_LIB%/plugins/OpenMMOpenCL.lib exit 1  # [win]
     - if not exist %LIBRARY_LIB%/plugins/OpenMMCUDA.lib exit 1  # [win]
     # Run a small MD
-    - cd $CONDA_PREFIX/share/openmm/examples 
+    - cd $CONDA_PREFIX/share/openmm/examples  # [unix]
+    - cd %CONDA_PREFIX%/share/openmm/examples  # [win]
     - python benchmark.py --test=rf --seconds=10 --platform=Reference
     - python benchmark.py --test=rf --seconds=10 --platform=CPU
 
