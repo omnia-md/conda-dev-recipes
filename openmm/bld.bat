@@ -6,7 +6,6 @@ cmake.exe .. -G "NMake Makefiles JOM" ^
     -DCMAKE_PREFIX_PATH="%LIBRARY_PREFIX%" ^
     -DCMAKE_BUILD_TYPE=Release ^
     -DBUILD_TESTING=OFF ^
-    -DCUDA_TOOLKIT_ROOT_DIR="%LIBRARY_BIN%" ^
     || goto :error
 
 :: Re-add above when CUDA is available
