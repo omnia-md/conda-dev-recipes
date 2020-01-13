@@ -195,7 +195,7 @@ jobs:
         if [ -n "$EXCLUDE_JINJA" ]; then
           CBA_FLAGS="$CBA_FLAGS --no-build-jinja $EXCLUDE_JINJA"
         fi
-        if [ ! -z "$NIGHTLY"]; then
+        if [ ! -z "$NIGHTLY" ]; then
           CBA_FLAGS="$CBA_FLAGS --dev --scheduled-only --upload omnia-dev"
         fi
         echo "##vso[task.setvariable variable=CBA_FLAGS]$CBA_FLAGS"

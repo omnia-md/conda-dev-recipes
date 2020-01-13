@@ -41,7 +41,7 @@ jobs:
         if [ -n "$EXCLUDE_JINJA" ]; then
           CBA_FLAGS="$CBA_FLAGS --no-build-jinja $EXCLUDE_JINJA"
         fi
-        if [ ! -z "$NIGHTLY"]; then
+        if [ ! -z "$NIGHTLY" ]; then
           CBA_FLAGS="$CBA_FLAGS --dev --scheduled-only --upload omnia-dev"
         fi
         export CBA_FLAGS=$CBA_FLAGS
@@ -60,9 +60,9 @@ jobs:
         conda info
         conda config --show-sources
         conda list --show-channel-urls
-        
+
         chmod +x $(Build.SourcesDirectory)/conda-build-all
-        
+
         which python
         python $(Build.SourcesDirectory)/conda-build-all $CBA_FLAGS -m $(Build.SourcesDirectory)/.conda_configs/$(CONFIG).yaml -- $(Build.SourcesDirectory)/*/
       displayName: Run Conda Build
