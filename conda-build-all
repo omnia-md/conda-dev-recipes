@@ -46,7 +46,7 @@ except ImportError as e:
     raise
 
 
-BINSTAR_TOKEN = os.environ.pop('BINSTAR_TOKEN', None)
+BINSTAR_TOKEN = os.environ.get('BINSTAR_TOKEN')
 
 # these labels will be checked by default for existent packages.
 STANDARD_LABELS = ('main',
@@ -158,7 +158,8 @@ def upload_to_anaconda(meta, username, max_retries=5,
     elif meta.get_section('extra') and 'upload' in meta.get_section('extra'):
         labels = meta.get_section('extra')['upload']
         for label in labels.split(','):
-            cmd.extend(['--label', label])
+            if label:
+                cmd.extend(['--label', label])
     else:
         cmd.extend(['--label', 'main'])
 
