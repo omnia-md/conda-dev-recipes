@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euxo pipefail 
+set -euxo pipefail
 
 CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=$PREFIX -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=Release"
 
@@ -9,6 +9,9 @@ if [[ "$target_platform" == linux* ]]; then
     # JRG: Had to add -ldl to prevent linking errors (dlopen, etc)
     CUDA_HOME="/usr/local/cuda"
     MINIMAL_CFLAGS+=" -O3 -ldl -I${CUDA_HOME}/include"
+    if [ ! -z "$NIGHTLY" ]; then
+        MINIMAL_CFLAGS+=" -g"
+    fi
     CFLAGS+=" $MINIMAL_CFLAGS"
     CXXFLAGS+=" $MINIMAL_CFLAGS"
     LDFLAGS+=" -L${CUDA_HOME}/lib64"
@@ -23,7 +26,7 @@ if [[ "$target_platform" == linux* ]]; then
     # CUDA tests won't build, disable for now
     # See https://github.com/openmm/openmm/issues/2258#issuecomment-462223634
     CMAKE_FLAGS+=" -DOPENMM_BUILD_CUDA_TESTS=OFF"
-    
+
     # OpenCL
     CMAKE_FLAGS+=" -DOPENCL_INCLUDE_DIR=${CUDA_HOME}/include"
     CMAKE_FLAGS+=" -DOPENCL_LIBRARY=${CUDA_HOME}/lib64/libOpenCL${SHLIB_EXT}"
