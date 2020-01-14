@@ -1,70 +1,83 @@
+{% if CUDA_SHORT_VERSION is defined %}
+{% set CUDA_STR = "_cuda" + CUDA_SHORT_VERSION %}
+{% elif OSX_ARCH is defined %}
+{% set CUDA_STR = "" %}
+{% else %}
+{% set CUDA_STR = "_nocuda" %}
+{% endif %}
+
 package:
   name: openmm
-  version: 7.5.0
+  version: 7.4.1
 
 source:
-  git_url: https://github.com/pandegroup/openmm.git
-
-  patches:
-    - silent-cmake.patch
-    - silent-doxygen.patch
-    - silent-latexpdf.patch
+  git_url: https://github.com/openmm/openmm.git
 
 extra:
   #upload: betacuda{{ CUDA_SHORT_VERSION }}{{ ",beta" if CUDA_SHORT_VERSION == "92" else ""}}
   #upload: devcuda{{ CUDA_SHORT_VERSION }}{{ ",dev" if CUDA_SHORT_VERSION == "92" else ""}}
-  upload: cuda{{ CUDA_SHORT_VERSION }}{{ ",main" if CUDA_SHORT_VERSION == "101" else ""}}
+  upload: {{ CUDA_STR[1:] }}
   force_upload: True
 
 build:
   number: 0
-  skip: True # [win]
-  detect_binary_files_with_prefix: False
-  #string: py{{ py }}_cuda{{ CUDA_SHORT_VERSION }}_{{ environ.get("GIT_DESCRIBE_HASH", "")[1:8] }}_1 # this doesn't work with conda-build-all
-  string: py{{ py }}_cuda{{ CUDA_SHORT_VERSION }}_1
+  string: py{{ py }}{{ CUDA_STR }}_{{ PKG_BUILDNUM }}
+  missing_dso_whitelist:
+    - "*/libcuda.*"  # [linux]
+    - "*/libOpenCL.*" # [unix]
+
   #features:
   #  - cuda{{ CUDA_SHORT_VERSION }}
 
 requirements:
   build:
-    # on windows, need to install cmake manually
-    - cmake     [not win]
-    - jom       [win]
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - {{ cdt('mesa-libgl-devel') }}  # [linux]
+    - cmake
+    - jom      # [win]
+
+  host:
     - python
-    # Pin fftw3f to 3.3.3 to work around OSX py34 issues
-    - fftw3f ==3.3.3 [osx]
-    - fftw3f ==3.3.4 [win or linux]
-    # swig is pinned to use omnia swig 3.0.8
-    - swig ==3.0.8
-    # on osx, need to install doxygen manually
-    - doxygen   [not osx]
-    # for building docs
-    - sphinx
-    - sphinxcontrib-bibtex
-    - sphinxcontrib-lunrsearch >=0.3
-    - sphinxcontrib-autodoc_doxygen
+    - fftw
+    - swig
+    - pthread-stubs
     - lxml
     - numpy
-    # Get clang from conda-forge
-    - clangdev ==6.0.0 [linux]
-    # Required for sphinx
-    - latexmk
     - cython
-
+    - doxygen 1.8.14
+    # docs
+    # - pydot
+    # - sphinx
+    # - sphinxcontrib-bibtex
+    # - sphinxcontrib-lunrsearch >=0.3
+    # - sphinxcontrib-autodoc_doxygen
   run:
     - python
-    - fftw3f
+    - fftw
     - numpy
-    - cython
 
 test:
-  requires:
-    - python
   imports:
     - simtk
     - simtk.openmm
   commands:
-    - python -m simtk.testInstallation  [not osx]
+    - python -m simtk.testInstallation
+    # Existence tests Unix
+    - test -f $PREFIX/lib/libOpenMM$SHLIB_EXT  # [unix]
+    - test -f $PREFIX/lib/plugins/libOpenMMCPU$SHLIB_EXT  # [unix]
+    - test -f $PREFIX/lib/plugins/libOpenMMOpenCL$SHLIB_EXT  # [unix]
+    - test -f $PREFIX/lib/plugins/libOpenMMCUDA$SHLIB_EXT  # [linux]
+    # Existence tests Windows
+    - if not exist %LIBRARY_LIB%/OpenMM.lib exit 1  # [win]
+    - if not exist %LIBRARY_LIB%/plugins/OpenMMCPU.lib exit 1  # [win]
+    - if not exist %LIBRARY_LIB%/plugins/OpenMMOpenCL.lib exit 1  # [win]
+    - if not exist %LIBRARY_LIB%/plugins/OpenMMCUDA.lib exit 1  # [win]
+    # Run a small MD
+    - cd $CONDA_PREFIX/share/openmm/examples  # [unix]
+    - cd %LIBRARY_PREFIX%/share/openmm/examples  # [win]
+    - python benchmark.py --test=rf --seconds=10 --platform=Reference
+    - python benchmark.py --test=rf --seconds=10 --platform=CPU
 
 about:
   home: http://openmm.org
