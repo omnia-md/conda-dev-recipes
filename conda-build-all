@@ -141,7 +141,7 @@ def upload_to_anaconda(meta, username, max_retries=5,
     if not os.path.exists(filename):
         raise FileNotFoundError('File does not exist: {}'.format(filename))
 
-    cmd = ['anaconda']
+    cmd = ['anaconda', '-v', '--show-traceback']
     if BINSTAR_TOKEN is not None:
         cmd.extend(['-t', BINSTAR_TOKEN])
     cmd.extend(['upload', '--no-progress', '-u', username, filename])
@@ -171,7 +171,7 @@ def upload_to_anaconda(meta, username, max_retries=5,
             return
         except CalledProcessError as call_err:
             err = call_err
-            err.cmd = '[not shown]'
+            err.cmd = [part.replace(str(BINSTAR_TOKEN), '<secret>') for part in err.cmd]
             print("Retrying after {} seconds...".format((i+1)))
             time.sleep(i+1)
 
