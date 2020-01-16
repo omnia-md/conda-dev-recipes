@@ -16,7 +16,7 @@ source:
 extra:
   #upload: betacuda{{ CUDA_SHORT_VERSION }}{{ ",beta" if CUDA_SHORT_VERSION == "92" else ""}}
   #upload: devcuda{{ CUDA_SHORT_VERSION }}{{ ",dev" if CUDA_SHORT_VERSION == "92" else ""}}
-  upload: {{ CUDA_STR[1:] }}{{",main" if CUDA_SHORT_VERSION == "102" else "" }}
+  upload: {{ CUDA_STR[1:] }}{{",main" if CUDA_STR[-3:] == "102" else "" }}
   force_upload: True
   scheduled: True
 
