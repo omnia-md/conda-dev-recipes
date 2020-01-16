@@ -143,6 +143,7 @@ def upload_to_anaconda(meta, username, max_retries=5,
 
     cmd = ['anaconda', '-v', '--show-traceback']
     if BINSTAR_TOKEN is not None:
+        print('Using authentication token starting with', BINSTAR_TOKEN[:4], '...')
         cmd.extend(['-t', BINSTAR_TOKEN])
     cmd.extend(['upload', '--no-progress', '-u', username, filename])
     if force:
