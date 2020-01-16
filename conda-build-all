@@ -429,7 +429,7 @@ def required_builds(metas, channel_urls, verbose=0, force=False, rebuild=False, 
 
         # Allow package recipe to force rebuild and upload in recipe.
         if meta.get_section('extra') and 'force_upload' in meta.get_section('extra') and (
-                meta.get_section('extra')['force_upload'] == 'True'):
+                meta.get_section('extra')['force_upload'] in (True, 'True', 'true')):
             if verbose > 1:
                 print('Queueing package due to force_upload={}: {}'.format(
                     str(meta.get_section('extra')['force_upload']), meta.name()))
