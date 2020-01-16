@@ -18,13 +18,14 @@ extra:
   #upload: devcuda{{ CUDA_SHORT_VERSION }}{{ ",dev" if CUDA_SHORT_VERSION == "92" else ""}}
   upload: {{ CUDA_STR[1:] }}
   force_upload: True
+  scheduled: True
 
 build:
   number: 0
   string: py{{ py }}{{ CUDA_STR }}_{{ PKG_BUILDNUM }}
   missing_dso_whitelist:
     - "*/libcuda.*"  # [linux]
-    - "*/libOpenCL.*" # [unix]
+    - "*/libOpenCL.*"  # [unix]
 
   #features:
   #  - cuda{{ CUDA_SHORT_VERSION }}
