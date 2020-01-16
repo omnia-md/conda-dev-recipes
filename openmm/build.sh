@@ -2,6 +2,9 @@
 
 set -euxo pipefail
 
+echo "Debug environment variables"
+env | sort
+
 CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=$PREFIX -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=Release"
 
 if [[ "$target_platform" == linux* ]]; then
