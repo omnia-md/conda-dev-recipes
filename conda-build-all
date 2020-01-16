@@ -158,9 +158,10 @@ def upload_to_anaconda(meta, username, max_retries=5,
         cmd.extend(['--label', 'dev'])
     elif meta.get_section('extra') and 'upload' in meta.get_section('extra'):
         labels = meta.get_section('extra')['upload']
-        for label in labels.split(','):
-            if label:
-                cmd.extend(['--label', label])
+        if labels is not None:  # empty `upload:` entry will be None, not ""
+            for label in labels.split(','):
+                if label:
+                    cmd.extend(['--label', label])
     else:
         cmd.extend(['--label', 'main'])
 
