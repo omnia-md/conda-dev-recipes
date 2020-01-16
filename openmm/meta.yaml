@@ -22,7 +22,8 @@ extra:
 
 build:
   number: 0
-  string: py{{ py }}{{ CUDA_STR }}_{{ GIT_BUILD_STR }}_{{ PKG_BUILDNUM }}
+  # we'll switch back to {{ GIT_BUILD_STR }} later
+  string: py{{ py }}{{ CUDA_STR }}_{{ PKG_BUILDNUM }}
   missing_dso_whitelist:
     - "*/libcuda.*"  # [linux]
     - "*/libOpenCL.*"  # [unix]
