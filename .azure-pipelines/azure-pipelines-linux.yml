@@ -120,7 +120,7 @@ jobs:
           CBA_FLAGS="$CBA_FLAGS --no-build-jinja $EXCLUDE_JINJA"
         fi
         if [ ! -z "$NIGHTLY" ]; then
-          CBA_FLAGS="$CBA_FLAGS --dev --scheduled-only --upload omnia-dev"
+          CBA_FLAGS="$CBA_FLAGS --scheduled-only --upload omnia-dev --force"
         fi
         echo "##vso[task.setvariable variable=CBA_FLAGS]$CBA_FLAGS"
       displayName: Assemble Variables
@@ -129,7 +129,10 @@ jobs:
         DOCKER_FLAGS="--rm"
         DOCKER_DIRS="-v `pwd`:/io"
         DOCKER_DIRS="$DOCKER_DIRS -v `pwd`/.conda_configs:/conda_configs"
-        DOCKER_VARS="-e CBA_FLAGS -e CONFIG"
+        DOCKER_VARS="-e CBA_FLAGS -e CONFIG -e BINSTAR_TOKEN"
         DOCKER_COMMAND="bash /io/devtools/docker-build.sh"
         docker run ${DOCKER_FLAGS} ${DOCKER_DIRS} ${DOCKER_VARS} ${DOCKER_IMAGE} ${DOCKER_COMMAND}
       displayName: Run Docker Build
+      env:
+        BINSTAR_TOKEN: $(BINSTAR_TOKEN)
+

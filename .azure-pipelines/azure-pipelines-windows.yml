@@ -196,7 +196,7 @@ jobs:
           CBA_FLAGS="$CBA_FLAGS --no-build-jinja $EXCLUDE_JINJA"
         fi
         if [ ! -z "$NIGHTLY" ]; then
-          CBA_FLAGS="$CBA_FLAGS --dev --scheduled-only --upload omnia-dev"
+          CBA_FLAGS="$CBA_FLAGS --scheduled-only --upload omnia-dev --force"
         fi
         echo "##vso[task.setvariable variable=CBA_FLAGS]$CBA_FLAGS"
       displayName: Assemble Variables
@@ -205,3 +205,5 @@ jobs:
         call C:\Miniconda\Scripts\activate
         python $(Build.SourcesDirectory)/conda-build-all $(CBA_FLAGS) -m $(Build.SourcesDirectory)/.conda_configs/$(CONFIG).yaml $(Build.SourcesDirectory)/*/
       displayName: Run Conda Builds
+      env:
+        BINSTAR_TOKEN: $(BINSTAR_TOKEN)
