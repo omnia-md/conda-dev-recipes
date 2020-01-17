@@ -188,7 +188,7 @@ jobs:
 
     # Assembling in Bash because it makes more sense then powershell
     - bash: |
-        CBA_FLAGS="-vvv --cycle-packages --upload omnia-dev --force"
+        CBA_FLAGS="-vvv --cycle-packages"
         if [ -n "$INCLUDE_JINJA" ]; then
           CBA_FLAGS="$CBA_FLAGS --build-only-jinja $INCLUDE_JINJA"
         fi
@@ -196,7 +196,7 @@ jobs:
           CBA_FLAGS="$CBA_FLAGS --no-build-jinja $EXCLUDE_JINJA"
         fi
         if [ ! -z "$NIGHTLY" ]; then
-          CBA_FLAGS="$CBA_FLAGS --dev --scheduled-only --upload omnia-dev"
+          CBA_FLAGS="$CBA_FLAGS --scheduled-only --upload omnia-dev --force"
         fi
         echo "##vso[task.setvariable variable=CBA_FLAGS]$CBA_FLAGS"
       displayName: Assemble Variables
