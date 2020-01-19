@@ -28,6 +28,8 @@ build:
   missing_dso_whitelist:
     - "*/libcuda.*"  # [linux]
     - "*/libOpenCL.*"  # [unix]
+  script_env:
+    - NIGHTLY
 
   #features:
   #  - cuda{{ CUDA_SHORT_VERSION }}
