@@ -6,7 +6,7 @@
 {% set CUDA_STR = "_nocuda" %}
 {% endif %}
 
-{% if debug_openmm == "true" %}
+{% if debug_openmm is defined and debug_openmm == "true" %}
 {% set DEBUG_STR = "_debug" %}
 {% else %}
 {% set DEBUG_STR = "" %}
@@ -46,7 +46,7 @@ requirements:
     - {{ compiler('cxx') }}
     - {{ cdt('mesa-libgl-devel') }}  # [linux]
     - cmake
-    - jom      # [win]
+    - jom  # [win]
 
   host:
     - python
