@@ -73,6 +73,9 @@ test:
     - simtk
     - simtk.openmm
   commands:
+    # Debug silent errors in plugin loading
+    - python -c "import simtk.openmm as mm; print(mm.Platform.getPluginLoadFailures())"
+    # Check all platforms
     - python -m simtk.testInstallation
     # Existence tests Unix
     - test -f $PREFIX/lib/libOpenMM$SHLIB_EXT  # [unix]
