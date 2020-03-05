@@ -6,6 +6,12 @@
 {% set CUDA_STR = "_nocuda" %}
 {% endif %}
 
+{% if debug_openmm == "true" %}
+{% set DEBUG_STR = "_debug" %}
+{% else %}
+{% set DEBUG_STR = "" %}
+{% endif %}
+
 package:
   name: openmm
   version: 7.5.0
@@ -24,7 +30,7 @@ build:
   number: 0
   # we'll switch back to {{ GIT_BUILD_STR }} later;
   # this part is not parsed at upload time resulting in FileNotFoundError
-  string: py{{ py }}{{ CUDA_STR }}_{{ PKG_BUILDNUM }}
+  string: py{{ py }}{{ CUDA_STR }}{{ DEBUG_STR }}_{{ PKG_BUILDNUM }}
   missing_dso_whitelist:
     - "*/libcuda.*"  # [linux]
     - "*/libOpenCL.*"  # [unix]

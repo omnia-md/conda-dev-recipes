@@ -9,7 +9,7 @@ if [[ "$target_platform" == linux* ]]; then
     # JRG: Had to add -ldl to prevent linking errors (dlopen, etc)
     CUDA_HOME="/usr/local/cuda"
     MINIMAL_CFLAGS+=" -O3 -ldl -I${CUDA_HOME}/include"
-    if [ ! -z "${NIGHTLY:-}" ]; then
+    if [ ! -z "${NIGHTLY:-}" && "${debug_openmm}" == "true" ]; then
         MINIMAL_CFLAGS+=" -g"
     fi
     CFLAGS+=" $MINIMAL_CFLAGS"
