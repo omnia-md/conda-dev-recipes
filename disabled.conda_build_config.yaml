@@ -536,9 +536,12 @@ proj:
   - 6.3.1
 python:
   - 2.7  # [not (aarch64 or ppc64le)]
-  - 3.6
-  - 3.7
-  - 3.8
+  - 3.6.7 he025d50_1006  # [win]
+  - 3.6  # [unix]
+  - 3.7.6 h5b45d93_2  # [win]
+  - 3.7  # [unix]
+  - 3.8.2 h5fd99cc_1_cpython  # [win]
+  - 3.8  # [unix]
 qt:
   - 5.12
 readline:
