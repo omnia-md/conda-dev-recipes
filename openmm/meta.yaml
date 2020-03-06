@@ -18,6 +18,7 @@ package:
 
 source:
   git_url: https://github.com/openmm/openmm.git
+  git_rev: a9223eea076bf54cc5028064d664b2951be94579
 
 extra:
   #upload: betacuda{{ CUDA_SHORT_VERSION }}{{ ",beta" if CUDA_SHORT_VERSION == "92" else ""}}
