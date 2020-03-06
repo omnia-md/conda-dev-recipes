@@ -1,5 +1,6 @@
 python:
-  - 3.8
+  - 3.8.2 *h5fd99cc_1_cpython  # [win]
+  - 3.8  # [unix]
 
 numpy:
   - 1.14
