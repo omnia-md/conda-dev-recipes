@@ -142,10 +142,11 @@ jobs:
       displayName: "Echo UP!"
 
     # Several mixed messages here: https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/package/conda-environment?view=azure-devops
-    # This is supposedly depreciated, but this is still required for Microsoft-hosted agents to use the conda env
+    # This is supposedly deprecated, but this is still required for Microsoft-hosted agents to use the conda env
     - task: CondaEnvironment@1
       inputs:
-        packageSpecs: 'python=3 conda-build conda anaconda-client'
+        # TODO: Remove CB pin once PREFIX hardcoding has been fixed for Windows
+        packageSpecs: 'python=3 conda-build=3.18.11 conda anaconda-client'
         installOptions: "-c conda-forge"
         updateConda: false
       displayName: Install conda-build and activate environment
