@@ -6,7 +6,7 @@ Set the PYTHONS, CUDAS, and NumPy version and go
 """
 
 import re
-import ruamel.yaml  # This gets installed with conda-build
+import ruamel_yaml  # This gets installed with conda-build
 
 
 PYTHONS = [3.6, 3.7, 3.8]
@@ -15,7 +15,7 @@ NUMPY = 1.14
 MACOSX_DEPLOY = 10.9
 
 dumper_keys = {"indent": 4, "block_seq_indent": 2}
-dumper = ruamel.yaml.round_trip_dump
+dumper = ruamel_yaml.round_trip_dump
 
 
 def dump_indent_add_lines(data):

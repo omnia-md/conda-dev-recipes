@@ -124,6 +124,8 @@ BUILD: armv7-conda_cos7-linux-gnueabihf   # [armv7l]
 
 # TODO: remove these when run_exports are added to the packages.
 pin_run_as_build:
+  abseil-cpp:
+    max_pin: x.x
   arpack:
     max_pin: x.x.x
   boost:
@@ -278,14 +280,10 @@ pin_run_as_build:
   r-base:
     max_pin: x.x
     min_pin: x.x
-  snappy:
-    max_pin: x.x.x
   sox:
     max_pin: x.x.x
   sqlite:
     max_pin: x
-  sundials:
-    max_pin: x.x
   tk:
     max_pin: x.x
   tiledb:
@@ -324,10 +322,14 @@ blas_impl:
   - mkl          # [x86 or x86_64]
   - blis         # [x86 or x86_64]
 
+abseil_cpp:
+  - 20190808.0
+arb:
+  - 2.17
 arpack:
   - 3.6.3
 arrow_cpp:
-  - 0.15.1
+  - 0.16.0
 boost:
   - 1.70.0
 boost_cpp:
@@ -339,7 +341,7 @@ cairo:
 cfitsio:
   - 3.470
 cudnn:
-  - 7.6.4
+  - 7.6.5
 curl:
   - 7.64
 dbus:
@@ -361,7 +363,7 @@ gf2x:
 gdk_pixbuf:
   - 2.36.12
 gsl:
-  - 2.5
+  - 2.6
 gstreamer:
   - 1.14.4
 gst_plugins_base:
@@ -373,7 +375,7 @@ geos:
 geotiff:
   - 1.5.1
 giflib:
-  - 5.1.7
+  - 5.2
 glew:
   - 2.0.0
 glib:
@@ -387,7 +389,7 @@ gmp:
 graphviz:
   - 2.40
 grpc_cpp:
-  - 1.25
+  - 1.27
 harfbuzz:
   - 2
 hdf4:
@@ -439,7 +441,7 @@ libpcap:
 libpng:
   - 1.6
 libprotobuf:
-  - 3.10
+  - 3.11
 librdkafka:
   - 0.11.5
 librsvg:
@@ -509,7 +511,7 @@ openjpeg:
 openmpi:
   - 4.0
 openssl:
-  - 1.1.1a
+  - 1.1.1
 openturns:
   - 1.14*
 pango:
@@ -531,7 +533,7 @@ pixman:
 poppler:
   - 0.67.0
 proj:
-  - 6.3.0
+  - 6.3.1
 python:
   - 2.7  # [not (aarch64 or ppc64le)]
   - 3.6
@@ -541,12 +543,8 @@ qt:
   - 5.12
 readline:
   - 8.0
-root:
-  - 6.18.04
 root_base:
-  - 6.18.04
-root_binaries:
-  - 6.18.04
+  - 6.20.0
 ruby:
   - 2.5
   - 2.6
@@ -560,13 +558,11 @@ ptscotch:
 singular:
   - 4.1.2
 snappy:
-  - 1.1.7
+  - 1
 sox:
   - 14.4.2
 sqlite:
   - 3
-sundials:
-  - 3.2
 suitesparse:
   - 5.6
 tk:

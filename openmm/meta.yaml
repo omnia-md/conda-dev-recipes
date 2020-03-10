@@ -6,12 +6,19 @@
 {% set CUDA_STR = "_nocuda" %}
 {% endif %}
 
+{% if debug_openmm is defined and debug_openmm == "true" %}
+{% set DEBUG_STR = "_debug" %}
+{% else %}
+{% set DEBUG_STR = "" %}
+{% endif %}
+
 package:
   name: openmm
   version: 7.5.0
 
 source:
   git_url: https://github.com/openmm/openmm.git
+  git_depth: 1
 
 extra:
   #upload: betacuda{{ CUDA_SHORT_VERSION }}{{ ",beta" if CUDA_SHORT_VERSION == "92" else ""}}
@@ -24,7 +31,7 @@ build:
   number: 0
   # we'll switch back to {{ GIT_BUILD_STR }} later;
   # this part is not parsed at upload time resulting in FileNotFoundError
-  string: py{{ py }}{{ CUDA_STR }}_{{ PKG_BUILDNUM }}
+  string: py{{ py }}{{ CUDA_STR }}{{ DEBUG_STR }}_{{ PKG_BUILDNUM }}
   missing_dso_whitelist:
     - "*/libcuda.*"  # [linux]
     - "*/libOpenCL.*"  # [unix]
@@ -40,7 +47,7 @@ requirements:
     - {{ compiler('cxx') }}
     - {{ cdt('mesa-libgl-devel') }}  # [linux]
     - cmake
-    - jom      # [win]
+    - jom  # [win]
 
   host:
     - python
@@ -67,6 +74,11 @@ test:
     - simtk
     - simtk.openmm
   commands:
+    # Debug silent errors in plugin loading
+    - python -c "import simtk.openmm as mm; print(*mm.pluginLoadedLibNames, *mm.Platform.getPluginLoadFailures(), sep='\n')"
+    # Check that hardcoded library path was correctly replaced by conda-build
+    - python -c "import os, simtk.openmm.version as v; print(v.openmm_library_path); assert os.path.isdir(v.openmm_library_path), 'Directory does not exist'"
+    # Check all platforms
     - python -m simtk.testInstallation
     # Existence tests Unix
     - test -f $PREFIX/lib/libOpenMM$SHLIB_EXT  # [unix]

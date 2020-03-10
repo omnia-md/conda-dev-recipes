@@ -11,16 +11,14 @@ cmake.exe .. -G "NMake Makefiles JOM" ^
     -DOPENCL_LIBRARY="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v%CUDA_VER%/lib/x64/OpenCL.lib" ^
     || goto :error
 
-:: Re-add above when CUDA is available
-
 jom -j %NUMBER_OF_PROCESSORS% || goto :error
 jom -j %NUMBER_OF_PROCESSORS% install || goto :error
 jom -j %NUMBER_OF_PROCESSORS% PythonInstall || goto :error
 
-:: Workaround overlinking warnings
-copy %SP_DIR%\simtk\openmm\_openmm* %LIBRARY_BIN% || goto :error
-copy %LIBRARY_LIB%\OpenMM* %LIBRARY_BIN% || goto :error
-copy %LIBRARY_LIB%\plugins\OpenMM* %LIBRARY_BIN% || goto :error
+:: :: Workaround overlinking warnings (do not do this in Windows and save some MB)
+:: copy %SP_DIR%\simtk\openmm\_openmm* %LIBRARY_BIN% || goto :error
+:: copy %LIBRARY_LIB%\OpenMM* %LIBRARY_BIN% || goto :error
+:: copy %LIBRARY_LIB%\plugins\OpenMM* %LIBRARY_BIN% || goto :error
 
 :: Better location for examples
 mkdir %LIBRARY_PREFIX%\share\openmm || goto :error
