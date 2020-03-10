@@ -9,7 +9,7 @@ if [[ "$target_platform" == linux* ]]; then
     # JRG: Had to add -ldl to prevent linking errors (dlopen, etc)
     CUDA_HOME="/usr/local/cuda"
     MINIMAL_CFLAGS+=" -O3 -ldl -I${CUDA_HOME}/include"
-    if [ ! -z "${NIGHTLY:-}" && "${debug_openmm}" == "true" ]; then
+    if [ "${debug_openmm}" == "true" ]; then
         MINIMAL_CFLAGS+=" -g"
     fi
     CFLAGS+=" $MINIMAL_CFLAGS"
@@ -19,7 +19,7 @@ if [[ "$target_platform" == linux* ]]; then
     # Use GCC
     CMAKE_FLAGS+=" -DCMAKE_C_COMPILER=$CC -DCMAKE_CXX_COMPILER=$CXX"
 
-    # CUDA_HOME is defined by nvcc metapackage
+    # CUDA_HOME is defined by nvcc metapackage, or us above
     CMAKE_FLAGS+=" -DCUDA_TOOLKIT_ROOT_DIR=${CUDA_HOME}"
     # From: https://github.com/floydhub/dl-docker/issues/59
     CMAKE_FLAGS+=" -DCMAKE_LIBRARY_PATH=${CUDA_HOME}/lib64/stubs"

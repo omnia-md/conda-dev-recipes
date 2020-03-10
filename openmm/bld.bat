@@ -11,8 +11,6 @@ cmake.exe .. -G "NMake Makefiles JOM" ^
     -DOPENCL_LIBRARY="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v%CUDA_VER%/lib/x64/OpenCL.lib" ^
     || goto :error
 
-:: Re-add above when CUDA is available
-
 jom -j %NUMBER_OF_PROCESSORS% || goto :error
 jom -j %NUMBER_OF_PROCESSORS% install || goto :error
 jom -j %NUMBER_OF_PROCESSORS% PythonInstall || goto :error
