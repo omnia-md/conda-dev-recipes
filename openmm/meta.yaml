@@ -28,7 +28,7 @@ extra:
   scheduled: True
 
 build:
-  number: 0
+  number: 1
   # we'll switch back to {{ GIT_BUILD_STR }} later;
   # this part is not parsed at upload time resulting in FileNotFoundError
   string: py{{ py }}{{ CUDA_STR }}{{ DEBUG_STR }}_{{ PKG_BUILDNUM }}
