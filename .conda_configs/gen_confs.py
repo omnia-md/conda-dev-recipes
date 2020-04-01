@@ -11,8 +11,6 @@ import ruamel_yaml  # This gets installed with conda-build
 
 PYTHONS = [3.6, 3.7, 3.8]
 CUDAS = [8.0, 9.0, 9.1, 9.2, 10.0, 10.1, 10.2]
-NUMPY = 1.14
-MACOSX_DEPLOY = 10.9
 
 dumper_keys = {"indent": 4, "block_seq_indent": 2}
 dumper = ruamel_yaml.round_trip_dump
@@ -27,13 +25,17 @@ def dump_indent_add_lines(data):
 
 def gen_yamls():
     for python in PYTHONS:
-        no_cuda_dict = {"python": [python], "numpy": [NUMPY], "MACOSX_DEPLOYMENT_TARGET": [MACOSX_DEPLOY]}
-        with open(f"python{python}.yaml", 'w') as f:
+        no_cuda_dict = {"python": [python]}
+        with open(f"python{python}.yaml", "w") as f:
             f.write(dump_indent_add_lines(no_cuda_dict))
         for cuda in CUDAS:
-            cuda_short = int(str(cuda).replace('.', ''))
-            cuda_dict = {**no_cuda_dict, "CUDA_SHORT_VERSION": [cuda_short], "CUDA_VERSION": [cuda]}
-            with open(f"python{python}_cuda{cuda}.yaml", 'w') as f:
+            cuda_short = int(str(cuda).replace(".", ""))
+            cuda_dict = {
+                **no_cuda_dict,
+                "CUDA_SHORT_VERSION": [cuda_short],
+                "CUDA_VERSION": [cuda],
+            }
+            with open(f"python{python}_cuda{cuda}.yaml", "w") as f:
                 f.write(dump_indent_add_lines(cuda_dict))
 
 
