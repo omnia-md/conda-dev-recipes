@@ -9,7 +9,7 @@ import re
 import ruamel_yaml  # This gets installed with conda-build
 
 
-PYTHONS = [3.6, 3.7, 3.8]
+PYTHONS = ["3.6.* *_cpython", "3.7.* *_cpython", "3.8.* *_cpython"]
 CUDAS = [8.0, 9.0, 9.1, 9.2, 10.0, 10.1, 10.2]
 
 dumper_keys = {"indent": 4, "block_seq_indent": 2}
@@ -26,7 +26,7 @@ def dump_indent_add_lines(data):
 def gen_yamls():
     for python in PYTHONS:
         no_cuda_dict = {"python": [python]}
-        with open(f"python{python}.yaml", "w") as f:
+        with open(f"python{python[:3]}.yaml", "w") as f:
             f.write(dump_indent_add_lines(no_cuda_dict))
         for cuda in CUDAS:
             cuda_short = int(str(cuda).replace(".", ""))
@@ -35,7 +35,7 @@ def gen_yamls():
                 "CUDA_SHORT_VERSION": [cuda_short],
                 "CUDA_VERSION": [cuda],
             }
-            with open(f"python{python}_cuda{cuda}.yaml", "w") as f:
+            with open(f"python{python[:3]}_cuda{cuda}.yaml", "w") as f:
                 f.write(dump_indent_add_lines(cuda_dict))
 
 

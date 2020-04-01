@@ -1,5 +1,5 @@
 python:
-  - 3.8
+  - 3.8.* *_cpython
 
 CUDA_SHORT_VERSION:
   - 91
