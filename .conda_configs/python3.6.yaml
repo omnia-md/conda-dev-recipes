@@ -1,8 +1,2 @@
 python:
-  - 3.6
-
-numpy:
-  - 1.14
-
-MACOSX_DEPLOYMENT_TARGET:
-  - 10.9
+  - 3.6.* *_cpython

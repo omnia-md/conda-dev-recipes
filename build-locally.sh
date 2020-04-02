@@ -1,8 +1,7 @@
 #!/bin/bash
 
-export CONFIG=python3.7_cuda10.0
-export DOCKER_IMAGE="condaforge/linux-anvil-cuda:10.0"
-export INCLUDE_JINJA=CUDA_STR
+export CONFIG=python3.7
+export DOCKER_IMAGE="condaforge/linux-anvil-comp7"
 
 CBA_FLAGS="-vvv --cycle-packages"
 if [ -n "$INCLUDE_JINJA" ]; then
