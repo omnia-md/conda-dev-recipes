@@ -14,24 +14,24 @@
 
 package:
   name: openmm
-  version: 7.5.0
+  version: 7.4.2
 
 source:
-  git_url: https://github.com/openmm/openmm.git
-  git_depth: 1
+  url: https://github.com/openmm/openmm/archive/dc9d188.tar.gz
+  sha256: 47160659055ac9f605afccf27c1a70eb29ffd34729b5c178b8473a97a41f3478
 
 extra:
   #upload: betacuda{{ CUDA_SHORT_VERSION }}{{ ",beta" if CUDA_SHORT_VERSION == "92" else ""}}
   #upload: devcuda{{ CUDA_SHORT_VERSION }}{{ ",dev" if CUDA_SHORT_VERSION == "92" else ""}}
   upload: {{ CUDA_STR[1:] }}{{",main" if CUDA_STR[-3:] == "102" else "" }}
-  force_upload: True
-  scheduled: True
+  force_upload: False
+  scheduled: False
 
 build:
-  number: 1
+  number: 0
   # we'll switch back to {{ GIT_BUILD_STR }} later;
   # this part is not parsed at upload time resulting in FileNotFoundError
-  string: py{{ py }}{{ CUDA_STR }}{{ DEBUG_STR }}_{{ PKG_BUILDNUM }}
+  string: py{{ py }}{{ CUDA_STR }}{{ DEBUG_STR }}_rc_{{ PKG_BUILDNUM }}
   missing_dso_whitelist:
     - "*/libcuda.*"  # [linux]
     - "*/libOpenCL.*"  # [unix]
