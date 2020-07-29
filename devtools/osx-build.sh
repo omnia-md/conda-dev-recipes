@@ -39,4 +39,4 @@ conda config --show-sources
 conda list --show-channel-urls
 
 echo -e "\n\nRunning conda-build-all"
-python conda-build-all $CBA_FLAGS -m .conda_configs/${CONFIG}.yaml -- ./*/
+python conda-build-all $CBA_FLAGS -m .conda_configs/${CONFIG}.yaml -- */
