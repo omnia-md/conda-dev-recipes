@@ -1,113 +1,42 @@
-# upgrade Bash to version 4, for associative array support
-if [[ ${BASH_VERSINFO[0]} < 4 ]]; then
-    brew install bash
-    /usr/local/bin/bash -uxe $0
-    exit $?
-fi
+#!/usr/bin/env bash
 
-#!/bin/bash
-set -e -x
-export MACOSX_DEPLOYMENT_TARGET="10.13"
-# Clear existing locks
-#rm -rf /usr/local/var/homebrew/locks
-# Update homebrew cant disable this yet, -y and --quiet do nothing
-#brew update-reset
+set -x
 
-# Install Miniconda
-curl -s -O https://repo.continuum.io/miniconda/Miniconda3-4.6.14-MacOSX-x86_64.sh;
-bash Miniconda3-4.6.14-MacOSX-x86_64.sh -b -p $HOME/anaconda;
-export PATH=$HOME/anaconda/bin:$PATH;
-conda config --add channels conda-forge;
-conda config --add channels omnia;
-conda install -yq conda\<=4.3.34;
-#####################################################################
-# WORKAROUND FOR BUG WITH ruamel_yaml
-# "conda config --add channels omnia/label/dev" will fail if ruamel_yaml > 0.15.54
-# This workaround is in place to avoid this failure until this is patched
-# See: https://github.com/conda/conda/issues/7672
-conda install --yes ruamel_yaml==0.15.53 conda
-#####################################################################
-conda config --add channels omnia/label/dev
-conda install -yq conda-env conda-build jinja2 anaconda-client
-conda config --show
-conda clean -tipsy
+echo -e "\n\nInstalling a fresh version of Miniforge."
 
-# Do this step last to make sure conda-build, conda-env, and conda updates come from the same channel first
+MINIFORGE_URL="https://github.com/conda-forge/miniforge/releases/latest/download"
+MINIFORGE_FILE="Miniforge3-MacOSX-x86_64.sh"
+curl -L -O "${MINIFORGE_URL}/${MINIFORGE_FILE}"
+bash $MINIFORGE_FILE -b
 
+echo -e "\n\nConfiguring conda."
 
-#export INSTALL_CUDA=`./conda-build-all --dry-run -- openmm`
-export INSTALL_OPENMM_PREREQUISITES=true
-if [ "$INSTALL_OPENMM_PREREQUISITES" = true ] ; then
-    # Install OpenMM dependencies that can't be installed through
-    # conda package manager (doxygen + CUDA)
-    HOMEBREW_NO_AUTO_UPDATE=1 brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/5b680fb58fedfb00cd07a7f69f5a621bb9240f3b/Formula/doxygen.rb
-    # Make the nvidia-cache if not there
-    mkdir -p $NVIDIA_CACHE
-    cd $NVIDIA_CACHE
-    # Download missing nvidia installers
-    if ! [ -f cuda_mac_installer_tk.tar.gz ]; then
-        curl -O http://developer.download.nvidia.com/compute/cuda/${CUDA_VERSION}/Prod/network_installers/mac/x86_64/cuda_mac_installer_tk.tar.gz
-        tar zxf cuda_mac_installer_tk.tar.gz
-        rm -f cuda_mac_installer_tk.tar.gz
-    fi
-    if ! [ -f cuda_mac_installer_drv.tar.gz ]; then
-        curl -O http://developer.download.nvidia.com/compute/cuda/${CUDA_VERSION}/Prod/network_installers/mac/x86_64/cuda_mac_installer_drv.tar.gz
-        tar zxf cuda_mac_installer_drv.tar.gz
-        rm -f cuda_mac_installer_drv.tar.gz
-    fi
-    cd ..
-    ls -ltr $NVIDIA_CACHE
-    sudo cp -r $NVIDIA_CACHE/* /
+source ${HOME}/miniforge3/etc/profile.d/conda.sh
+conda activate base
 
-    #sudo tar -zxf cuda_mac_installer_tk.tar.gz -C /;
-    #sudo tar -zxf cuda_mac_installer_drv.tar.gz -C /;
+echo -e "\n\nInstalling conda-forge-ci-setup=3 and conda-build."
+conda install -n base --quiet --yes conda-forge-ci-setup=3 conda-build pip
 
-    sudo touch testfile
-    cd $NVIDIA_CACHE
+echo -e "\n\nSetting up the condarc and mangling the compiler."
+setup_conda_rc ./ ./recipe ./.conda_configs/${CONFIG}.yaml
+mangle_compiler ./ ./recipe .conda_configs/${CONFIG}.yaml
 
-    # TODO: Don't delete the tarballs to cache the package, if we can spare the space
-    #rm -f cuda_mac_installer_tk.tar.gz cuda_mac_installer_drv.tar.gz
+echo -e "\n\nMangling homebrew in the CI to avoid conflicts."
+/usr/bin/sudo mangle_homebrew
+/usr/bin/sudo -k
 
-    # Now head back to work directory
-    cd $TRAVIS_BUILD_DIR
+echo -e "\n\nRunning the build setup script."
+source run_conda_forge_build_setup
 
-    # Install latex.
-#    echo $PATH
-#    export PATH="/Library/TeX/texbin/:/usr/texbin:$PATH:/usr/bin"
-#    echo $PATH
-#    #brew cask install --no-quarantine basictex
-#    #mkdir -p /usr/texbin
-#    # Path based on https://github.com/caskroom/homebrew-cask/blob/master/Casks/basictex.rb location
-#    # .../texlive/{YEAR}basic/bin/{ARCH}/{Location of actual binaries}
-#    # Sym link them to the /usr/texbin folder in the path
-#    export TLREPO=http://ctan.math.utah.edu/ctan/tex-archive/systems/texlive/tlnet
-#    #ln -s /usr/local/texlive/*basic/bin/*/* /usr/texbin/
-#    sudo tlmgr --repository=$TLREPO update --self
-#    sleep 5
-#    sudo tlmgr --persistent-downloads --repository=$TLREPO install \
-#        titlesec framed threeparttable wrapfig multirow collection-fontsrecommended hyphenat xstring \
-#        fncychap tabulary capt-of eqparbox environ trimspaces \
-#        cmap fancybox titlesec framed fancyvrb threeparttable \
-#        mdwtools wrapfig parskip upquote float multirow hyphenat caption \
-#        xstring fncychap tabulary capt-of eqparbox environ trimspaces \
-#        varwidth needspace
-    # Clean up brew
-    #brew cleanup -s
-fi;
+set -e
 
-# Build packages
-export CUDA_SHORT_VERSION
+echo -e "\n\nSome more conda configuration"
+conda config --add channels omnia
+conda config --add channels conda-forge
 
-# Make sure we have the appropriate channel added
-conda config --add channels omnia/label/cuda${CUDA_SHORT_VERSION};
-conda config --add channels omnia/label/rc;
-conda config --add channels omnia/label/rccuda${CUDA_SHORT_VERSION};
-#conda config --add channels omnia/label/beta;
-conda config --add channels omnia/label/betacuda${CUDA_SHORT_VERSION};
-#conda config --add channels omnia/label/dev;
-#conda config --add channels omnia/label/devcuda${CUDA_SHORT_VERSION};
+conda info --all
+conda config --show-sources
+conda list --show-channel-urls
 
-for PY_BUILD_VERSION in "37" "36" "35" "27" ; do
-#for PY_BUILD_VERSION in "37" "36" "35" "27"; do
-    ./conda-build-all -vvv --python $PY_BUILD_VERSION --check-against omnia/label/beta --check-against omnia/label/betacuda${CUDA_SHORT_VERSION} --check-against omnia/label/dev --check-against omnia/label/devcuda${CUDA_SHORT_VERSION} --numpy "1.15" $UPLOAD -- *
-done
+echo -e "\n\nRunning conda-build-all"
+python conda-build-all $CBA_FLAGS -m .conda_configs/${CONFIG}.yaml -- */
