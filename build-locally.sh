@@ -13,6 +13,9 @@ fi
 if [ ! -z "$NIGHTLY"]; then
     CBA_FLAGS="$CBA_FLAGS --dev --scheduled-only --upload omnia-dev"
 fi
+if [ ! -z "$BETA"]; then
+    CBA_FLAGS="$CBA_FLAGS --upload omnia"
+fi
 export CBA_FLAGS=${CBA_FLAGS}
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
