@@ -87,13 +87,17 @@ test:
     # Existence tests Unix
     - test -f $PREFIX/lib/libOpenMM$SHLIB_EXT  # [unix]
     - test -f $PREFIX/lib/plugins/libOpenMMCPU$SHLIB_EXT  # [unix]
+    - test -f $PREFIX/lib/plugins/libOpenMMPME$SHLIB_EXT  # [unix]
     - test -f $PREFIX/lib/plugins/libOpenMMOpenCL$SHLIB_EXT  # [unix]
     - test -f $PREFIX/lib/plugins/libOpenMMCUDA$SHLIB_EXT  # [linux]
+    - test -f $PREFIX/lib/plugins/libOpenMMCudaCompiler$SHLIB_EXT  # [linux]
     # Existence tests Windows
     - if not exist %LIBRARY_LIB%/OpenMM.lib exit 1  # [win]
     - if not exist %LIBRARY_LIB%/plugins/OpenMMCPU.lib exit 1  # [win]
+    - if not exist %LIBRARY_LIB%/plugins/OpenMMPME.lib exit 1  # [win]
     - if not exist %LIBRARY_LIB%/plugins/OpenMMOpenCL.lib exit 1  # [win]
     - if not exist %LIBRARY_LIB%/plugins/OpenMMCUDA.lib exit 1  # [win]
+    - if not exist %LIBRARY_LIB%/plugins/OpenMMCudaCompiler.lib exit 1  # [win]
     # Run a small MD
     - cd $CONDA_PREFIX/share/openmm/examples  # [unix]
     - cd %LIBRARY_PREFIX%/share/openmm/examples  # [win]
