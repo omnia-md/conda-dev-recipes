@@ -10,7 +10,7 @@ cmake.exe .. -G "NMake Makefiles JOM" ^
     -DOPENCL_INCLUDE_DIR="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v%CUDA_VER%/include" ^
     -DOPENCL_LIBRARY="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v%CUDA_VER%/lib/x64/OpenCL.lib" ^
     -DFFTW_INCLUDES="%LIBRARY_PREFIX%/include" ^
-    -DFFTW_LIBRARY="%LIBRARY_PREFIX%/lib/libfftw3f.lib" ^
+    -DFFTW_LIBRARY="%LIBRARY_PREFIX%/lib/fftw3f.lib" ^
     || goto :error
 
 jom -j %NUMBER_OF_PROCESSORS% || goto :error
