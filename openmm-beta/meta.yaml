@@ -12,13 +12,16 @@
 {% set DEBUG_STR = "" %}
 {% endif %}
 
+{% set version = "7.5.0b1" %}
+{% set commit_hash = "cc3c4b5" %}
+
 package:
   name: openmm
-  version: 7.5b1
+  version: {{ version }}
 
 source:
   git_url: https://github.com/openmm/openmm.git
-  git_rev: cc3c4b5
+  git_rev: {{ commit_hash }}
   git_depth: 1
 
 extra:
@@ -26,18 +29,18 @@ extra:
   #upload: devcuda{{ CUDA_SHORT_VERSION }}{{ ",dev" if CUDA_SHORT_VERSION == "92" else ""}}
   upload: beta{{ CUDA_STR[1:] }}{{",beta" if CUDA_STR[-3:] == "102" else "" }}
   force_upload: True
-  scheduled: True
+  scheduled: False
 
 build:
-  number: 1
+  number: 0
   # we'll switch back to {{ GIT_BUILD_STR }} later;
   # this part is not parsed at upload time resulting in FileNotFoundError
-  string: {{ GIT_BUILD_STR }}_py{{ py }}{{ CUDA_STR }}{{ DEBUG_STR }}_{{ PKG_BUILDNUM }}
+  string: {{ commit_hash }}_py{{ py }}{{ CUDA_STR }}{{ DEBUG_STR }}_{{ PKG_BUILDNUM }}
   missing_dso_whitelist:
     - "*/libcuda.*"  # [linux]
     - "*/libOpenCL.*"  # [unix]
   script_env:
-    - NIGHTLY
+    - BETA
 
   #features:
   #  - cuda{{ CUDA_SHORT_VERSION }}

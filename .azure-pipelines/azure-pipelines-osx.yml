@@ -23,6 +23,11 @@ jobs:
         displayName: Set dev trigger if scheduled
 
       - script: |
+          echo "##vso[task.setvariable variable=UNSCHEDULED_MASTER]true"
+        condition: and(eq(variables['Build.SourceBranch'], 'refs/heads/master'), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'))
+        displayName: Set upload if running from unscheduled master
+
+      - script: |
           CBA_FLAGS="-vvv"
           if [ -n "$INCLUDE_JINJA" ]; then
             CBA_FLAGS="$CBA_FLAGS --build-only-jinja $INCLUDE_JINJA"
@@ -32,6 +37,8 @@ jobs:
           fi
           if [ ! -z "$NIGHTLY" ]; then
             CBA_FLAGS="$CBA_FLAGS --scheduled-only --upload omnia-dev --force"
+          elif [ ! -z "$UNSCHEDULED_MASTER" ]; then
+            CBA_FLAGS="$CBA_FLAGS --upload omnia-dev"
           fi
           export CBA_FLAGS=$CBA_FLAGS
           echo "##vso[task.setvariable variable=CBA_FLAGS]$CBA_FLAGS"
