@@ -2,7 +2,7 @@ jobs:
   - job: windows
     pool:
       vmImage: vs2017-win2016
-    #  timeoutInMinutes: 360
+    timeoutInMinutes: 360
     variables:
       NVIDIA_CUDA_DIR: $(Pipeline.Workspace)/.nvcuda
       NVIDIA_DRIVER_DIR: $(Pipeline.Workspace)/.nvdriver
@@ -137,6 +137,11 @@ jobs:
         displayName: Set dev trigger if scheduled
 
       - script: |
+          echo "##vso[task.setvariable variable=UNSCHEDULED_MASTER]true"
+        condition: and(eq(variables['Build.SourceBranch'], 'refs/heads/master'), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'))
+        displayName: Set upload if running from unscheduled master
+
+      - script: |
           ECHO ON
         #        conda create -c conda-forge --yes -n cb python=3 conda-build
         displayName: "Echo UP!"
@@ -197,6 +202,8 @@ jobs:
           fi
           if [ ! -z "$NIGHTLY" ]; then
             CBA_FLAGS="$CBA_FLAGS --scheduled-only --upload omnia-dev --force"
+          elif [ ! -z "$UNSCHEDULED_MASTER" ]; then
+            CBA_FLAGS="$CBA_FLAGS --upload omnia-dev"
           fi
           echo "##vso[task.setvariable variable=CBA_FLAGS]$CBA_FLAGS"
         displayName: Assemble Variables
