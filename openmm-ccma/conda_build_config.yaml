@@ -1,0 +1,3 @@
+debug_openmm:  # [linux]
+  - true  # [linux]
+  - false  # [linux]

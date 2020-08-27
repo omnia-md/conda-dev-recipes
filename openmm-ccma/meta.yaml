@@ -1,0 +1,112 @@
+{% if CUDA_SHORT_VERSION is defined %}
+{% set CUDA_STR = "_cuda" + CUDA_SHORT_VERSION %}
+{% elif OSX_ARCH is defined %}
+{% set CUDA_STR = "" %}
+{% else %}
+{% set CUDA_STR = "_nocuda" %}
+{% endif %}
+
+{% if debug_openmm is defined and debug_openmm == "true" %}
+{% set DEBUG_STR = "_debug" %}
+{% else %}
+{% set DEBUG_STR = "" %}
+{% endif %}
+
+{% set version = "7.5.0b2" %}
+{% set commit_hash = "19ebecf" %}
+{% set org = "peastman" %}
+{% set label = "ccma" %}
+
+package:
+  name: openmm
+  version: {{ version }}
+
+source:
+  git_url: https://github.com/{{ org }}/openmm.git
+  git_rev: {{ commit_hash }}
+  git_depth: 1
+
+extra:
+  #upload: betacuda{{ CUDA_SHORT_VERSION }}{{ ",beta" if CUDA_SHORT_VERSION == "92" else ""}}
+  #upload: devcuda{{ CUDA_SHORT_VERSION }}{{ ",dev" if CUDA_SHORT_VERSION == "92" else ""}}
+  upload: {{ label }}{{ CUDA_STR[1:] }}{{",beta" if CUDA_STR[-3:] == "102" else "" }}
+  force_upload: True
+  scheduled: False
+
+build:
+  number: 0
+  # we'll switch back to {{ GIT_BUILD_STR }} later;
+  # this part is not parsed at upload time resulting in FileNotFoundError
+  string: {{ commit_hash }}_py{{ py }}{{ CUDA_STR }}{{ DEBUG_STR }}_{{ PKG_BUILDNUM }}
+  missing_dso_whitelist:
+    - "*/libcuda.*"  # [linux]
+    - "*/libOpenCL.*"  # [unix]
+  script_env:
+    - BETA
+
+  #features:
+  #  - cuda{{ CUDA_SHORT_VERSION }}
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - {{ cdt('mesa-libgl-devel') }}  # [linux]
+    - cmake
+    - jom  # [win]
+
+  host:
+    - python
+    - fftw
+    - swig
+    - pthread-stubs
+    - lxml
+    - numpy
+    - cython
+    - doxygen 1.8.14
+    # docs
+    # - pydot
+    # - sphinx
+    # - sphinxcontrib-bibtex
+    # - sphinxcontrib-lunrsearch >=0.3
+    # - sphinxcontrib-autodoc_doxygen
+  run:
+    - python
+    - fftw
+    - numpy
+
+test:
+  imports:
+    - simtk
+    - simtk.openmm
+  commands:
+    # Debug silent errors in plugin loading
+    - python -c "import simtk.openmm as mm; print(*mm.pluginLoadedLibNames, *mm.Platform.getPluginLoadFailures(), sep='\n')"
+    # Check that hardcoded library path was correctly replaced by conda-build
+    - python -c "import os, simtk.openmm.version as v; print(v.openmm_library_path); assert os.path.isdir(v.openmm_library_path), 'Directory does not exist'"
+    # Check all platforms
+    - python -m simtk.testInstallation
+    # Existence tests Unix
+    - test -f $PREFIX/lib/libOpenMM$SHLIB_EXT  # [unix]
+    - test -f $PREFIX/lib/plugins/libOpenMMCPU$SHLIB_EXT  # [unix]
+    - test -f $PREFIX/lib/plugins/libOpenMMPME$SHLIB_EXT  # [unix]
+    - test -f $PREFIX/lib/plugins/libOpenMMOpenCL$SHLIB_EXT  # [unix]
+    - test -f $PREFIX/lib/plugins/libOpenMMCUDA$SHLIB_EXT  # [linux]
+    - test -f $PREFIX/lib/plugins/libOpenMMCudaCompiler$SHLIB_EXT  # [linux]
+    # Existence tests Windows
+    - if not exist %LIBRARY_LIB%/OpenMM.lib exit 1  # [win]
+    - if not exist %LIBRARY_LIB%/plugins/OpenMMCPU.lib exit 1  # [win]
+    - if not exist %LIBRARY_LIB%/plugins/OpenMMPME.lib exit 1  # [win]
+    - if not exist %LIBRARY_LIB%/plugins/OpenMMOpenCL.lib exit 1  # [win]
+    - if not exist %LIBRARY_LIB%/plugins/OpenMMCUDA.lib exit 1  # [win]
+    - if not exist %LIBRARY_LIB%/plugins/OpenMMCudaCompiler.lib exit 1  # [win]
+    # Run a small MD
+    - cd $CONDA_PREFIX/share/openmm/examples  # [unix]
+    - cd %LIBRARY_PREFIX%/share/openmm/examples  # [win]
+    - python benchmark.py --test=rf --seconds=10 --platform=Reference
+    - python benchmark.py --test=rf --seconds=10 --platform=CPU
+
+about:
+  home: http://openmm.org
+  license: MIT
+  summary: A high performance toolkit for molecular simulation.
