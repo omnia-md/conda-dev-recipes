@@ -47,6 +47,10 @@ jobs:
           CONFIG: python3.6_cuda10.2
           DOCKER_IMAGE: "omniamd/linux-anvil-cuda:10.2"
           INCLUDE_JINJA: CUDA_STR
+        linux_python3.6_cuda11.0:
+          CONFIG: python3.6_cuda11.0
+          DOCKER_IMAGE: "omniamd/linux-anvil-cos7-cuda:11.0"
+          INCLUDE_JINJA: CUDA_STR
 
         linux_python3.7_cuda8.0:
           CONFIG: python3.7_cuda8.0
@@ -76,6 +80,10 @@ jobs:
           CONFIG: python3.7_cuda10.2
           DOCKER_IMAGE: "omniamd/linux-anvil-cuda:10.2"
           INCLUDE_JINJA: CUDA_STR
+        linux_python3.7_cuda11.0:
+          CONFIG: python3.7_cuda11.0
+          DOCKER_IMAGE: "omniamd/linux-anvil-cos7-cuda:11.0"
+          INCLUDE_JINJA: CUDA_STR
 
         linux_python3.8_cuda8.0:
           CONFIG: python3.8_cuda8.0
@@ -104,6 +112,10 @@ jobs:
         linux_python3.8_cuda10.2:
           CONFIG: python3.8_cuda10.2
           DOCKER_IMAGE: "omniamd/linux-anvil-cuda:10.2"
+          INCLUDE_JINJA: CUDA_STR
+        linux_python3.8_cuda11.0:
+          CONFIG: python3.8_cuda11.0
+          DOCKER_IMAGE: "omniamd/linux-anvil-cos7-cuda:11.0"
           INCLUDE_JINJA: CUDA_STR
 
     steps:

@@ -57,6 +57,11 @@ jobs:
           INCLUDE_JINJA: CUDA_STR
           CUDA_VER: 10.2
           CUDA_URL: http://developer.download.nvidia.com/compute/cuda/10.2/Prod/network_installers/cuda_10.2.89_win10_network.exe
+        windows_python3.6_cuda11.0:
+          CONFIG: python3.6_cuda11.0
+          INCLUDE_JINJA: CUDA_STR
+          CUDA_VER: 11.0
+          CUDA_URL: http://developer.download.nvidia.com/compute/cuda/11.0.3/network_installers/cuda_11.0.3_win10_network.exe
 
         windows_python3.7_cuda8.0:
           CONFIG: python3.7_cuda8.0
@@ -93,6 +98,11 @@ jobs:
           INCLUDE_JINJA: CUDA_STR
           CUDA_VER: 10.2
           CUDA_URL: http://developer.download.nvidia.com/compute/cuda/10.2/Prod/network_installers/cuda_10.2.89_win10_network.exe
+        windows_python3.7_cuda11.0:
+          CONFIG: python3.7_cuda11.0
+          INCLUDE_JINJA: CUDA_STR
+          CUDA_VER: 11.0
+          CUDA_URL: http://developer.download.nvidia.com/compute/cuda/11.0.3/network_installers/cuda_11.0.3_win10_network.exe
 
         windows_python3.8_cuda8.0:
           CONFIG: python3.8_cuda8.0
@@ -129,6 +139,11 @@ jobs:
           INCLUDE_JINJA: CUDA_STR
           CUDA_VER: 10.2
           CUDA_URL: http://developer.download.nvidia.com/compute/cuda/10.2/Prod/network_installers/cuda_10.2.89_win10_network.exe
+        windows_python3.8_cuda11.0:
+          CONFIG: python3.8_cuda11.0
+          INCLUDE_JINJA: CUDA_STR
+          CUDA_VER: 11.0
+          CUDA_URL: http://developer.download.nvidia.com/compute/cuda/11.0.3/network_installers/cuda_11.0.3_win10_network.exe
 
     steps:
       - script: |
@@ -210,7 +225,7 @@ jobs:
 
       - script: |
           call C:\Miniconda\Scripts\activate
-          python $(Build.SourcesDirectory)/conda-build-all $(CBA_FLAGS) -m $(Build.SourcesDirectory)/.conda_configs/$(CONFIG).yaml $(Build.SourcesDirectory)/*/
+          python $(Build.SourcesDirectory)/conda-build-all $(CBA_FLAGS) -m $(Build.SourcesDirectory)/.conda_configs/$(CONFIG).yaml $(Build.SourcesDirectory)/recipes/*/
         displayName: Run Conda Builds
         env:
           BINSTAR_TOKEN: $(BINSTAR_TOKEN)
