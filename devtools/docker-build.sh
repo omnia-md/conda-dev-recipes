@@ -18,7 +18,7 @@ CONDARC
 conda config --add channels omnia
 conda config --add channels conda-forge
 
-conda install --yes conda conda-build anaconda-client
+conda install --yes conda 'conda-build>=3.19.2,<=3.20.4' anaconda-client
 
 conda config --set show_channel_urls true
 conda config --set auto_update_conda false

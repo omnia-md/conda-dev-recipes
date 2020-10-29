@@ -15,7 +15,7 @@ source ${HOME}/miniforge3/etc/profile.d/conda.sh
 conda activate base
 
 echo -e "\n\nInstalling conda-forge-ci-setup=3 and conda-build."
-conda install -n base --quiet --yes conda-forge-ci-setup=3 conda-build pip
+conda install -n base --quiet --yes conda-forge-ci-setup=3 'conda-build>=3.19.2,<=3.20.4' pip
 
 echo -e "\n\nSetting up the condarc and mangling the compiler."
 setup_conda_rc ./ ./recipe ./.conda_configs/${CONFIG}.yaml
