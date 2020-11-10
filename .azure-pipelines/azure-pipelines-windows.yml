@@ -182,13 +182,13 @@ jobs:
         displayName: Add Conda-forge to the conda channels
 
       # The condition here for the NVIDIA steps only should trigger if CUDA_VER is set
-      - task: Cache@2
-        inputs:
-          key: 'CUDA | "$(CUDA_VER)" | Network'
-          path: $(NVIDIA_CUDA_DIR)/$(CUDA_VER)
-          cacheHitVar: CUDA_RESTORED
-        displayName: Cache the NVIDIA CUDA installer
-        condition: ne(variables['CUDA_VER'], '') # Technically Null, but is cast as "To string: '' (the empty string)"
+      # - task: Cache@2
+      #   inputs:
+      #     key: 'CUDA | "$(CUDA_VER)" | Network'
+      #     path: $(NVIDIA_CUDA_DIR)/$(CUDA_VER)
+      #     cacheHitVar: CUDA_RESTORED
+      #   displayName: Cache the NVIDIA CUDA installer
+      #   condition: ne(variables['CUDA_VER'], '') # Technically Null, but is cast as "To string: '' (the empty string)"
 
       - task: PowerShell@2
         inputs:
@@ -197,7 +197,8 @@ jobs:
             New-Item -ItemType Directory -Force -Path $(NVIDIA_CUDA_DIR)/$(CUDA_VER)
             Invoke-WebRequest $(CUDA_URL) -OutFile $(NVIDIA_CUDA_DIR)/$(CUDA_VER)/CUDA_installer.exe
         displayName: Download CUDA Driver
-        condition: and(ne(variables['CUDA_VER'], ''), ne(variables.CUDA_RESTORED, 'true'))
+        # condition: and(ne(variables['CUDA_VER'], ''), ne(variables.CUDA_RESTORED, 'true'))
+        condition: ne(variables['CUDA_VER'], '')
 
       - script: |
           $(NVIDIA_CUDA_DIR)/$(CUDA_VER)/CUDA_installer.exe -s
