@@ -14,7 +14,7 @@
 
 package:
   name: openmm
-  version: 7.5.0
+  version: 7.5.1
 
 source:
   git_url: https://github.com/openmm/openmm.git
@@ -72,15 +72,14 @@ requirements:
 
 test:
   imports:
-    - simtk
-    - simtk.openmm
+    - openmm
   commands:
     # Debug silent errors in plugin loading
-    - python -c "import simtk.openmm as mm; print(*mm.pluginLoadedLibNames, *mm.Platform.getPluginLoadFailures(), sep='\n')"
+    - python -c "import openmm as mm; print(*mm.pluginLoadedLibNames, *mm.Platform.getPluginLoadFailures(), sep='\n')"
     # Check that hardcoded library path was correctly replaced by conda-build
-    - python -c "import os, simtk.openmm.version as v; print(v.openmm_library_path); assert os.path.isdir(v.openmm_library_path), 'Directory does not exist'"
+    - python -c "import os, openmm.version as v; print(v.openmm_library_path); assert os.path.isdir(v.openmm_library_path), 'Directory does not exist'"
     # Check all platforms
-    - python -m simtk.testInstallation
+    - python -m openmm.testInstallation
     # Existence tests Unix
     - test -f $PREFIX/lib/libOpenMM$SHLIB_EXT  # [unix]
     - test -f $PREFIX/lib/plugins/libOpenMMCPU$SHLIB_EXT  # [unix]
