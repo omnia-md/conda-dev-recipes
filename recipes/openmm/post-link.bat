@@ -1,6 +1,6 @@
 echo Thanks for testing out the OpenMM development builds!  > "%PREFIX%/.messages.txt"
 echo ----------------------------------------------------- >> "%PREFIX%/.messages.txt"
 echo This is a nightly build of the latest snapshot        >> "%PREFIX%/.messages.txt"
-echo available on the `master` branch. Code has not been   >> "%PREFIX%/.messages.txt"
+echo available on the master branch. Code has not been     >> "%PREFIX%/.messages.txt"
 echo released as part of a stable version yet, so it is    >> "%PREFIX%/.messages.txt"
 echo NOT production ready!                                 >> "%PREFIX%/.messages.txt"
