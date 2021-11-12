@@ -15,6 +15,9 @@ jobs:
         osx_python3.8:
           CONFIG: python3.8
           # EXCLUDE_JINJA: CUDA_STR
+        osx_python3.9:
+          CONFIG: python3.9
+          # EXCLUDE_JINJA: CUDA_STR
 
     steps:
       - script: |
