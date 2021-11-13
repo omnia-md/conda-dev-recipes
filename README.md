@@ -30,8 +30,8 @@ Default CUDA version is currently v10.2
 
 Python packages are built against:
 
-* Python 3.6, 3.7, 3.8
-* CUDA 8.0, 9.0, 9.1, 9.2, 10.0, 10.1, 10.2
+* Python 3.6, 3.7, 3.8, 3.9
+* CUDA 8.0, 9.0, 9.1, 9.2, 10.0, 10.1, 10.2, 11.0
 * Linux-64, MacOS, Windows
 
 ### Building the packages
@@ -54,5 +54,3 @@ build environment.
     for dependencies and building against.
 * meta.yaml `extra`: `scheduled: {bool}`: Flags a recipe to be built in the nightly builds, but will always upload to the `omnia-dev` channel
 * meta.yaml `extra`: `force_upload {bool}`: Forces the built recipes to be uploaded, even if they already exist on omnia (normally pre-existing blocks a build)
-
-
