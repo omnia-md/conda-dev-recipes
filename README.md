@@ -18,13 +18,13 @@ To install a development package, use
 conda install -c conda-forge -c omnia-dev -c omnia <package_name>
 ```
 
-You can use channel labels to request a specific variant, like CUDA versions. For example:
+You can use channel labels to request a specific variant, like CUDA versions. For example, for CUDA 11.0:
 
 ```bash
-conda install -c conda-forge -c omnia-dev/label/cuda102 -c omnia openmm
+conda install -c conda-forge -c omnia-dev/label/cuda110 -c omnia openmm
 ```
 
-Default CUDA version is currently v10.2
+Default CUDA version is currently 11.0
 
 ### Build matrix
 
@@ -33,6 +33,15 @@ Python packages are built against:
 * Python 3.6, 3.7, 3.8, 3.9
 * CUDA 8.0, 9.0, 9.1, 9.2, 10.0, 10.1, 10.2, 11.0
 * Linux-64, MacOS, Windows
+
+#### Adding new Python versions
+
+To add a new Python version:
+* Edit `.conda_configs/gen_confs.py` to extend `PYTHONS` with the new Python version
+* Re-run `gen_confs.py` to generate new YAML files
+* Commit the new YAML files to the repository
+* Update this `README.md` with the newly supported Python versions
+* Edit YAML files in `.azure-pipelines/` to extend build matrix with new Python version
 
 ### Building the packages
 
