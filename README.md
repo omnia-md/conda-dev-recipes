@@ -42,6 +42,7 @@ To add a new Python version:
 * Commit the new YAML files to the repository
 * Update this `README.md` with the newly supported Python versions
 * Edit YAML files in `.azure-pipelines/` to extend build matrix with new Python version
+* Edit `conda_build_config.yaml` to add Python version to the `python:` tag
 
 ### Building the packages
 
