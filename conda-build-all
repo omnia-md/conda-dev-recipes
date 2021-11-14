@@ -498,7 +498,7 @@ def build_package(meta, args):
             # Add the new channel to the front (repetition does not mater, order does)
             meta.config.channel_urls = ('omnia/label/{}'.format(omnia_label),) + tuple(meta.config.channel_urls)
     # Finalize channel URLs
-    meta.config.channel_urls = ('conda-forge',) + tuple(meta.config.channel_urls) + ('defaults',)
+    meta.config.channel_urls = ('conda-forge',) + tuple(meta.config.channel_urls)  # + ('defaults',)
     # Build package
     kwarg_bundle = {'notest': args.notest}  # Common flags
     if meta.final:
