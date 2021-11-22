@@ -25,6 +25,8 @@ try:
     # at some point with no indication as why nor what replaced it
     from conda.exports import get_index
     from conda_build.variants import find_config_files as fcf
+    from conda_build.config import Config
+    from conda_build.metadata import MetaData
     cb_version = conda_build.__version__
     if cb_version < "3":
         raise ImportError("Conda version too low: {}".format(cb_version))
@@ -275,9 +277,16 @@ def render_metadatas(paths, variant_config_files=(), channel_urls=(), cycle_pack
             # the placeholder work directory
             meta_lookup[possible_recipe] = []
             with temporary_directory() as temp_dir:  # Make a faux `croot` temporary directory
-                build_id = "placeholder"  # Make a faux build_ID
+                # Make a faux build_ID, but it has to be the package name
+                # Scrape by making a dirty, throwaway metadata just to get the correct name.
+                # The Config.compute_build_id function only looks for the old folder at specifically packagename
+                # Has been in since 3.21.6
+                dirty_meta = MetaData(possible_recipe, config=Config())
+                package_name = dirty_meta.name()
+                build_id = f"{package_name}"  # Make a faux build_ID
                 work_dir = "work"  # Make the "work_dir" directory
                 work_path = os.path.join(temp_dir, build_id, work_dir)
+                # Faux work dir will get deleted very quickly, even before the temporary directory collapses
                 os.makedirs(work_path)
                 with open(os.path.join(work_path, 'a_touched_file.magic'), 'w') as _:
                     # Touch a random file so the "work_dir" is not empty
@@ -343,6 +352,8 @@ def render_metadatas(paths, variant_config_files=(), channel_urls=(), cycle_pack
                     metas.append(meta_lookup[possible_recipe].pop(0))
                     if not meta_lookup[possible_recipe]:  # Remove recipe if empty
                         meta_lookup.pop(possible_recipe)
+                elif not meta_lookup[possible_recipe]:  # Covers case where recipe present from start, but no metas
+                    meta_lookup.pop(possible_recipe)
 
     return metas, errors
 
@@ -535,7 +546,10 @@ def execute(args):
     """Execute the building"""
     # Parse the pythons, numpys, and cudas into long and short form
 
-    variant_config_files = fcf('.')
+    try:
+        variant_config_files = fcf('.')
+    except TypeError:  # More modern conda-build expectations, defaults for this function got rolled into Config.
+        variant_config_files = fcf('.', Config())
     if args.variant_config_files:
         variant_config_files.extend(args.variant_config_files)
 
