@@ -1,8 +1,8 @@
 python:
-  - 3.6.* *_cpython
+  - 3.9.* *_cpython
 
 CUDA_SHORT_VERSION:
-  - 90
+  - 80
 
 CUDA_VERSION:
-  - 9.0
+  - 8.0
