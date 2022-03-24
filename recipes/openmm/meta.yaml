@@ -44,6 +44,7 @@ build:
 requirements:
   build:
     - {{ compiler('c') }}
+    - sysroot_linux-64 2.17  # [linux64]    
     - {{ compiler('cxx') }}
     - {{ cdt('mesa-libgl-devel') }}  # [linux]
     - cmake
