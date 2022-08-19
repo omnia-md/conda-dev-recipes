@@ -9,7 +9,7 @@ import re
 import ruamel_yaml  # This gets installed with conda-build
 
 
-PYTHONS = ["3.7.* *_cpython", "3.8.* *_cpython", "3.9.* *_cpython"]
+PYTHONS = ["3.8.* *_cpython", "3.9.* *_cpython"]
 CUDAS = [10.2, 11.0, 11.1, 11.2]
 
 dumper_keys = {"indent": 4, "block_seq_indent": 2}
