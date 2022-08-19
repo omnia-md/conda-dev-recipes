@@ -1,8 +1,0 @@
-python:
-  - 3.7.* *_cpython
-
-CUDA_SHORT_VERSION:
-  - 102
-
-CUDA_VERSION:
-  - 10.2
