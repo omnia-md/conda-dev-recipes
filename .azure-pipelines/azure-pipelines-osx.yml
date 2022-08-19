@@ -1,14 +1,11 @@
 jobs:
   - job: osx
     pool:
-      vmImage: macOS-10.14
+      vmImage: macOS-11
     timeoutInMinutes: 360
     strategy:
       maxParallel: 8
       matrix:
-        osx_python3.7:
-          CONFIG: python3.7
-          # EXCLUDE_JINJA: CUDA_STR
         osx_python3.8:
           CONFIG: python3.8
           # EXCLUDE_JINJA: CUDA_STR

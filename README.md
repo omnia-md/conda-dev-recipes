@@ -30,8 +30,8 @@ Default CUDA version is currently 11.0
 
 Python packages are built against:
 
-* Python 3.6, 3.7, 3.8, 3.9
-* CUDA 8.0, 9.0, 9.1, 9.2, 10.0, 10.1, 10.2, 11.0
+* Python 3.8, 3.9
+* CUDA 10.2, 11.0, 11.1 11.2
 * Linux-64, MacOS, Windows
 
 #### Adding new Python versions
