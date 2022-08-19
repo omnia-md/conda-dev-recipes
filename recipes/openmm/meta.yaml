@@ -60,6 +60,7 @@ requirements:
     - numpy
     - cython
     - doxygen 1.8.14
+    - yaml
     # docs
     # - pydot
     # - sphinx
